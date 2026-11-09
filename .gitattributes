@@ -1,2 +1,6 @@
 * text=auto eol=lf
 *.png binary
+# Prompts are hashed into every audit-log record (prompt_version = name@sha256[:8]).
+# Store them byte for byte so the hash is the same on every machine and on the demo site.
+prompts/*.md -text
+docs/runner/py/prompts/*.md -text
