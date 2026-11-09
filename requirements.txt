@@ -1,0 +1,5 @@
+pydantic>=2.6
+requests>=2.31
+openai>=1.50        # OpenAI, Azure OpenAI and Gemini (OpenAI-compatible endpoint)
+anthropic>=0.40     # optional: only for LLM_PROVIDER=anthropic
+pytest>=8           # tests

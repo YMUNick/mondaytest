@@ -1,0 +1,16 @@
+application_id,acceptable_tiers,note
+APP-2026-0301,standard,Clean US pension fund with full docs and an existing relationship
+APP-2026-0302,standard,Inheritance and real estate are normal sources of wealth; should not be over-flagged
+APP-2026-0303,high,Offshore; nominee directors; beneficial ownership unclear; vague source of funds; pushback on documents
+APP-2026-0304,standard,Public pension fund; full docs; phased transition is operational not a risk
+APP-2026-0305,standard|enhanced,Overseas residency and trusts add complexity; wealth source is documented employment
+APP-2026-0306,standard,Pending board resolution is a missing document not a risk signal
+APP-2026-0307,enhanced|high,PEP general partner; multi-country LPs; incomplete KYC
+APP-2026-0308,standard,Divorce settlement is a normal source of wealth; should not be over-flagged
+APP-2026-0309,standard|enhanced,State-owned investor; complex but well documented
+APP-2026-0310,standard,Very complex operationally (22 accounts) but no risk signals
+APP-2026-0311,high,New company; sole owner-director; undocumented source of funds; pressure on timeline
+APP-2026-0312,standard,Clean union pension fund with full docs
+APP-2026-0313,standard|enhanced,Insider trading-window coordination is a legal workflow item rather than an AML signal
+APP-2026-0314,standard,Clean foundation; reporting requirements are operational
+APP-2026-0315,high,Unknown introducer; offshore trust; no documents; refuses direct contact

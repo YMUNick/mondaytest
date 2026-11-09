@@ -1,0 +1,408 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crestview Intake Pre-screen</title><style>
+:root{--bg:#f7f7f9;--card:#fff;--ink:#1d1f27;--muted:#5d6273;--line:#e3e5ec;
+--std:#1f7a4d;--std-bg:#e3f4ea;--enh:#8a5a00;--enh-bg:#fff1d6;--high:#b42318;--high-bg:#fde7e5;
+--accent:#5034ff}
+@media (prefers-color-scheme:dark){:root{--bg:#14151a;--card:#1d1f27;--ink:#eceef4;--muted:#a3a8b8;
+--line:#2e313c;--std:#6fd59d;--std-bg:#173325;--enh:#f3c260;--enh-bg:#3a2d10;--high:#ff8a80;
+--high-bg:#3d1714;--accent:#9d8cff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:28px 0 10px}
+.muted{color:var(--muted)}.kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:120px}
+.kpi b{display:block;font-size:22px}
+.tbl{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tbl th,.tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-size:12px;color:var(--muted);font-weight:600}
+.wrap{overflow-x:auto}
+.chip{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.standard{color:var(--std);background:var(--std-bg)}.enhanced{color:var(--enh);background:var(--enh-bg)}
+.high{color:var(--high);background:var(--high-bg)}.failed{color:var(--muted);background:var(--line)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0;padding:0 14px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;list-style-position:outside}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:14px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+ul{margin:4px 0;padding-left:18px}li{margin:2px 0}
+.ok{color:var(--std)}.warn{color:var(--high)}.note{border-left:3px solid var(--accent);padding-left:10px}
+code{font-size:12px}
+</style></head><body><main>
+<h1>Crestview client intake: AI pre-screen</h1>
+<p class="muted">Run 20261107T171334Z-f4d75c · 15 applications · every record needs human review</p>
+<div class="kpis">
+ <div class="kpi"><b>4</b>high (escalation)</div>
+ <div class="kpi"><b>2</b>enhanced due diligence</div>
+ <div class="kpi"><b>9</b>standard review</div>
+ <div class="kpi"><b>2</b>raised by guardrails</div>
+ <div class="kpi"><b>0</b>failed</div>
+</div>
+
+<h2>Pipeline</h2>
+<div class="wrap"><table class="tbl"><thead><tr><th>ID</th><th>Client</th><th>Type</th><th>AUM</th>
+<th>Final tier</th><th>Model tier</th><th>Complexity</th><th>Queue</th></tr></thead>
+<tbody><tr><td>APP-2026-0301</td><td>Greenfield State Pension Fund</td><td>Institutional</td><td>$750.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>medium</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0302</td><td>Margaret and Theodore Ashworth</td><td>High-Net-Worth Individual</td><td>$28.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>low</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0303</td><td>Apex Global Holdings Ltd</td><td>Corporate</td><td>$500.0M</td><td><span class="chip high">high</span></td><td><span class="chip high">high</span></td><td>high</td><td>Compliance - escalation</td></tr><tr><td>APP-2026-0304</td><td>Pacific Northwest Teachers Retirement System</td><td>Institutional</td><td>$1,200.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>medium</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0305</td><td>James Okafor</td><td>High-Net-Worth Individual</td><td>$42.0M</td><td><span class="chip enhanced">enhanced</span></td><td><span class="chip enhanced">enhanced</span></td><td>high</td><td>Compliance - enhanced due diligence</td></tr><tr><td>APP-2026-0306</td><td>Brightpath University Endowment</td><td>Institutional</td><td>$320.0M</td><td><span class="chip enhanced">enhanced</span></td><td><span class="chip enhanced">enhanced</span></td><td>medium</td><td>Compliance - enhanced due diligence</td></tr><tr><td>APP-2026-0307</td><td>Velocity Venture Partners LLC</td><td>Corporate</td><td>$85.0M</td><td><span class="chip high">high</span></td><td><span class="chip enhanced">enhanced</span></td><td>high</td><td>Compliance - escalation</td></tr><tr><td>APP-2026-0308</td><td>Linda Vasquez</td><td>High-Net-Worth Individual</td><td>$9.5M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>low</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0309</td><td>Northern Lights Sovereign Wealth Fund</td><td>Institutional</td><td>$2,000.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>high</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0310</td><td>Heritage Family Office</td><td>Family Office</td><td>$175.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>high</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0311</td><td>Eastbridge Trading Group Ltd</td><td>Corporate</td><td>$45.0M</td><td><span class="chip high">high</span></td><td><span class="chip enhanced">enhanced</span></td><td>medium</td><td>Compliance - escalation</td></tr><tr><td>APP-2026-0312</td><td>Midwest Municipal Workers Union</td><td>Institutional</td><td>$180.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>medium</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0313</td><td>Robert and Diane Mercer-Hastings</td><td>High-Net-Worth Individual</td><td>$67.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>medium</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0314</td><td>Global Impact Partners Foundation</td><td>Institutional</td><td>$95.0M</td><td><span class="chip standard">standard</span></td><td><span class="chip standard">standard</span></td><td>medium</td><td>Compliance - standard review</td></tr><tr><td>APP-2026-0315</td><td>R. Ashford (via Introducer)</td><td>High-Net-Worth Individual</td><td>$120.0M</td><td><span class="chip high">high</span></td><td><span class="chip high">high</span></td><td>high</td><td>Compliance - escalation</td></tr></tbody></table></div>
+<h2>Details</h2>
+
+<details><summary>APP-2026-0301 · Greenfield State Pension Fund &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Greenfield State Pension Fund, $750M AUM, equity and fixed income management</b><br>Large state pension fund with $750 million to allocate across domestic equity and investment-grade fixed income, holding standard institutional documentation and an existing sub-advisory relationship.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a state pension fund with a large AUM and standard institutional documentation, indicating low AML/KYC risk. There are no red flags or missing critical documents. The complexity is medium due to the size and governance structure but does not raise compliance risk. No severe flags or pressure to speed onboarding are present, so the tier is standard rather than enhanced or high.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to multiple governance documents and coordination with an existing sub-advisory relationship.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to complete documentation, no red flags, and a low AML/KYC risk profile.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on regulatory oversight requirements for institutional clients and verifying provided investment policy statement and board resolution.</li><li>[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling in parallel with compliance review.</li><li>[RM] Monitor and coordinate any additional information requests from Compliance if needed.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>Institutional client subject to regulatory oversight</li><li>Investment policy statement and board resolution provided</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0302 · Margaret and Theodore Ashworth &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Margaret and Theodore Ashworth, $28M AUM, Wealth Management with discretionary income focus</b><br>Retired U.S.-based couple with assets from executive compensation, real estate sales, and inheritance seeking discretionary portfolio management with moderate risk tolerance.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a U.S.-based retired couple with assets from common, well-understood sources such as executive compensation, real estate sales, and inheritance. There are no red flags or missing critical documentation. The case is straightforward with standard documentation and no complexity in ownership or structure, justifying a standard risk tier and low operational complexity.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> low — Low complexity due to standard documentation, no complex ownership, and straightforward client profile.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to no red flags, complete documentation, and well-understood sources of funds.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on verifying source of funds and confirming no red flags.</li><li>[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0303 · Apex Global Holdings Ltd &nbsp;<span class="chip high">high</span>
+<span class="muted"> · Compliance - escalation</span></summary>
+<p class="note"><b>Apex Global Holdings Ltd, $500M AUM, multi-asset management account</b><br>Offshore corporate entity with a complex multi-layered ownership structure involving nominee directors and unclear beneficial ownership, seeking a managed multi-asset investment account.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip high">high</span> &nbsp; model <span class="chip high">high</span> &nbsp;
+     rules floor <span class="chip high">high</span> &nbsp; confidence 0.95</p>
+  <p>The presence of nominee directors and inability to establish beneficial ownership are severe flags that alone justify a high risk tier. The source of funds is unevidenced and combined with client pressure and resistance to documentation requests, this pattern strongly indicates potential money laundering risk. The complexity is high due to the multi-layered offshore structure and large AUM. This case is not merely enhanced risk but high risk due to multiple severe flags and behavioural red flags.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>nominee_directors</b> <span class='muted'>(ownership)</span><br>“the listed directors appear to be nominee directors from a corporate services firm rather than actual principals” <span class=ok>✓ found in application</span></li><li><b>beneficial_owner_unknown</b> <span class='muted'>(ownership)</span><br>“Beneficial ownership is difficult to determine from submitted documentation” <span class=ok>✓ found in application</span></li><li><b>blocks_direct_contact</b> <span class='muted'>(behaviour)</span><br>“Client is requesting expedited processing and has pushed back on repeated requests for additional ownership and source-of-funds documentation” <span class=ok>✓ found in application</span></li><li><b>steering_attempt</b> <span class='muted'>(behaviour)</span><br>“Client is requesting expedited processing and has pushed back on repeated requests for additional ownership and source-of-funds documentation” <span class=ok>✓ found in application</span></li><li><b>source_of_funds_unevidenced</b> <span class='muted'>(source_of_funds)</span><br>“Source of funds documentation references &#x27;diversified business interests&#x27; but provides no supporting detail” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li>Offshore jurisdiction or structure → min <span class="chip enhanced">enhanced</span> <code>offshore</code></li><li>Nominee directors → min <span class="chip high">high</span> <code>nominee director</code></li><li>Beneficial ownership unclear → min <span class="chip high">high</span> <code>Beneficial ownership is difficult</code></li><li>Layered ownership structure → min <span class="chip enhanced">enhanced</span> <code>layers of intermediate holding compan</code></li><li>Source of funds not evidenced → min <span class="chip enhanced">enhanced</span> <code>no supporting detail</code></li><li>Resists due diligence → min <span class="chip enhanced">enhanced</span> <code>pushed back</code></li><li>Pressure on timeline → min <span class="chip enhanced">enhanced</span> <code>expedited processing</code></li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — High complexity due to multi-jurisdictional ownership layers, offshore status, and large AUM.</p>
+  <p><b>Risk:</b> High risk tier assigned because of nominee directors, unknown beneficial ownership, unevidenced source of funds, and client resistance to documentation requests.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct enhanced due diligence with senior compliance review focusing on verifying beneficial ownership, source of funds evidence, and addressing client resistance to documentation requests.</li><li>[RM] Request complete beneficial ownership documentation and detailed source of funds evidence from the client as identified in missing information.</li><li>[Operations] Hold all account opening, funding, and trading activities until compliance clearance is obtained.</li><li>[Operations] Begin collecting missing information only; no operational set-up or investment restriction coding may proceed at this stage.</li></ol>
+  <b>Missing information</b><ul><li>complete beneficial ownership documentation</li><li>detailed source of funds evidence</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0304 · Pacific Northwest Teachers Retirement System &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Pacific Northwest Teachers Retirement System, $1.2B AUM, Fixed Income and Real Assets onboarding</b><br>Institutional public pension fund with a 10-year track record at another firm, transitioning $1.2B in assets with phased onboarding over 6 months and full documentation provided.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a well-documented public pension fund with no red flags or missing critical documents, indicating standard AML/KYC risk. The phased onboarding and large AUM increase operational complexity but do not raise compliance risk. There are no severe flags or evidence of pressure or resistance, so enhanced or high risk tiers are not warranted.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to large AUM, phased onboarding, and multiple asset classes requested.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to no red flags, complete documentation, and a well-established client profile.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on public pension fund status, investment committee approval, 10-year track record verification, and monitoring phased onboarding.</li><li>[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.</li><li>[RM] Maintain client communication and provide any additional information requested by Compliance.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>public pension fund status</li><li>investment committee approval</li><li>10-year track record with another firm</li><li>dedicated relationship manager assigned</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0305 · James Okafor &nbsp;<span class="chip enhanced">enhanced</span>
+<span class="muted"> · Compliance - enhanced due diligence</span></summary>
+<p class="note"><b>James Okafor, $42M AUM, wealth management and trust services</b><br>U.S. citizen on a multi-year overseas assignment with complex trust and entity structures requiring coordination with an estate planning attorney.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip enhanced">enhanced</span> &nbsp; model <span class="chip enhanced">enhanced</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.85</p>
+  <p>The client has moderate to high complexity due to multiple trust structures and international residency, which raises jurisdictional and ownership complexity flags. However, the source of funds is clearly stated as executive compensation and stock options from a long career, with no evidence of unevidenced funds or resistance to documentation, so the tier is enhanced rather than high.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>complex ownership</b> <span class='muted'>(ownership)</span><br>“Multiple entity structures will be involved” <span class=ok>✓ found in application</span></li><li><b>international residency</b> <span class='muted'>(jurisdiction)</span><br>“U.S. citizen currently on a multi-year overseas work assignment” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — High complexity due to multiple entity structures, several trusts, international residency, and attorney coordination.</p>
+  <p><b>Risk:</b> Enhanced risk tier due to complex ownership and international residency despite clear source of funds.</p>
+  <b>Next steps</b><ol><li>[Compliance] Perform enhanced due diligence focusing on ownership structures and international residency implications.</li><li>[RM] Collect any additional information needed to support compliance review if identified during due diligence.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0306 · Brightpath University Endowment &nbsp;<span class="chip enhanced">enhanced</span>
+<span class="muted"> · Compliance - enhanced due diligence</span></summary>
+<p class="note"><b>Brightpath University Endowment, $320M AUM, equity and alternatives allocation</b><br>Institutional university endowment allocating $320 million across domestic equity, international equity, and alternative strategies with ESG exclusions and a pending board resolution.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip enhanced">enhanced</span> &nbsp; model <span class="chip enhanced">enhanced</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.85</p>
+  <p>The client is an institutional university endowment with a large AUM and multiple asset classes, which increases operational complexity. The pending board resolution and request to start onboarding before final approval represent moderate compliance risks and pressure to speed onboarding, warranting enhanced due diligence. There are no severe flags such as nominee directors or refusal to provide documents, so the tier is not high.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>pressure to speed onboarding</b> <span class='muted'>(behaviour)</span><br>“Requesting that onboarding begin in parallel with the final approval to meet a Q2 funding deadline” <span class=ok>✓ found in application</span></li><li><b>missing board resolution</b> <span class='muted'>(documentation)</span><br>“Board resolution pending final signature” <span class=ok>✓ found in application</span></li><li><b>ESG exclusion requirements</b> <span class='muted'>(other)</span><br>“Endowment has specific ESG exclusion requirements — no fossil fuels, no private prisons, no tobacco” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to multiple asset classes, ESG exclusion requirements, and a pending board resolution.</p>
+  <p><b>Risk:</b> Enhanced risk tier due to pressure to speed onboarding and missing final signed board resolution.</p>
+  <b>Next steps</b><ol><li>[Compliance] Perform enhanced due diligence focusing on obtaining the final signed board resolution and monitoring the timing pressure for onboarding.</li><li>[RM] Request the final signed board resolution from the client.</li><li>[Operations] Collect any missing client information but do not proceed with account opening, funding, or trading until compliance clearance.</li></ol>
+  <b>Missing information</b><ul><li>final signed board resolution</li></ul>
+  <b>Other compliance considerations</b><ul><li>ESG exclusion requirements</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0307 · Velocity Venture Partners LLC &nbsp;<span class="chip high">high</span>
+<span class="muted"> · Compliance - escalation</span></summary>
+<p class="note"><b>Velocity Venture Partners LLC, $85M AUM, alternative investments onboarding</b><br>Velocity Venture Partners LLC is a venture capital firm with a multi-entity fund structure and limited partners from multiple countries, led by a general partner who is a recently former senior government official.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip high">high</span> &nbsp; model <span class="chip enhanced">enhanced</span> &nbsp;
+     rules floor <span class="chip enhanced">enhanced</span> &nbsp; confidence 0.90</p>
+  <p>The presence of a politically exposed person (PEP) requires enhanced due diligence. Additionally, incomplete ownership documentation and multiple international investors increase risk and complexity. There are no severe flags such as nominee directors or refusal to provide documents, so the tier is not high.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>pep</b> <span class='muted'>(pep)</span><br>“General partner is a former senior government official who left office 14 months ago” <span class=ok>✓ found in application</span></li><li><b>ownership</b> <span class='muted'>(ownership)</span><br>“missing certified copies of fund formation documents and an updated list of limited partners” <span class=ok>✓ found in application</span></li><li><b>jurisdiction</b> <span class='muted'>(jurisdiction)</span><br>“Fund documentation lists investors from multiple countries across several regions” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li>Politically exposed person → min <span class="chip enhanced">enhanced</span> <code>former senior government official</code></li><li>Incomplete KYC on material parties → min <span class="chip enhanced">enhanced</span> <code>KYC documentation is partially complete</code></li></ul>
+  <b>Guardrail actions</b><ul><li>Raised from enhanced to high: escalation policy (red flags in 3 categories: jurisdiction, ownership, pep)</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — High complexity due to multi-entity fund structure, multiple international investors, and incomplete KYC documentation on fund formation and investors.</p>
+  <p><b>Risk:</b> High risk tier assigned due to PEP status of the general partner, missing certified fund formation documents, and multiple jurisdictions involved.</p>
+  <b>Next steps</b><ol><li>[Compliance] Perform enhanced due diligence focusing on the PEP status of the general partner and review the missing certified fund formation documents and updated list of limited partners.</li><li>[Operations] Collect missing certified copies of fund formation documents and updated list of limited partners only; no account opening, funding, or trading until compliance clearance.</li><li>[RM] Request certified copies of fund formation documents and updated list of limited partners from the client.</li></ol>
+  <b>Missing information</b><ul><li>certified copies of fund formation documents</li><li>updated list of limited partners</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0308 · Linda Vasquez &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Linda Vasquez, $9.5M AUM, Wealth Management</b><br>High-net-worth individual with assets from a divorce settlement seeking conservative portfolio management focused on capital preservation.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a single high-net-worth individual with assets from a divorce settlement, which is a normal source of funds. The application states &#x27;All standard documentation provided&#x27; and there are no red flags or indications of complexity. There are no severe flags or missing critical information. The case is not higher risk because there are no PEPs, complex ownership, or unexplained sources of funds.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> low — Low complexity due to single individual status, standard documentation, and no complex ownership structures.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to clear source of funds, no red flags, and complete documentation.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on verifying source of funds and confirming no adverse information.</li><li>[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0309 · Northern Lights Sovereign Wealth Fund &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Northern Lights Sovereign Wealth Fund, $2B AUM, Multi-Asset Management requested</b><br>Northern Lights is a large sovereign wealth fund seeking to allocate $2 billion across global equity, fixed income, and real asset strategies. They have provided extensive due diligence documentation and request reciprocal KYC review and dedicated onboarding support.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a large, reputable sovereign wealth fund with extensive due diligence documentation and no red flags indicating enhanced or high AML risk. The source of funds is clear and well documented. The operational complexity is high due to the size, multi-asset nature, and the client&#x27;s request for reciprocal KYC and dedicated onboarding support. There are no severe flags or evidence of pressure or resistance, so the risk tier remains standard.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — Onboarding is complex due to the large size, multi-asset service scope, and client requests for reciprocal KYC and dedicated onboarding with weekly status calls.</p>
+  <p><b>Risk:</b> Risk tier is standard based on clear source of funds, no red flags, and no severe risk indicators, but operational complexity is high.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on verifying the reciprocal KYC review request and ensuring all compliance documentation is complete.</li><li>[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.</li><li>[RM] Coordinate with the client to confirm expectations for the dedicated onboarding team and schedule weekly status calls.</li><li>[Compliance] Address the other compliance consideration regarding the client&#x27;s request to review our compliance practices.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>Client requests reciprocal KYC review of our compliance practices</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0310 · Heritage Family Office &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Heritage Family Office, $175M AUM, comprehensive wealth management with multi-entity reporting</b><br>A multi-generational family office managing wealth for 14 family members across trusts, LLCs, individual accounts, and a family foundation, requiring consolidated reporting and coordination with three external advisors.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.90</p>
+  <p>The client is a large, multi-entity family office with complex ownership and multiple accounts, which increases operational complexity but does not present any AML/KYC red flags or missing documentation. There are no indications of PEPs, nominee directors, or refusal to provide documents, so the risk tier remains standard rather than enhanced or high.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — High complexity due to multiple entities, 22 accounts, and coordination with external advisors.</p>
+  <p><b>Risk:</b> Standard risk tier due to no AML/KYC red flags or missing documentation despite operational complexity.</p>
+  <b>Next steps</b><ol><li>[Compliance] Perform enhanced due diligence on all trusts and LLCs ownership structures and verify source of funds documentation for all entities as part of the standard review.</li><li>[Operations] Begin operational set-up including account structure creation, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.</li><li>[RM] Coordinate with client to provide any additional clarifications needed for ownership structures or source of funds documentation if requested by Compliance.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0311 · Eastbridge Trading Group Ltd &nbsp;<span class="chip high">high</span>
+<span class="muted"> · Compliance - escalation</span></summary>
+<p class="note"><b>Eastbridge Trading Group Ltd, $45M AUM, Fixed Income Management</b><br>Eastbridge Trading Group Ltd is a newly formed corporate trading company with a sole director and beneficial owner, seeking to invest $45 million in short-duration fixed income as a cash management strategy.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip high">high</span> &nbsp; model <span class="chip enhanced">enhanced</span> &nbsp;
+     rules floor <span class="chip high">high</span> &nbsp; confidence 0.85</p>
+  <p>The client is a newly formed entity with limited operating history and minimal supporting documentation for source of funds, combined with pressure to speed onboarding, which triggers enhanced due diligence. There are no severe flags such as nominee directors or refusal to provide documents, so the case does not reach high risk. The combination of factors justifies enhanced tier rather than standard.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>newly formed entity</b> <span class='muted'>(ownership)</span><br>“Company was formed just 8 months ago with limited operating history” <span class=ok>✓ found in application</span></li><li><b>source of funds needs evidence</b> <span class='muted'>(source_of_funds)</span><br>“Source of funds is described as &#x27;trading profits&#x27; but supporting documentation is minimal — no audited financials or bank statements provided” <span class=ok>✓ found in application</span></li><li><b>pressure on documentation</b> <span class='muted'>(behaviour)</span><br>“Client insists on a compressed onboarding timeline and has expressed frustration with documentation requirements” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li>Source of funds not evidenced → min <span class="chip enhanced">enhanced</span> <code>supporting documentation is minimal</code></li><li>Resists due diligence → min <span class="chip enhanced">enhanced</span> <code>frustration with documentation</code></li><li>Pressure on timeline → min <span class="chip enhanced">enhanced</span> <code>insists on a compressed</code></li><li>Limited operating history → min <span class="chip enhanced">enhanced</span> <code>Recently incorporated</code></li></ul>
+  <b>Guardrail actions</b><ul><li>Raised from enhanced to high: deterministic rules set a floor</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to recent incorporation, single ownership, moderate AUM, and limited supporting documentation.</p>
+  <p><b>Risk:</b> High risk tier due to unevidenced source of funds, pressure on documentation, and newly formed entity status as identified in the compliance pre-screen.</p>
+  <b>Next steps</b><ol><li>[Compliance] Perform enhanced due diligence focusing on verifying source of funds and ownership, and monitor client responsiveness to documentation requests.</li><li>[RM] Request audited financials and bank statements from the client as missing information.</li><li>[Operations] Collect missing documents only; no account opening, funding, or trading until compliance clearance.</li></ol>
+  <b>Missing information</b><ul><li>audited financials</li><li>bank statements</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0312 · Midwest Municipal Workers Union &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Midwest Municipal Workers Union, $180M AUM, fixed income management</b><br>Institutional pension fund for a union with 12,000 members, transitioning assets from retiring manager with full documentation provided.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a large institutional pension fund with full documentation provided and no AML/KYC red flags. The source of funds is clear and typical for a union pension fund. The complexity is medium due to the size and governance structure, but there are no indications of enhanced or high risk factors.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to large AUM, union governance, and multiple governance documents.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to clear source of funds, no red flags, and complete documentation.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on verifying adherence to the investment policy mandating investment-grade only and no derivatives.</li><li>[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling.</li><li>[RM] Monitor and coordinate any additional information requests from Compliance if needed.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>investment policy mandates investment-grade only, no derivatives</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0313 · Robert and Diane Mercer-Hastings &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Robert and Diane Mercer-Hastings, $67M AUM, wealth management and estate planning</b><br>High-net-worth couple with multiple asset types including concentrated employer stock, real estate, and cash; husband is a healthcare CEO and wife is a law firm partner.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a high-net-worth individual couple with clear and documented sources of funds including employment income, stock holdings, and real estate. There are no red flags such as nominee directors or refusal to provide documents. The complexity arises from multiple asset classes and regulatory considerations like 10b5-1 plans, but no AML/KYC risk concerns are evident, supporting a standard risk tier.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to multiple asset classes and required coordination on 10b5-1 plan and trading window restrictions.</p>
+  <p><b>Risk:</b> Standard risk tier due to documented sources of funds and absence of red flags, with complexity driven by regulatory coordination needs.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on 10b5-1 plan involvement and trading window restrictions compliance.</li><li>[Operations] Begin operational set-up tasks including account structure, reporting set-up, investment-restriction coding, and scheduling.</li><li>[RM] Coordinate with corporate counsel to clarify trading window restrictions and 10b5-1 plan details as needed.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>10b5-1 plan involvement</li><li>Trading window restrictions coordination</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0314 · Global Impact Partners Foundation &nbsp;<span class="chip standard">standard</span>
+<span class="muted"> · Compliance - standard review</span></summary>
+<p class="note"><b>Global Impact Partners Foundation, $95M AUM, impact investing with ESG and detailed reporting</b><br>Institutional private foundation focused on climate and social justice with a $95 million allocation to impact investment strategies requiring UN SDG-aligned reporting and quarterly narrative outcome reports.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip standard">standard</span> &nbsp; model <span class="chip standard">standard</span> &nbsp;
+     rules floor <span class="chip standard">standard</span> &nbsp; confidence 0.95</p>
+  <p>The client is a large private foundation with no red flags or missing KYC/AML documentation indicated. The source of funds is not questioned and there is no evidence of pressure or resistance. The complexity arises from the size, institutional nature, and specific reporting requirements, but these do not elevate the AML risk beyond standard.</p>
+  <b>Red flags (model, with evidence)</b><ul><li class='muted'>None identified</li></ul>
+  <b>Deterministic rule hits</b><ul><li class='muted'>No rule matched</li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> medium — Medium complexity due to large institutional size and detailed impact and narrative reporting requirements.</p>
+  <p><b>Risk:</b> Standard risk tier assigned due to no red flags, no missing information, and verified source of funds, with complexity driven by reporting and ESG needs.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct standard due diligence focusing on Impact Investing and ESG restrictions and quarterly narrative reporting requirements.</li><li>[Operations] Begin operational set-up including account structure, reporting configuration, investment-restriction coding, and scheduling in parallel with compliance review.</li><li>[RM] Monitor client evaluation timeline and prioritize onboarding speed in coordination with compliance and operations.</li></ol>
+  <b>Missing information</b><ul><li class='muted'>None</li></ul>
+  <b>Other compliance considerations</b><ul><li>Impact Investing and ESG restrictions</li><li>Quarterly narrative reporting requirements</li><li>Client evaluating multiple firms with onboarding speed as a factor</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+<details><summary>APP-2026-0315 · R. Ashford (via Introducer) &nbsp;<span class="chip high">high</span>
+<span class="muted"> · Compliance - escalation</span></summary>
+<p class="note"><b>R. Ashford, $120M HNW individual, offshore trust wealth management</b><br>High-net-worth individual introduced via an unaffiliated third party, requesting account in an offshore trust with all communications routed through their advisor and declining direct contact.</p>
+<div class="grid">
+ <div>
+  <h3>Risk pre-screen</h3>
+  <p>Final <span class="chip high">high</span> &nbsp; model <span class="chip high">high</span> &nbsp;
+     rules floor <span class="chip high">high</span> &nbsp; confidence 0.95</p>
+  <p>The client exhibits multiple red flags including refusal of direct contact, use of an offshore trust, and no evidence for source of funds, which together justify a high risk tier. The presence of severe flags such as &#x27;blocks_direct_contact&#x27; and &#x27;source_of_funds_unevidenced&#x27; combined with pressure/resistance (declining the introductory call) meets the criteria for high risk. It is not merely enhanced risk because of the combination of severe flags and behavioural resistance.</p>
+  <b>Red flags (model, with evidence)</b><ul><li><b>blocks_direct_contact</b> <span class='muted'>(behaviour)</span><br>“Has requested that all communications be routed through their advisor rather than directly to the client” <span class=ok>✓ found in application</span></li><li><b>source_of_funds_unevidenced</b> <span class='muted'>(source_of_funds)</span><br>“Source of wealth listed as &#x27;private investments and real estate development&#x27; with no supporting documentation provided” <span class=ok>✓ found in application</span></li><li><b>pressure_or_resistance</b> <span class='muted'>(behaviour)</span><br>“Declined a standard introductory call with the relationship manager” <span class=ok>✓ found in application</span></li></ul>
+  <b>Deterministic rule hits</b><ul><li>Offshore jurisdiction or structure → min <span class="chip enhanced">enhanced</span> <code>offshore</code></li><li>Source of funds not evidenced → min <span class="chip enhanced">enhanced</span> <code>no supporting documentation</code></li><li>Resists due diligence → min <span class="chip enhanced">enhanced</span> <code>Declined a standard introductory call</code></li><li>Unknown introducer or intermediary → min <span class="chip enhanced">enhanced</span> <code>unaffiliated third-party introducer</code></li></ul>
+  <b>Guardrail actions</b><ul><li class='muted'>None</li></ul>
+ </div>
+ <div>
+  <h3>Onboarding brief</h3>
+  <p><b>Complexity:</b> high — High complexity due to offshore trust ownership, use of an unaffiliated introducer, and refusal of direct client contact.</p>
+  <p><b>Risk:</b> High risk tier assigned because of severe flags including blocking direct contact, unevidenced source of funds, and client resistance to standard onboarding calls.</p>
+  <b>Next steps</b><ol><li>[Compliance] Conduct enhanced due diligence focusing on verification of offshore trust ownership, source of funds documentation, and insist on direct client contact if possible.</li><li>[RM] Request from client supporting documentation for source of wealth, identity and ownership documents for the offshore trust, and attempt to schedule the standard introductory call.</li><li>[Operations] Begin collecting missing information only; no account opening, funding, or trading until compliance clearance.</li></ol>
+  <b>Missing information</b><ul><li>supporting documentation for source of wealth</li><li>identity and ownership documents for offshore trust</li><li>standard introductory call with relationship manager</li></ul>
+  <b>Other compliance considerations</b><ul><li class='muted'>None</li></ul>
+  <p class="muted">Model openai:gpt-4.1-mini · prompts risk_assessment_v3@d6256028, onboarding_summary_v3@049991c1<br>
+  AI pre-screen. Needs human review. Not a compliance decision.</p>
+ </div>
+</div></details>
+</main></body></html>
