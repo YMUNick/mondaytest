@@ -24,32 +24,29 @@
       "red_flags": [],
       "complexity": "medium",
       "complexity_drivers": [
-        "Large institutional client with $750M AUM",
-        "Multiple asset classes (equity and fixed income)",
-        "Existing relationship and standard institutional documentation"
+        "Large institutional client with multiple documents and prior sub-advisory relationship"
       ],
       "missing_information": [],
       "other_compliance_considerations": [
-        "Institutional client",
-        "Existing sub-advisory relationship"
+        "government-owned investor"
       ],
-      "recommended_action": "Proceed with standard due diligence and onboarding processes appropriate for a large institutional client.",
+      "recommended_action": "Proceed with standard due diligence and onboarding processes for a large institutional client.",
       "confidence": 0.95,
-      "reasoning": "The client is a state pension fund with a large AUM and standard institutional documentation, indicating low AML/KYC risk. There are no red flags or missing critical documents related to identity, ownership, or source of funds. The complexity is medium due to the size and multi-asset nature of the account, but the risk tier remains standard because no enhanced or high-risk indicators are present."
+      "reasoning": "The client is a state pension fund with a large AUM and standard institutional documentation provided, indicating no AML/KYC red flags. There are no severe flags or evidence of pressure or unevidenced source of funds. The complexity is medium due to the size and institutional nature, but the risk tier remains standard because all required documentation is in place and no suspicious factors are present."
     },
     "summary": {
       "headline": "Greenfield State Pension Fund, $750M AUM, equity and fixed income management",
-      "client_profile": "Large state pension fund with $750 million to allocate across domestic equity and investment-grade fixed income strategies, supported by standard institutional documentation and an existing sub-advisory relationship.",
+      "client_profile": "Large state pension fund with a prior sub-advisory relationship and standard institutional documentation provided.",
       "services_needed": [
         "Equity Management",
         "Fixed Income Management"
       ],
-      "complexity_note": "Medium complexity due to large AUM, multiple asset classes, and existing sub-advisory relationship.",
-      "risk_note": "Standard risk tier assigned due to no red flags, complete documentation, and low AML/KYC risk.",
+      "complexity_note": "Medium complexity due to large institutional size, multiple documents, and existing sub-advisory relationship.",
+      "risk_note": "Standard risk tier assigned because all required documentation is present and no red flags or severe issues were identified.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on institutional client status and existing sub-advisory relationship.",
+        "[Compliance] Conduct standard due diligence focusing on government-owned investor considerations.",
         "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.",
-        "[RM] Monitor and coordinate any additional information requests from Compliance if needed."
+        "[RM] Monitor and coordinate any additional information requests if compliance identifies gaps during review."
       ],
       "owner": "Compliance - standard review"
     },
@@ -59,7 +56,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:12.055472+00:00",
+    "processed_at": "2026-11-09T08:01:07.667025+00:00",
     "error": null
   },
   {
@@ -88,14 +85,14 @@
       "complexity": "low",
       "complexity_drivers": [
         "Single individual clients",
-        "No complex ownership or entities",
-        "Standard documentation provided"
+        "Standard documentation provided",
+        "No complex ownership or structures"
       ],
       "missing_information": [],
       "other_compliance_considerations": [],
       "recommended_action": "Proceed with standard due diligence and onboarding processes.",
       "confidence": 0.95,
-      "reasoning": "The client is a U.S.-based retired couple with clear sources of funds including executive compensation, real estate sales, and inheritance, all typical and well-documented. There are no red flags or missing critical documentation. The case is straightforward with no complexity in ownership or structure, justifying a standard risk tier and low operational complexity."
+      "reasoning": "The client is a U.S.-based retired couple with clear sources of funds including executive compensation, real estate sales, and inheritance, all typical and well-documented. There are no red flags or missing critical documentation. The case is straightforward with no complexity or risk indicators that would require enhanced or high-tier review."
     },
     "summary": {
       "headline": "Margaret and Theodore Ashworth, $28M AUM, discretionary wealth management",
@@ -103,10 +100,10 @@
       "services_needed": [
         "Wealth Management"
       ],
-      "complexity_note": "Low complexity due to straightforward ownership, standard documentation, and no complex entities.",
+      "complexity_note": "Low complexity due to standard documentation, no complex ownership, and straightforward client profile.",
       "risk_note": "Standard risk tier assigned due to clear, well-documented sources of funds and no red flags or missing information.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on verifying sources of funds and confirming no red flags.",
+        "[Compliance] Conduct standard due diligence focusing on verifying income sources and confirming no red flags.",
         "[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling."
       ],
       "owner": "Compliance - standard review"
@@ -117,7 +114,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:12.055472+00:00",
+    "processed_at": "2026-11-09T08:01:07.668034+00:00",
     "error": null
   },
   {
@@ -183,8 +180,7 @@
         "severe_flags": [
           "nominee_directors",
           "beneficial_owner_unknown",
-          "blocks_direct_contact",
-          "steering_attempt"
+          "refuses_documents"
         ],
         "source_of_funds_unevidenced": true,
         "pressure_or_resistance": true
@@ -204,15 +200,9 @@
           "evidence_verified": true
         },
         {
-          "flag": "blocks_direct_contact",
-          "category": "behaviour",
-          "evidence": "Client is requesting expedited processing and has pushed back on repeated requests for additional ownership and source-of-funds documentation",
-          "evidence_verified": true
-        },
-        {
-          "flag": "steering_attempt",
-          "category": "behaviour",
-          "evidence": "Client is requesting expedited processing",
+          "flag": "refuses_documents",
+          "category": "documentation",
+          "evidence": "has pushed back on repeated requests for additional ownership and source-of-funds documentation",
           "evidence_verified": true
         },
         {
@@ -220,37 +210,38 @@
           "category": "source_of_funds",
           "evidence": "Source of funds documentation references 'diversified business interests' but provides no supporting detail",
           "evidence_verified": true
+        },
+        {
+          "flag": "pressure_or_resistance",
+          "category": "behaviour",
+          "evidence": "Client is requesting expedited processing and has pushed back on repeated requests for additional ownership and source-of-funds documentation",
+          "evidence_verified": true
         }
       ],
       "complexity": "high",
       "complexity_drivers": [
-        "multi-layer ownership structure across multiple jurisdictions",
+        "multi-layered ownership structure across multiple jurisdictions",
         "offshore corporate entity",
-        "large estimated AUM of 500,000,000 USD"
+        "large estimated AUM"
       ],
-      "missing_information": [
-        "complete beneficial ownership details",
-        "detailed source of funds documentation"
-      ],
+      "missing_information": [],
       "other_compliance_considerations": [],
       "recommended_action": "Escalate for enhanced due diligence and detailed ownership verification before onboarding due to multiple severe red flags and resistance to documentation requests.",
       "confidence": 0.95,
-      "reasoning": "The presence of nominee directors and inability to establish beneficial ownership are severe flags that alone justify a high risk tier. Combined with unevidenced source of funds and client resistance to documentation requests and expedited processing demands, this meets the criteria for high risk. The case is not merely enhanced because of the multiple severe flags and pressure, which are classic indicators of potential money laundering risk."
+      "reasoning": "The presence of nominee directors, unknown beneficial ownership, refusal to provide adequate documentation, and unevidenced source of funds combined with pressure to expedite onboarding clearly place this client in the high-risk tier. The case is not merely enhanced risk because of the combination of multiple severe flags and behavioural resistance, which are classic indicators of potential money laundering risk."
     },
     "summary": {
       "headline": "Apex Global Holdings Ltd, $500M AUM, multi-asset management requested",
-      "client_profile": "Offshore corporate entity with a complex multi-layer ownership structure involving nominee directors and unclear beneficial ownership, seeking a managed account for multi-asset investment.",
+      "client_profile": "Offshore corporate entity with a complex, multi-layered ownership structure involving nominee directors and unclear beneficial ownership, seeking a managed account for multi-asset investment.",
       "services_needed": [
         "Multi-Asset Management"
       ],
       "complexity_note": "High complexity due to multi-jurisdictional ownership layers, offshore status, and large AUM.",
-      "risk_note": "High risk tier assigned due to nominee directors, unknown beneficial ownership, unevidenced source of funds, and client resistance to documentation requests.",
+      "risk_note": "High risk tier assigned due to nominee directors, unknown beneficial ownership, refusal to provide documentation, unevidenced source of funds, and client resistance to compliance requests.",
       "next_steps": [
-        "[Compliance] Conduct enhanced due diligence focusing on verifying complete beneficial ownership details and obtaining detailed source of funds documentation.",
-        "[Compliance] Review client behavior flags including resistance to documentation and attempts to expedite processing.",
-        "[RM] Request from client the missing beneficial ownership details and detailed source of funds documentation as identified by Compliance.",
-        "[Operations] Hold all account opening, funding, and trading activities until Compliance clears the client.",
-        "[Operations] Prepare to collect missing information only; no operational set-up tasks to begin until Compliance clearance."
+        "[Compliance] Conduct enhanced due diligence focusing on detailed ownership verification and source-of-funds evidence before any account opening or funding.",
+        "[Operations] Collect missing information only if Compliance requests it; no account structure or trading setup until Compliance clearance.",
+        "[RM] Continue to request outstanding ownership and source-of-funds documentation from the client as directed by Compliance."
       ],
       "owner": "Compliance - escalation"
     },
@@ -260,7 +251,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:12.055472+00:00",
+    "processed_at": "2026-11-09T08:01:07.668034+00:00",
     "error": null
   },
   {
@@ -289,33 +280,33 @@
       "complexity": "medium",
       "complexity_drivers": [
         "Large institutional client with $1.2B AUM",
-        "Multi-phase onboarding requested",
-        "Multiple asset classes (Fixed Income and Real Assets)",
-        "Investment committee approval and dedicated RM involved"
+        "Multi-strategy allocation (Fixed Income and Real Assets)",
+        "Phased onboarding over 6 months"
       ],
       "missing_information": [],
       "other_compliance_considerations": [
-        "10-year track record with a competing firm",
-        "Phased onboarding requested",
-        "Public pension fund status"
+        "public pension fund status",
+        "investment committee approval",
+        "10-year track record with another firm",
+        "phased onboarding request"
       ],
-      "recommended_action": "Proceed with standard due diligence and phased onboarding as planned, monitoring documentation completeness and phased funding schedule.",
+      "recommended_action": "Proceed with standard due diligence and onboarding procedures, noting phased onboarding and institutional nature.",
       "confidence": 0.95,
-      "reasoning": "The client is a large, well-documented public pension fund with no red flags or missing KYC/AML documentation. The source of funds is clear and evidenced by the nature of the client and its track record. The phased onboarding adds operational complexity but does not increase compliance risk. There are no severe flags or behavioural concerns, so the tier is standard rather than enhanced or high."
+      "reasoning": "The client is a well-documented, established public pension fund with no red flags or missing critical KYC/AML information. The source of funds is clear and evidenced by the nature of the client and documentation. The phased onboarding and large AUM increase operational complexity but do not raise compliance risk. There are no severe flags or indications of pressure or resistance, so the tier remains standard rather than enhanced or high."
     },
     "summary": {
-      "headline": "Pacific Northwest Teachers Retirement System, $1.2B, Fixed Income and Real Assets onboarding",
-      "client_profile": "Public pension fund with a 10-year track record at a competing firm, requesting phased onboarding of $1.2B in fixed income and real assets through a dedicated RM and confirmed investment committee approval.",
+      "headline": "Pacific Northwest Teachers Retirement System, $1.2B AUM, Fixed Income and Real Assets allocation",
+      "client_profile": "Public pension fund with a 10-year track record at another firm, transitioning $1.2B in assets with phased onboarding over 6 months.",
       "services_needed": [
         "Fixed Income",
         "Real Assets"
       ],
-      "complexity_note": "Medium complexity due to large AUM, phased onboarding, and multiple asset classes.",
+      "complexity_note": "Medium complexity due to large institutional size, multi-strategy allocation, and phased onboarding request.",
       "risk_note": "Standard risk tier assigned due to clear source of funds, no red flags, and complete documentation.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on phased onboarding schedule, documentation completeness, and public pension fund status.",
-        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.",
-        "[RM] Monitor phased funding schedule and coordinate any additional information requests if needed."
+        "[Compliance] Conduct standard due diligence focusing on public pension fund status, investment committee approval, 10-year track record verification, and phased onboarding structure.",
+        "[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling in parallel with compliance review.",
+        "[RM] Monitor and coordinate any additional information requests from Compliance related to the phased onboarding or institutional specifics."
       ],
       "owner": "Compliance - standard review"
     },
@@ -325,7 +316,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:12.055472+00:00",
+    "processed_at": "2026-11-09T08:01:07.668034+00:00",
     "error": null
   },
   {
@@ -336,13 +327,11 @@
     "estimated_aum": 42000000.0,
     "submission_date": "2026-01-10",
     "status": "processed",
-    "final_risk_tier": "high",
+    "final_risk_tier": "enhanced",
     "model_risk_tier": "enhanced",
     "rule_floor_tier": "standard",
-    "routing_queue": "Compliance - escalation",
-    "tier_adjustments": [
-      "Raised from enhanced to high: escalation policy (red flags in 3 categories: jurisdiction, ownership, source_of_funds)"
-    ],
+    "routing_queue": "Compliance - enhanced due diligence",
+    "tier_adjustments": [],
     "policy_checks": [],
     "rule_hits": [],
     "risk_assessment": {
@@ -362,44 +351,45 @@
         {
           "flag": "international residency",
           "category": "jurisdiction",
-          "evidence": "multi-year overseas work assignment",
+          "evidence": "U.S. citizen currently on a multi-year overseas work assignment",
           "evidence_verified": true
         },
         {
-          "flag": "complex source of funds",
-          "category": "source_of_funds",
-          "evidence": "executive compensation and stock options from 18-year career",
+          "flag": "complex trust structures",
+          "category": "other",
+          "evidence": "generation-skipping trust and two irrevocable life insurance trusts",
           "evidence_verified": true
         }
       ],
       "complexity": "high",
       "complexity_drivers": [
         "multiple entity structures",
-        "generation-skipping trust and two irrevocable life insurance trusts",
-        "coordination with estate planning attorney",
-        "international residency"
+        "international residency",
+        "complex trust arrangements"
       ],
       "missing_information": [],
-      "other_compliance_considerations": [],
-      "recommended_action": "Perform enhanced due diligence focusing on verifying ownership of entities, source of funds documentation for stock options, and international residency implications.",
-      "confidence": 0.85,
-      "reasoning": "The client involves multiple complex trust and entity structures and has international residency, which raises jurisdictional and ownership complexity requiring enhanced due diligence. The source of funds is typical for an executive but involves stock options that should be evidenced. There are no severe flags or pressure to speed onboarding, so the tier is enhanced rather than high."
+      "other_compliance_considerations": [
+        "coordination with estate planning attorney"
+      ],
+      "recommended_action": "Perform enhanced due diligence focusing on ownership structures, international residency implications, and trust documentation.",
+      "confidence": 0.9,
+      "reasoning": "The client involves multiple complex trust and entity structures and has international residency, which are standard enhanced due diligence triggers. The source of funds is clear and documented as executive compensation and stock options, and there is no evidence of pressure or refusal to provide documents, so the case does not warrant a high risk tier."
     },
     "summary": {
-      "headline": "James Okafor, $42M HNW individual, wealth management and trust services",
-      "client_profile": "U.S. citizen on a multi-year overseas assignment with complex trust and entity structures requiring coordination with an estate planning attorney.",
+      "headline": "James Okafor, $42M AUM, wealth management and trust services",
+      "client_profile": "U.S. citizen on a multi-year overseas assignment with $42 million AUM, seeking wealth management including generation-skipping and irrevocable life insurance trusts involving multiple entities.",
       "services_needed": [
         "Wealth Management",
         "Trust Services"
       ],
-      "complexity_note": "High complexity due to multiple entity structures, generation-skipping and irrevocable life insurance trusts, international residency, and attorney coordination.",
-      "risk_note": "High risk tier due to verified red flags in ownership complexity, international residency, and complex source of funds involving stock options.",
+      "complexity_note": "High complexity due to multiple entity structures, international residency, and complex trust arrangements.",
+      "risk_note": "Enhanced risk tier due to complex ownership, international residency, and trust structures requiring enhanced due diligence.",
       "next_steps": [
-        "[Compliance] Perform enhanced due diligence focusing on verifying ownership of entities, source of funds documentation for stock options, and international residency implications.",
-        "[Operations] Begin collecting any missing information only if identified by Compliance during their review; no account opening, funding, or trading until Compliance clearance.",
-        "[RM] Coordinate with the estate planning attorney as needed to support compliance review and trust structuring."
+        "[Compliance] Perform enhanced due diligence focusing on ownership structures, international residency implications, and trust documentation.",
+        "[RM] Coordinate with the estate planning attorney as part of compliance considerations.",
+        "[RM] Collect any additional information requested by Compliance during their review."
       ],
-      "owner": "Compliance - escalation"
+      "owner": "Compliance - enhanced due diligence"
     },
     "needs_human_review": true,
     "model": "openai:gpt-4.1-mini",
@@ -407,7 +397,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:19.238843+00:00",
+    "processed_at": "2026-11-09T08:01:15.113032+00:00",
     "error": null
   },
   {
@@ -433,9 +423,10 @@
       },
       "risk_tier": "standard",
       "red_flags": [],
-      "complexity": "medium",
+      "complexity": "high",
       "complexity_drivers": [
-        "Large institutional client with multiple asset classes",
+        "Institutional client with $320M AUM",
+        "Multiple asset classes including alternatives",
         "ESG exclusion requirements",
         "Pending board resolution but requesting parallel onboarding"
       ],
@@ -446,21 +437,21 @@
         "ESG exclusion requirements",
         "Institutional client with investment committee oversight"
       ],
-      "recommended_action": "Proceed with standard due diligence while monitoring for completion of the board resolution and ensure ESG restrictions are documented and implemented.",
+      "recommended_action": "Proceed with standard due diligence but prepare for complex onboarding due to institutional nature, large AUM, and ESG restrictions; monitor final board resolution completion.",
       "confidence": 0.95,
-      "reasoning": "The client is a large, reputable university endowment with clear investment committee documentation and no AML red flags. The source of funds is typical for an endowment and well evidenced. Although the board resolution is pending, this is a normal operational delay and does not raise compliance risk. The request to begin onboarding in parallel is reasonable and not pressured or resistant. Therefore, the risk tier is standard, but operational complexity is medium due to size, multiple asset classes, and ESG requirements."
+      "reasoning": "The client is a large, institutional university endowment with clear documentation of investment committee oversight and no AML red flags. The source of funds is evident as an endowment. There are no severe flags or pressure to skip due diligence. The pending board resolution is noted but does not elevate risk. The complexity is high due to size, multiple asset classes, and ESG restrictions, but the AML/KYC risk remains standard."
     },
     "summary": {
-      "headline": "Brightpath University Endowment, $320M, equity and alternatives allocation",
-      "client_profile": "Large institutional university endowment with investment committee oversight seeking to allocate $320 million across domestic equity, international equity, and alternative strategies including hedge funds. Board resolution is pending final signature.",
+      "headline": "Brightpath University Endowment, $320M AUM, equity and alternatives allocation",
+      "client_profile": "Institutional university endowment with investment committee oversight seeking to allocate $320 million across domestic equity, international equity, and alternative strategies with ESG exclusions.",
       "services_needed": [
         "Equity",
         "Alternatives"
       ],
-      "complexity_note": "Medium complexity due to multiple asset classes, ESG exclusion requirements, and pending board resolution while requesting parallel onboarding.",
-      "risk_note": "Standard risk tier due to no AML red flags, evidenced source of funds, and normal operational delays with pending board resolution.",
+      "complexity_note": "High complexity due to large AUM, multiple asset classes including alternatives, ESG exclusion requirements, and pending board resolution.",
+      "risk_note": "Standard risk tier assigned due to clear source of funds, no severe flags, and institutional oversight despite pending board resolution.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on completion of the board resolution and documentation and implementation of ESG exclusion requirements.",
+        "[Compliance] Conduct standard due diligence focusing on verifying the pending board resolution final signature and ESG exclusion compliance.",
         "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding for ESG exclusions, and scheduling in parallel with compliance review.",
         "[RM] Obtain final signed board resolution from the client."
       ],
@@ -472,7 +463,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:19.292794+00:00",
+    "processed_at": "2026-11-09T08:01:15.490574+00:00",
     "error": null
   },
   {
@@ -536,30 +527,29 @@
       "complexity_drivers": [
         "multi-investor fund structure",
         "multiple jurisdictions involved",
-        "incomplete KYC documentation"
+        "incomplete KYC documentation on fund formation and LP list"
       ],
       "missing_information": [
         "certified copies of fund formation documents",
         "updated list of limited partners"
       ],
       "other_compliance_considerations": [],
-      "recommended_action": "Enhanced due diligence is recommended due to PEP status of the general partner, multi-jurisdictional investors, and incomplete ownership documentation.",
+      "recommended_action": "Perform enhanced due diligence focusing on the PEP status of the general partner and obtain the missing fund formation documents and updated LP list before onboarding.",
       "confidence": 0.9,
-      "reasoning": "The presence of a politically exposed person combined with incomplete ownership documentation and multi-jurisdictional investors triggers enhanced due diligence. There are no severe flags such as nominee directors or refusal to provide documents, and the source of funds appears normal and evidenced, so the tier is not high. The complexity is high due to the multi-entity fund structure and incomplete documentation."
+      "reasoning": "The presence of a politically exposed person (PEP) requires enhanced due diligence, as does the incomplete ownership documentation and the multi-jurisdictional investor base. There are no severe flags such as nominee directors or refusal to provide documents, and the source of funds appears normal and evidenced, so the tier is enhanced rather than high."
     },
     "summary": {
-      "headline": "Velocity Venture Partners LLC, $85M AUM, alternative investments onboarding",
-      "client_profile": "Velocity Venture Partners LLC is a venture capital firm with a multi-investor fund structure and investors from multiple jurisdictions, led by a general partner who is a recently former senior government official.",
+      "headline": "Velocity Venture Partners LLC, $85M AUM, seeking Alternative Investments",
+      "client_profile": "Velocity Venture Partners LLC is a venture capital firm with a multi-investor fund structure and investors from multiple jurisdictions, led by a general partner who is a politically exposed person.",
       "services_needed": [
         "Alternative Investments"
       ],
-      "complexity_note": "Onboarding is complex due to the multi-jurisdictional investor base, incomplete KYC documentation, and PEP status of the general partner.",
-      "risk_note": "Client is classified as high risk because of PEP status, missing certified fund formation documents, and multi-jurisdictional investors requiring escalation.",
+      "complexity_note": "Onboarding is complex due to the multi-investor fund structure, multiple jurisdictions, and incomplete KYC documentation on fund formation and limited partners.",
+      "risk_note": "Client is high risk due to PEP status of the general partner, missing certified fund formation documents, and multi-jurisdictional investor base requiring escalation.",
       "next_steps": [
-        "[Compliance] Conduct enhanced due diligence focusing on PEP status, ownership documentation gaps, and multi-jurisdictional investor risks as part of escalation review.",
+        "[Compliance] Perform enhanced due diligence focusing on the PEP status of the general partner and review missing certified fund formation documents and updated limited partner list.",
         "[RM] Request certified copies of fund formation documents and an updated list of limited partners from the client.",
-        "[Operations] Hold all account opening, funding, and trading activities until compliance clearance is received.",
-        "[Operations] Begin collecting missing KYC information only; no operational set-up tasks may proceed at this stage."
+        "[Operations] Begin collecting missing KYC information only; no account opening, funding, or trading until compliance clearance."
       ],
       "owner": "Compliance - escalation"
     },
@@ -569,7 +559,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:19.910500+00:00",
+    "processed_at": "2026-11-09T08:01:15.582850+00:00",
     "error": null
   },
   {
@@ -605,19 +595,20 @@
       "other_compliance_considerations": [],
       "recommended_action": "Proceed with standard due diligence and onboarding processes.",
       "confidence": 0.95,
-      "reasoning": "The client is a single high-net-worth individual with assets from a divorce settlement, which is a normal source of funds. All standard documentation is provided and there are no red flags or indications of complexity. The case is not higher risk because there are no PEPs, complex ownership, or missing critical documents."
+      "reasoning": "The client is a single high-net-worth individual with assets from a divorce settlement, which is a normal source of funds. The application states 'All standard documentation provided' and there are no red flags or indications of complexity. There are no severe flags or pressure to speed up onboarding. Therefore, the risk tier is standard and operational complexity is low."
     },
     "summary": {
-      "headline": "Linda Vasquez, $9.5M HNW individual, requests Wealth Management",
-      "client_profile": "Linda Vasquez is a high-net-worth individual with $9.5 million in assets from a divorce settlement, seeking conservative portfolio management focused on capital preservation. She has provided all standard documentation and presents a straightforward onboarding profile.",
+      "headline": "Linda Vasquez, $9.5M AUM, Wealth Management services",
+      "client_profile": "High-net-worth individual with assets from a divorce settlement seeking conservative portfolio management focused on capital preservation.",
       "services_needed": [
         "Wealth Management"
       ],
-      "complexity_note": "Onboarding is low complexity due to single individual status, standard documentation, and no complex ownership structures.",
-      "risk_note": "Risk tier is standard based on complete documentation, normal source of funds, and absence of red flags or complex ownership.",
+      "complexity_note": "Low complexity due to single individual client, standard documentation, and no complex ownership structures.",
+      "risk_note": "Standard risk tier assigned based on normal source of funds, no red flags, and complete documentation.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on verification of provided documentation and source of funds.",
-        "[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling."
+        "[Compliance] Conduct standard due diligence focusing on verifying source of funds and reviewing all provided documentation.",
+        "[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling.",
+        "[RM] Monitor for any additional information requests from Compliance and coordinate client responses as needed."
       ],
       "owner": "Compliance - standard review"
     },
@@ -627,7 +618,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:21.324802+00:00",
+    "processed_at": "2026-11-09T08:01:20.651482+00:00",
     "error": null
   },
   {
@@ -657,29 +648,30 @@
       "complexity_drivers": [
         "Large sovereign wealth fund with $2B AUM",
         "Multi-Asset Management services requested",
-        "Requesting dedicated onboarding team and weekly status calls",
-        "Reciprocal KYC request indicating extensive compliance interaction"
+        "Client requests reciprocal KYC and dedicated onboarding team",
+        "Weekly status calls requested"
       ],
       "missing_information": [],
       "other_compliance_considerations": [
-        "Reciprocal KYC request to review our compliance practices"
+        "Client requests reciprocal KYC review of our compliance practices"
       ],
-      "recommended_action": "Proceed with standard enhanced onboarding due to client size and complexity, ensuring thorough documentation review and managing reciprocal KYC requests carefully.",
+      "recommended_action": "Proceed with standard due diligence but allocate significant operational resources for onboarding and manage reciprocal KYC requests carefully.",
       "confidence": 0.95,
-      "reasoning": "The client is a large, reputable sovereign wealth fund with extensive due diligence documentation provided and no red flags indicating AML risk. The reciprocal KYC request and onboarding demands increase operational complexity but do not raise compliance risk. There are no severe flags or evidence of source of funds concerns, so the tier remains standard rather than enhanced or high."
+      "reasoning": "The client is a large, reputable sovereign wealth fund with extensive due diligence documentation provided and no red flags indicating enhanced or high risk. The source of funds is clear and well documented. The complexity is high due to the size, multi-asset nature, and reciprocal KYC requests, but there are no AML/KYC risk concerns that would elevate the tier beyond standard."
     },
     "summary": {
-      "headline": "Northern Lights Sovereign Wealth Fund, $2B AUM, Multi-Asset Management services",
-      "client_profile": "Northern Lights is a large sovereign wealth fund seeking to allocate $2 billion across global equity, fixed income, and real assets. They have provided extensive due diligence documentation and request a dedicated onboarding team with weekly status calls.",
+      "headline": "Northern Lights Sovereign Wealth Fund, $2B AUM, Multi-Asset Management requested",
+      "client_profile": "Northern Lights is a large sovereign wealth fund seeking to allocate $2 billion across global equity, fixed income, and real asset strategies. They have provided extensive due diligence documentation and require reciprocal KYC review and a dedicated onboarding team with weekly status calls.",
       "services_needed": [
         "Multi-Asset Management"
       ],
-      "complexity_note": "High complexity due to client size, multi-asset service request, reciprocal KYC demands, and onboarding coordination requirements.",
-      "risk_note": "Standard risk tier assigned due to no severe flags or source of funds concerns, despite high operational complexity.",
+      "complexity_note": "High complexity due to large size, multi-asset services, reciprocal KYC requests, and dedicated onboarding with weekly status updates.",
+      "risk_note": "Standard risk tier assigned based on clear source of funds, no red flags, and no AML/KYC concerns despite high complexity.",
       "next_steps": [
-        "[Compliance] Conduct standard review focusing on thorough documentation assessment and managing the client's reciprocal KYC request.",
-        "[Operations] Begin operational set-up including account structure, reporting configuration, investment restriction coding, and scheduling in parallel with compliance review.",
-        "[RM] Coordinate weekly status calls and manage all client communications regarding onboarding progress and information requests."
+        "[Compliance] Conduct standard due diligence focusing on reciprocal KYC review of our compliance practices as requested by the client.",
+        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.",
+        "[RM] Coordinate with the client regarding their request for a dedicated onboarding team and schedule weekly status calls.",
+        "[RM] Manage any additional information requests if they arise during compliance review."
       ],
       "owner": "Compliance - standard review"
     },
@@ -689,7 +681,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:24.646394+00:00",
+    "processed_at": "2026-11-09T08:01:21.167757+00:00",
     "error": null
   },
   {
@@ -717,32 +709,29 @@
       "red_flags": [],
       "complexity": "high",
       "complexity_drivers": [
-        "Multi-generational family office",
-        "14 family members across three generations",
+        "Multi-generational family office with 14 family members",
         "Assets across trusts, LLCs, individual accounts, and a family foundation",
         "Coordination with three external advisors",
         "22 separate accounts to be established"
       ],
       "missing_information": [],
       "other_compliance_considerations": [],
-      "recommended_action": "Proceed with comprehensive due diligence given the multi-entity structure and coordinate onboarding efforts across all related entities and advisors.",
+      "recommended_action": "Proceed with enhanced operational onboarding due to complexity, but standard AML/KYC due diligence is sufficient.",
       "confidence": 0.95,
-      "reasoning": "There are no AML/KYC red flags such as PEP status, nominee directors, or refusal to provide documents, and the source of funds appears normal for a family office. The complexity arises from the multiple entities and accounts, but this does not elevate the AML risk beyond standard. Therefore, the risk tier is standard with high operational complexity."
+      "reasoning": "The client is a large, multi-entity family office with complex structures and multiple accounts, driving high operational complexity. However, there are no AML/KYC red flags such as PEP status, opaque ownership, or unevidenced source of funds, so the compliance risk remains standard."
     },
     "summary": {
-      "headline": "Heritage Family Office, $175M AUM, comprehensive wealth management with multi-entity reporting",
+      "headline": "Heritage Family Office, $175M AUM, comprehensive wealth management with complex multi-entity setup",
       "client_profile": "A multi-generational family office managing wealth for 14 family members across trusts, LLCs, individual accounts, and a family foundation, requiring consolidated reporting and coordination with three external advisors.",
       "services_needed": [
-        "Comprehensive Wealth Management",
-        "Consolidated Reporting",
-        "Tax-lot Accounting",
-        "Coordination with External Advisors"
+        "Comprehensive Wealth Management"
       ],
-      "complexity_note": "High complexity due to 22 separate accounts, multiple entity types, and coordination with external advisors.",
-      "risk_note": "Standard risk tier assigned due to absence of AML/KYC red flags and normal source of funds despite operational complexity.",
+      "complexity_note": "High operational complexity due to 22 separate accounts, multiple entity types, and coordination with external advisors.",
+      "risk_note": "Standard risk tier assigned because there are no AML/KYC red flags despite the operational complexity.",
       "next_steps": [
-        "[Compliance] Conduct standard review focusing on comprehensive due diligence for the multi-entity structure and coordination across all related entities and advisors.",
-        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review."
+        "[Compliance] Conduct standard AML/KYC due diligence focusing on verifying identities and source of funds as per standard review.",
+        "[Operations] Begin operational set-up including account structure configuration, reporting set-up, investment-restriction coding, and scheduling in the system, running in parallel with compliance review.",
+        "[RM] Coordinate with the client to confirm details for consolidated reporting and external advisor contacts if any clarifications arise during compliance or operations set-up."
       ],
       "owner": "Compliance - standard review"
     },
@@ -752,7 +741,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:25.037024+00:00",
+    "processed_at": "2026-11-09T08:01:22.501829+00:00",
     "error": null
   },
   {
@@ -818,7 +807,7 @@
           "evidence_verified": true
         },
         {
-          "flag": "pressure to speed onboarding",
+          "flag": "pressure on documentation",
           "category": "behaviour",
           "evidence": "Client insists on a compressed onboarding timeline and has expressed frustration with documentation requirements",
           "evidence_verified": true
@@ -827,31 +816,31 @@
       "complexity": "medium",
       "complexity_drivers": [
         "Corporate entity with a single beneficial owner/director",
-        "Newly incorporated with limited operating history",
-        "Moderate AUM of $45M"
+        "Newly incorporated company with limited operating history",
+        "Significant AUM of $45M requiring careful onboarding"
       ],
       "missing_information": [
         "audited financials",
         "bank statements"
       ],
       "other_compliance_considerations": [],
-      "recommended_action": "Perform enhanced due diligence focusing on verifying source of funds and ownership, and manage client expectations on documentation timelines.",
+      "recommended_action": "Perform enhanced due diligence focusing on verifying source of funds and ownership, and manage client expectations on onboarding timeline.",
       "confidence": 0.85,
-      "reasoning": "The client is a newly formed corporate entity with limited operating history and minimal supporting documentation for source of funds, combined with pressure to expedite onboarding, which triggers enhanced due diligence. There are no severe flags such as nominee directors or refusal to provide documents, so the case does not reach high risk. The risk is elevated beyond standard due to these factors."
+      "reasoning": "The client is a newly formed corporate entity with limited operating history and minimal supporting documentation for source of funds, combined with pressure to expedite onboarding, which triggers enhanced due diligence. There are no severe flags such as nominee directors or refusal to provide documents, so the case does not escalate to high risk. The presence of multiple red flags across ownership, source of funds, and behaviour categories supports an enhanced tier."
     },
     "summary": {
       "headline": "Eastbridge Trading Group Ltd, $45M AUM, Fixed Income Management",
-      "client_profile": "Newly incorporated corporate entity with a single beneficial owner/director and limited operating history seeking to invest $45 million in short-duration fixed income.",
+      "client_profile": "Newly incorporated corporate entity with a single beneficial owner/director and limited operating history, seeking to invest $45 million in short-duration fixed income as a cash management strategy.",
       "services_needed": [
         "Fixed Income Management"
       ],
-      "complexity_note": "Medium complexity due to new corporate structure, single beneficial owner, limited operating history, and moderate AUM.",
-      "risk_note": "High risk tier due to unevidenced source of funds, pressure to expedite onboarding, and recent incorporation with limited history.",
+      "complexity_note": "Medium complexity due to the new corporate structure, significant AUM, and limited supporting documentation for source of funds.",
+      "risk_note": "High risk tier assigned because of unevidenced source of funds, pressure on documentation, and the client’s recent incorporation with limited operating history.",
       "next_steps": [
-        "[Compliance] Perform enhanced due diligence focusing on verifying source of funds and ownership, and manage client expectations on documentation timelines.",
-        "[RM] Obtain missing audited financials and bank statements from the client as identified in the pre-screen.",
+        "[Compliance] Perform enhanced due diligence focusing on verifying source of funds and ownership, and manage client expectations on onboarding timeline.",
+        "[RM] Collect missing audited financials and bank statements from the client as identified in the pre-screen.",
         "[Operations] Hold all account opening, funding, and trading activities until compliance clearance is received.",
-        "[Operations] Prepare to begin operational set-up only after compliance clearance."
+        "[Operations] Prepare to begin operational set-up only after compliance clearance; no operational set-up tasks run in parallel due to high risk tier."
       ],
       "owner": "Compliance - escalation"
     },
@@ -861,7 +850,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:25.317026+00:00",
+    "processed_at": "2026-11-09T08:01:22.773941+00:00",
     "error": null
   },
   {
@@ -897,22 +886,22 @@
       "other_compliance_considerations": [
         "investment policy mandates investment-grade only, no derivatives"
       ],
-      "recommended_action": "Proceed with standard due diligence and onboarding procedures given the straightforward institutional profile and complete documentation.",
+      "recommended_action": "Proceed with standard due diligence and onboarding processes for an institutional client with full documentation provided.",
       "confidence": 0.95,
-      "reasoning": "The client is a large institutional pension fund with full documentation and no red flags in ownership, source of funds, or behaviour. The complexity arises from the size and institutional nature, but there are no indications of enhanced or high risk factors. The case is not higher tier because there are no PEPs, no opaque ownership, and no resistance to documentation."
+      "reasoning": "The client is a large institutional pension fund with full documentation and no red flags or unusual source of funds. The complexity is medium due to the size and governance structure, but there are no AML/KYC concerns or missing critical documents. This is not enhanced or high risk because there are no PEPs, no opaque ownership, no refusal of documents, and no suspicious behaviour."
     },
     "summary": {
       "headline": "Midwest Municipal Workers Union, $180M AUM, Fixed Income Management",
-      "client_profile": "Institutional municipal workers union pension fund with 12,000 members and full documentation including trust agreement, investment policy statement, and board resolution.",
+      "client_profile": "Institutional municipal workers union pension fund with 12,000 members and full governance documentation including trust agreement, investment policy statement, and board resolution.",
       "services_needed": [
         "Fixed Income Management"
       ],
-      "complexity_note": "Medium complexity due to large institutional size, multiple governance documents, and union structure.",
-      "risk_note": "Standard risk tier assigned due to complete documentation, no red flags, and straightforward institutional profile.",
+      "complexity_note": "Medium complexity due to large AUM, union membership size, and multiple governance documents.",
+      "risk_note": "Standard risk tier assigned due to full documentation, no red flags, and no AML/KYC concerns.",
       "next_steps": [
         "[Compliance] Conduct standard due diligence focusing on verifying adherence to the investment policy mandate of investment-grade only and no derivatives.",
-        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding per the investment policy, and scheduling.",
-        "[RM] Monitor for any additional information requests from Compliance and communicate with the client as needed."
+        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling.",
+        "[RM] Monitor for any additional information requests from Compliance and coordinate client responses as needed."
       ],
       "owner": "Compliance - standard review"
     },
@@ -922,7 +911,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:25.576024+00:00",
+    "processed_at": "2026-11-09T08:01:25.415182+00:00",
     "error": null
   },
   {
@@ -951,32 +940,31 @@
       "complexity": "medium",
       "complexity_drivers": [
         "High-net-worth couple with multiple asset types",
-        "Coordination needed for 10b5-1 plan and trading window restrictions",
-        "Estate planning and wealth management services requested"
+        "Coordination needed with corporate counsel on trading window restrictions",
+        "Potential 10b5-1 plan involvement"
       ],
       "missing_information": [],
       "other_compliance_considerations": [
         "10b5-1 plan involvement",
-        "Trading window restrictions",
-        "Publicly traded company CEO status"
+        "Trading window restrictions coordination"
       ],
-      "recommended_action": "Proceed with standard due diligence focusing on verifying identity, ownership, and source of funds, and coordinate with legal on 10b5-1 and trading restrictions.",
+      "recommended_action": "Proceed with standard due diligence focusing on verifying identity, ownership, and source of funds, and ensure coordination on trading restrictions and 10b5-1 plan compliance.",
       "confidence": 0.95,
-      "reasoning": "The client is a high-net-worth individual couple with clear and standard sources of funds and no red flags for ownership or behaviour. The complexity arises from multiple asset classes and regulatory considerations like 10b5-1 plans, but there are no indications of evasive behaviour or unknown beneficial ownership. Therefore, the risk tier is standard, while operational complexity is medium due to the coordination required."
+      "reasoning": "The client is a high-net-worth individual couple with clear and documented sources of funds including employment income, stock sales, and real estate. There are no red flags such as nominee directors, unknown beneficial ownership, or refusal to provide documents. The complexity arises from multiple asset types and coordination with corporate counsel, but no AML risk indicators are present. This justifies a standard risk tier with medium operational complexity."
     },
     "summary": {
       "headline": "Robert and Diane Mercer-Hastings, $67M AUM, wealth management and estate planning",
-      "client_profile": "High-net-worth couple with multiple asset types including concentrated employer stock, real estate, and cash; husband is CEO of a publicly traded healthcare company, wife is a law firm partner.",
+      "client_profile": "High-net-worth couple with multiple asset types including concentrated employer stock, real estate, and cash from stock sales; husband is a healthcare CEO and wife is a law firm partner.",
       "services_needed": [
         "Wealth Management",
         "Estate Planning"
       ],
-      "complexity_note": "Medium complexity due to multiple asset classes and coordination required for 10b5-1 plan and trading window restrictions.",
-      "risk_note": "Standard risk tier due to clear sources of funds, no red flags, but requires standard due diligence focused on identity, ownership, and source of funds verification.",
+      "complexity_note": "Medium complexity due to multiple asset types and required coordination with corporate counsel on trading window restrictions and potential 10b5-1 plan involvement.",
+      "risk_note": "Standard risk tier due to clear sources of funds and no red flags, but complexity requires focused compliance review.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on verifying identity, ownership, and source of funds; coordinate with legal on 10b5-1 plan involvement and trading window restrictions.",
-        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling as these do not involve moving money.",
-        "[RM] Communicate with client to confirm any outstanding details related to 10b5-1 plan and trading restrictions as needed."
+        "[Compliance] Conduct standard due diligence focusing on verifying identity, ownership, and source of funds, and ensure review covers 10b5-1 plan compliance and trading window restrictions coordination.",
+        "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.",
+        "[RM] Coordinate with client and corporate counsel to gather any additional information needed on trading window restrictions and 10b5-1 plan details."
       ],
       "owner": "Compliance - standard review"
     },
@@ -986,7 +974,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:29.454921+00:00",
+    "processed_at": "2026-11-09T08:01:26.734642+00:00",
     "error": null
   },
   {
@@ -1016,31 +1004,32 @@
       "complexity_drivers": [
         "Institutional client with $95M AUM",
         "Requires detailed impact reporting aligned with UN SDGs",
-        "Quarterly narrative reports on measurable outcomes required",
-        "Evaluating three firms simultaneously with onboarding speed as a key factor"
+        "Needs quarterly narrative reports on measurable outcomes"
       ],
       "missing_information": [],
       "other_compliance_considerations": [
         "Impact Investing and ESG restrictions",
-        "Reporting requirements aligned with UN Sustainable Development Goals"
+        "Requirement for detailed impact and quarterly narrative reporting"
       ],
-      "recommended_action": "Proceed with standard due diligence and prepare for moderate onboarding complexity due to reporting and impact measurement requirements.",
+      "recommended_action": "Proceed with standard due diligence and prepare for moderate onboarding workload due to reporting requirements.",
       "confidence": 0.95,
-      "reasoning": "The client is a private foundation with a clear mission and no red flags or missing KYC/AML documentation mentioned. The source of funds is not questioned and there is no pressure or resistance to due diligence. The complexity arises from the size of the allocation and the detailed reporting requirements, which increase operational workload but do not raise compliance risk."
+      "reasoning": "The client is a large institutional private foundation with no red flags or missing KYC/AML documentation mentioned, and the source of funds is consistent with a foundation's mission. The complexity arises from the size of the allocation and the specific reporting requirements, but there are no indications of enhanced or high AML risk factors."
     },
     "summary": {
-      "headline": "Global Impact Partners Foundation, $95M, Impact Investing and ESG services",
-      "client_profile": "Institutional private foundation focused on climate and social justice with a $95M allocation for impact investment strategies requiring detailed impact and financial reporting.",
+      "headline": "Global Impact Partners Foundation, $95M, impact investing with ESG and detailed reporting",
+      "client_profile": "Institutional private foundation focused on climate and social justice with a $95M allocation for impact investment strategies requiring alignment with UN SDGs and quarterly narrative outcome reports.",
       "services_needed": [
         "Impact Investing",
-        "ESG"
+        "ESG",
+        "Detailed impact reporting",
+        "Quarterly narrative reporting"
       ],
-      "complexity_note": "Medium complexity due to large AUM and detailed quarterly narrative reporting aligned with UN Sustainable Development Goals.",
-      "risk_note": "Standard risk tier assigned; no red flags or missing information, but complexity arises from reporting and impact measurement requirements.",
+      "complexity_note": "Medium complexity due to large AUM and specific, detailed impact and narrative reporting requirements.",
+      "risk_note": "Standard risk tier with no red flags or missing information; complexity driven by reporting and investment restrictions.",
       "next_steps": [
-        "[Compliance] Conduct standard due diligence focusing on Impact Investing and ESG restrictions and verifying reporting requirements aligned with UN Sustainable Development Goals.",
+        "[Compliance] Conduct standard due diligence focusing on Impact Investing and ESG restrictions and the requirement for detailed impact and quarterly narrative reporting.",
         "[Operations] Begin operational set-up including account structure, reporting set-up, investment-restriction coding, and scheduling in parallel with compliance review.",
-        "[RM] Coordinate with client to confirm any additional documentation or clarifications if requested by Compliance during review."
+        "[RM] Coordinate with client to confirm any additional details needed for impact and narrative reporting as identified by Compliance."
       ],
       "owner": "Compliance - standard review"
     },
@@ -1050,7 +1039,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:29.848757+00:00",
+    "processed_at": "2026-11-09T08:01:27.741918+00:00",
     "error": null
   },
   {
@@ -1140,23 +1129,23 @@
         "source of funds documentation"
       ],
       "other_compliance_considerations": [],
-      "recommended_action": "Perform enhanced due diligence with a focus on verifying beneficial ownership and source of funds, and escalate for senior review due to refusal of direct contact and lack of documentation.",
+      "recommended_action": "Perform enhanced due diligence including verification of beneficial ownership of the offshore trust, obtain full source of funds documentation, and escalate due to refusal of direct contact and lack of documentation.",
       "confidence": 0.95,
-      "reasoning": "The client exhibits multiple severe red flags including refusal to provide documentation, blocking direct contact, and lack of source of funds evidence combined with pressure behaviors such as declining the introductory call and routing communications through an advisor. These factors meet the criteria for a high risk tier. The complexity is medium due to the offshore trust structure and use of an unaffiliated introducer, but not high because the client is a single individual rather than a multi-entity corporate structure."
+      "reasoning": "The client exhibits multiple severe red flags including refusal of direct contact, no submitted documentation, and source of funds unevidenced, which together with pressure behaviors justify a high risk tier. The presence of an offshore trust and third-party introducer add complexity but do not alone raise the tier beyond high risk. The case is not merely enhanced because of the combination of severe flags and resistance to standard onboarding procedures."
     },
     "summary": {
-      "headline": "R. Ashford, $120M HNW individual, offshore trust wealth management",
-      "client_profile": "High-net-worth individual applying via an unaffiliated introducer, requesting account in an offshore trust with all communications routed through their advisor and no direct client contact.",
+      "headline": "R. Ashford, $120M HNW individual, requests wealth management via offshore trust",
+      "client_profile": "High-net-worth individual introduced by an unaffiliated third party, requesting account in an offshore trust with all communications routed through their advisor and no direct client contact.",
       "services_needed": [
         "Wealth Management"
       ],
-      "complexity_note": "Medium complexity due to offshore trust account, unaffiliated introducer, and high AUM.",
-      "risk_note": "High risk tier due to refusal of direct contact, lack of source of funds documentation, refusal to provide documents, and pressure behaviors.",
+      "complexity_note": "Medium complexity due to offshore trust structure, unaffiliated introducer, and high AUM.",
+      "risk_note": "High risk tier due to refusal of direct contact, lack of documentation, unevidenced source of funds, and pressure behaviors.",
       "next_steps": [
-        "[Compliance] Escalate for senior review focusing on enhanced due diligence to verify beneficial ownership and source of funds given refusal of direct contact and missing documentation.",
-        "[RM] Request identity documents, ownership documents for the offshore trust, and source of funds documentation from the client.",
+        "[Compliance] Perform enhanced due diligence focusing on verification of beneficial ownership of the offshore trust, obtaining full source of funds documentation, and addressing refusal of direct contact.",
+        "[RM] Request identity documents, ownership documents for the offshore trust, and source of funds documentation from the client via the advisor.",
         "[Operations] Hold all account opening, funding, and trading activities until compliance clearance is received.",
-        "[Operations] Collect missing information only; no operational set-up tasks may proceed at this stage."
+        "[Operations] Collect missing information only; no operational set-up or account structuring may proceed at this stage."
       ],
       "owner": "Compliance - escalation"
     },
@@ -1166,7 +1155,7 @@
       "risk": "risk_assessment_v4@d74fc82b",
       "summary": "onboarding_summary_v4@049991c1"
     },
-    "processed_at": "2026-11-09T06:51:29.920268+00:00",
+    "processed_at": "2026-11-09T08:01:29.895207+00:00",
     "error": null
   }
 ]

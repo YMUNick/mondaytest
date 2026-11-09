@@ -2,7 +2,7 @@
 
 Raw client applications in → explained risk pre-screen → operations brief → structured output and a monday.com board.
 
-**Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** **0 missed high-risk cases in every run**. 14–15/15 within the hand-labelled acceptable tiers: the latest run over-escalated one case (James Okafor, APP-2026-0305), the safe direction of error (see [Evaluation](#evaluation)). ~20 s for the batch with 4 workers, ~3k tokens per application.
+**Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** **0 missed high-risk cases in every run**. 14–15/15 within the hand-labelled acceptable tiers: the latest run (20261109T080107Z) scored 15/15, and one earlier run over-escalated James Okafor (APP-2026-0305), the safe direction of error (see [Evaluation](#evaluation)). 20–30 s for the batch with 4 workers, ~3k tokens per application.
 
 **Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`). Its **Try it live** section runs this same `pipeline.process()` in the browser with Pyodide (`browser_runner.py`): paste an OpenAI or Anthropic key, pick sample applications or write your own, and the browser calls the provider directly. No server, and the key is never stored.
 
@@ -31,8 +31,9 @@ python build_site.py                                 # docs/index.html: one-page
 # monday.com
 python pipeline.py --monday --dry-run                # prints every GraphQL call, sends nothing
 export MONDAY_API_TOKEN=...
-python monday_client.py setup                        # once: board, 3 tier groups, 12 columns
-python pipeline.py --monday                          # idempotent upsert by Application ID
+python monday_client.py link 5032370472             # once: use an existing board (maps its columns by title)
+python monday_client.py setup                        # or once: a new board, 3 tier groups, 13 columns
+python pipeline.py --monday                          # idempotent upsert by Application ID, then opens the board
 ```
 
 `LLM_PROVIDER=mock` runs everything offline to test the plumbing. Mock output comes from the rules only; it is not AI output.
@@ -87,7 +88,7 @@ CSV row ─► Load & validate ─► Rules (regex) ─────────�
 | v3 | 14/15 (1 over) | 13/15 | 3/3 | Policy moved to code; checklist definition of "pressure" too broad (Brightpath) |
 | v4 | **14–15/15** | 14–15/15 | **3/3** | 0 missed high in every run. Final tier matched in 18/18 cases across 3 consistency runs, but a later full run over-escalated APP-2026-0305 (below) |
 
-**Known variance (v4).** On the latest run the model tagged James Okafor's red flags in three categories (ownership, jurisdiction, source of funds) instead of two, so the code policy (≥3 categories → high) raised a case labelled `standard|enhanced` to high. The guardrails make the final tier far more stable than the model's own tier, but not perfectly stable, because the policy still depends on which facts the model extracts. Next tuning step, for compliance to decide: whether flags that describe complexity (international residency, layered but documented ownership) should count toward the 3-category rule. That needs a larger labelled set before changing it.
+**Known variance (v4).** On run 20261109T065112Z the model tagged James Okafor's red flags in three categories (ownership, jurisdiction, source of funds) instead of two, so the code policy (≥3 categories → high) raised a case labelled `standard|enhanced` to high. The guardrails make the final tier far more stable than the model's own tier, but not perfectly stable, because the policy still depends on which facts the model extracts. Next tuning step, for compliance to decide: whether flags that describe complexity (international residency, layered but documented ownership) should count toward the 3-category rule. That needs a larger labelled set before changing it.
 
 Edge cases (`data/edge_cases.csv`): a prompt-injection attempt, a Spanish-language PEP case the regex rules cannot read, an unparseable AUM, an empty description, and a clean case with messy formatting.
 

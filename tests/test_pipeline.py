@@ -257,3 +257,67 @@ def test_monday_column_values_and_dry_run(tmp_path, monkeypatch, capsys):
     assert values["risk"] == {"label": "High"}
     assert values["review"] == {"label": "Awaiting human review"}
     assert values["submitted"] == {"date": "2026-01-08"}
+    assert values["tier_source"] == {"label": "AI"}
+
+
+MONDAY_BOARD = {
+    "id": "77", "name": "Onboarding", "url": "https://x.monday.com/boards/77",
+    "columns": [{"id": "name", "title": "Name", "type": "name", "settings_str": "{}"},
+                {"id": "st9", "title": "Risk tier", "type": "status",
+                 "settings_str": '{"labels": {"0": "Enhanced", "1": "Standard", "2": "High"}}'},
+                {"id": "st3", "title": "Review status", "type": "status",
+                 "settings_str": '{"labels": {"0": "Awaiting review", "1": "Cleared"}}'},
+                {"id": "own", "title": "Owner", "type": "text", "settings_str": "{}"},
+                {"id": "src", "title": "Tier Resource", "type": "status",
+                 "settings_str": '{"labels": {"0": "Manual label", "1": "AI pipeline"}}'}],
+    "groups": [{"id": "topics", "title": "Group Title"}],
+}
+
+
+def fake_monday(calls, items=()):
+    def gql(query, variables=None, retries=4):
+        calls.append((query, variables))
+        if "items_page(" in query:
+            return {"boards": [{"items_page": {"cursor": None, "items": list(items)}}]}
+        if "boards(ids" in query:
+            return {"boards": [MONDAY_BOARD]}
+        for key in ("create_column", "create_group", "create_item", "create_update",
+                    "change_multiple_column_values"):
+            if key in query:
+                return {key: {"id": f"new{len(calls)}"}}
+        return {}
+    return gql
+
+
+def test_monday_link_uses_existing_board_as_is(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(monday_client, "gql", fake_monday(calls))
+    monkeypatch.setattr(monday_client, "CONFIG", tmp_path / "board.json")
+    cfg = monday_client.link("77")
+    assert not any("create_" in q for q, _ in calls)  # nothing added to the board
+    assert "app_id" not in cfg["columns"]  # matched by item name instead
+    assert cfg["columns"]["risk"] == "st9" and cfg["columns"]["queue"] == "own"
+    assert cfg["columns"]["tier_source"] == "src" and cfg["groups"] == {}
+    assert cfg["labels"]["tier_source"] == ["Manual label", "AI pipeline"]
+
+
+def test_monday_push_updates_by_item_name_and_keeps_review(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("LLM_PROVIDER", "mock")
+    results = pipeline.main(["--out", str(tmp_path), "--ids", "APP-2026-0303", "APP-2026-0301"])
+    calls = []
+    monkeypatch.setattr(monday_client, "CONFIG", tmp_path / "board.json")
+    monkeypatch.setattr(monday_client, "gql", fake_monday(calls))
+    monday_client.link("77")
+    existing = [{"id": "555", "name": "APP-2026-0303 · Apex Global Holdings Ltd"}]
+    calls.clear()
+    monkeypatch.setattr(monday_client, "gql", fake_monday(calls, existing))
+    url = monday_client.push_results(results)
+    assert url == "https://x.monday.com/boards/77"
+    update = next(v for q, v in calls if "change_multiple_column_values" in q)
+    values = json.loads(update["v"])
+    assert update["i"] == "555"
+    assert values["src"] == {"label": "AI pipeline"} and values["st9"] == {"label": "High"}
+    assert "st3" not in values  # a reviewer's decision is never overwritten
+    create = next(v for q, v in calls if "create_item" in q)
+    assert create["n"] == "APP-2026-0301 · Greenfield State Pension Fund"
+    assert json.loads(create["v"])["st3"] == {"label": "Awaiting review"}

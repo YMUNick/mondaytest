@@ -310,6 +310,7 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=4, help="parallel applications (default 4)")
     ap.add_argument("--monday", action="store_true", help="write results to the monday.com board")
     ap.add_argument("--dry-run", action="store_true", help="with --monday: print calls, send nothing")
+    ap.add_argument("--no-open", action="store_true", help="with --monday: do not open the board afterwards")
     args = ap.parse_args(argv)
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -358,7 +359,12 @@ def main(argv=None):
 
     if args.monday:
         from monday_client import push_results
-        push_results([r for r in results if r.status == "processed"], dry_run=args.dry_run)
+        url = push_results([r for r in results if r.status == "processed"], dry_run=args.dry_run)
+        if url and not args.dry_run:
+            print(f"\nBoard updated: {url}")
+            if not args.no_open:
+                import webbrowser
+                webbrowser.open(url)
     return results
 
 
