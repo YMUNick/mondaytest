@@ -26,9 +26,9 @@ import evaluate as ev  # noqa: E402
 import monday_client  # noqa: E402
 from pipeline import load_applications  # noqa: E402
 from schemas import ProcessedApplication  # noqa: E402
+from site_render import TIER_LABEL, card, money, pill, ul  # noqa: E402
 
 REPO_URL = "https://github.com/YMUNick/mondaytest"
-TIER_LABEL = {"standard": "Standard", "enhanced": "Enhanced", "high": "High"}
 
 # ---------------------------------------------------------------- data
 
@@ -106,94 +106,6 @@ def run_meta(audit_path: Path) -> dict:
 
 
 # ---------------------------------------------------------------- html helpers
-
-
-def pill(tier, small=False):
-    if not tier:
-        return '<span class="pill pill-failed">Failed</span>'
-    cls = " pill-sm" if small else ""
-    return f'<span class="pill pill-{tier}{cls}"><i></i>{TIER_LABEL[tier]}</span>'
-
-
-def ul(items, empty="None"):
-    if not items:
-        return f'<p class="muted small">{escape(empty)}</p>'
-    return "<ul>" + "".join(f"<li>{escape(i)}</li>" for i in items) + "</ul>"
-
-
-def highlight(text: str, quotes: list[str]) -> str:
-    out = escape(text)
-    for q in quotes:
-        eq = escape(q.strip())
-        if eq and eq in out:
-            out = out.replace(eq, f"<mark>{eq}</mark>", 1)
-    return out
-
-
-def money(v: float) -> str:
-    return f"${v / 1e9:,.1f}B" if v >= 1e9 else f"${v / 1e6:,.1f}M"
-
-
-def card(r: ProcessedApplication, app_text: str, set_key: str) -> str:
-    cid = f"{set_key}-{r.application_id}"
-    if r.status == "failed":
-        return (f'<details class="case" id="{cid}" data-tier="failed"><summary>'
-                f'<span class="case-id">{escape(r.application_id)}</span>'
-                f'<span class="case-name">{escape(r.client_name)}</span>{pill(None)}</summary>'
-                f'<div class="case-body"><p class="warn">{escape(r.error or "")}</p></div></details>')
-    ra, s = r.risk_assessment, r.summary
-    flags = "".join(
-        f'<li><b>{escape(f.flag)}</b> <span class="tag">{escape(f.category)}</span>'
-        f'<q>{escape(f.evidence)}</q>'
-        + ('<span class="ok small">&#10003; quote found in application</span>' if f.evidence_verified
-           else '<span class="warn small">&#10007; not found verbatim</span>') + "</li>"
-        for f in ra.red_flags)
-    flags = f'<ul class="flags">{flags}</ul>' if flags else '<p class="muted small">None identified</p>'
-    rules = "".join(
-        f'<li>{escape(h.rule)} &rarr; at least {pill(h.min_tier, True)} <code>{escape(h.matched_text)}</code></li>'
-        for h in r.rule_hits)
-    rules = f"<ul>{rules}</ul>" if rules else '<p class="muted small">No rule matched</p>'
-    quotes = [f.evidence for f in ra.red_flags if f.evidence_verified]
-    raised = r.final_risk_tier != r.model_risk_tier
-    steps = "".join(f"<li>{escape(x)}</li>" for x in s.next_steps)
-    return f"""
-<details class="case" id="{cid}" data-tier="{r.final_risk_tier}">
-<summary><span class="case-id">{escape(r.application_id)}</span>
-<span class="case-name">{escape(r.client_name)}</span>
-{pill(r.final_risk_tier)}{'<span class="raised" title="Final tier raised above the model tier by guardrails">raised</span>' if raised else ''}
-<span class="case-queue">{escape(r.routing_queue or '')}</span></summary>
-<div class="case-body">
- <p class="headline">{escape(s.headline)}</p>
- <p class="muted">{escape(s.client_profile)}</p>
- <div class="tierline">
-  <div><span class="lbl">Final tier</span>{pill(r.final_risk_tier)}</div>
-  <div><span class="lbl">Model said</span>{pill(r.model_risk_tier)}</div>
-  <div><span class="lbl">Rules floor</span>{pill(r.rule_floor_tier)}</div>
-  <div><span class="lbl">Confidence</span><b class="num">{ra.confidence:.2f}</b></div>
-  <div><span class="lbl">Complexity</span><b>{escape(ra.complexity)}</b></div>
- </div>
- <div class="cols">
-  <div>
-   <h4>Why this tier</h4>
-   <p>{escape(ra.reasoning)}</p>
-   <h4>Red flags, with evidence</h4>{flags}
-   <h4>Deterministic rule hits</h4>{rules}
-   <h4>Guardrail actions</h4>{ul(r.tier_adjustments + r.policy_checks, "None needed")}
-  </div>
-  <div>
-   <h4>Onboarding brief</h4>
-   <p><b>Risk:</b> {escape(s.risk_note)}</p>
-   <p><b>Complexity:</b> {escape(s.complexity_note)}</p>
-   <h4>Next steps</h4><ol>{steps}</ol>
-   <h4>Missing information</h4>{ul(ra.missing_information)}
-   <h4>Other compliance considerations</h4>{ul(ra.other_compliance_considerations)}
-  </div>
- </div>
- <details class="source"><summary>Original application text{' (verified quotes highlighted)' if quotes else ''}</summary>
-  <p>{highlight(app_text, quotes)}</p></details>
- <p class="fine">{escape(r.model or '')} &middot; {escape(', '.join(r.prompt_versions.values()))} &middot;
- AI pre-screen, awaiting human review. Not a compliance decision.</p>
-</div></details>"""
 
 
 def results_panel(key, results, apps, load_errors, active):
@@ -275,6 +187,18 @@ def board_preview(results):
     return "".join(out)
 
 
+DEMO_CASES = ("APP-2026-0301", "APP-2026-0303", "APP-2026-0311")
+
+
+def live_samples(apps) -> str:
+    return "".join(
+        f'<label class="pick"><input type="checkbox" name="sample" value="{escape(a.application_id)}"'
+        f'{" checked" if a.application_id in DEMO_CASES else ""}>'
+        f'<span><b class="mono">{escape(a.application_id)}</b> {escape(a.client_name)}'
+        f'<small>{escape(a.client_type)} &middot; {money(a.estimated_aum)}</small></span></label>'
+        for a in apps)
+
+
 def cmd(text):
     return (f'<div class="cmd"><code>{escape(text)}</code>'
             f'<button class="copy" data-copy="{escape(text)}" aria-label="Copy command">'
@@ -345,6 +269,7 @@ def build() -> str:
         g_table=eval_table(g_rows), e_table=eval_table(e_rows),
         panel_golden=results_panel("golden", golden, texts, [], True),
         panel_edge=results_panel("edge", edge, texts, edge_errors, False),
+        live_samples=live_samples(apps_main),
         board=board_preview([r for r in golden if r.status == "processed"]),
         dry=escape(dry), n_dry=n_calls,
         built=datetime.now().strftime("%d %b %Y"),
@@ -569,6 +494,58 @@ mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:2px}
 .b-tbl td{padding:8px 12px}.b-title .muted{font-weight:400;font-size:14px}
 footer{padding:40px 0 56px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 footer p{margin:4px 0}
+/* live runner */
+.live{display:flex;flex-direction:column;gap:16px}
+.live-block{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:18px 20px;margin:0;min-width:0;box-shadow:var(--shadow)}
+.live-block legend{font-weight:600;padding:0 6px;margin-left:-6px}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--surface-2);border-radius:12px;margin:4px 0 14px}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;padding:8px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--ink-2);min-height:36px;transition:background .2s,color .2s}
+.seg input:checked+span{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.seg input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.row2{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:768px){.row2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;min-width:0}
+.field label{font-size:14px;font-weight:600}
+.field small{font-size:13px;color:var(--muted)}
+.field input,.field textarea{font:15px/1.5 var(--sans);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%}
+.field input#api-key,.field input#model{font-family:var(--mono);font-size:14px}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.field textarea{resize:vertical}
+.field.invalid input{border-color:var(--high)}
+.help{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-2);margin:0;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.help svg{flex:none;width:18px;height:18px;stroke:var(--std);fill:none;stroke-width:2;margin-top:2px}
+.help[hidden]{display:none}
+.pick-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.picks{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media (min-width:768px){.picks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.picks{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pick{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:14px;min-height:44px;transition:border-color .2s,background .2s}
+.pick:hover{border-color:var(--accent)}
+.pick input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+.pick:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.pick b{font-size:12px;color:var(--muted);font-weight:500;display:block}
+.pick small{display:block;color:var(--muted);font-size:13px}
+.live-run{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:12px;border:0;cursor:pointer;
+ background:var(--accent);color:var(--accent-ink);font:600 16px var(--sans);transition:filter .2s,transform .1s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}
+.btn svg{width:16px;height:16px;fill:currentColor}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.form-error{color:var(--high);font-size:14px;margin:0}
+.live-out{margin-top:24px}
+.progress{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .3s ease-out}
+.log{list-style:none;margin:12px 0 0;padding:0;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.log li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.log .t{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:44px}
+.log .run::before{content:"";display:inline-block;width:10px;height:10px;border:2px solid var(--accent);border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;margin-right:2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.log .run::before{animation:none}}
+.live-summary{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin:16px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:14px}
+.live-summary .btn{min-height:40px;font-size:14px;padding:0 14px;margin-left:auto}
 """
 
 JS = r"""
@@ -613,6 +590,98 @@ JS = r"""
    var i=secs.indexOf(e.target);links.forEach(function(l,j){l.classList.toggle('is-active',i===j)})}})},{rootMargin:'-40% 0px -55% 0px'});
   secs.forEach(function(s){if(s)io.observe(s)});
  }
+
+ /* ---- Try it live: runs the real pipeline in a Pyodide worker ---- */
+ var form=document.getElementById('live-form');
+ if(!form)return;
+ var MODELS={openai:'gpt-4.1-mini',anthropic:'claude-sonnet-5-5',mock:'mock'};
+ var keyIn=document.getElementById('api-key'),modelIn=document.getElementById('model'),
+     runBtn=document.getElementById('run-btn'),stopBtn=document.getElementById('stop-btn'),
+     err=document.getElementById('form-error'),out=document.getElementById('live-out'),
+     log=document.getElementById('log'),bar=document.getElementById('bar'),
+     sum=document.getElementById('live-summary'),cards=document.getElementById('live-cards');
+ var worker=null,results=[],audit='',t0=0,current=null,lastLine=null;
+ function val(n){var c=form.querySelector('input[name="'+n+'"]:checked');return c?c.value:''}
+ function syncProvider(){
+  var p=val('provider'),mock=p==='mock';
+  document.getElementById('key-row').hidden=mock;
+  document.getElementById('key-help').hidden=mock;
+  document.getElementById('mock-help').hidden=!mock;
+  if(!mock&&(modelIn.value===''||Object.values(MODELS).indexOf(modelIn.value)>=0))modelIn.value=MODELS[p];
+  keyIn.placeholder=p==='anthropic'?'sk-ant-...':'sk-...';
+ }
+ form.querySelectorAll('input[name="provider"]').forEach(function(r){r.addEventListener('change',syncProvider)});
+ form.querySelectorAll('input[name="source"]').forEach(function(r){r.addEventListener('change',function(){
+  var c=val('source')==='custom';document.getElementById('src-samples').hidden=c;document.getElementById('src-custom').hidden=!c})});
+ form.querySelectorAll('[data-pick]').forEach(function(b){b.addEventListener('click',function(){
+  var mode=b.getAttribute('data-pick'),demo=['APP-2026-0301','APP-2026-0303','APP-2026-0311'];
+  form.querySelectorAll('input[name="sample"]').forEach(function(c){c.checked=mode==='all'||(mode==='demo'&&demo.indexOf(c.value)>=0)});
+ })});
+ function line(text,cls){
+  var li=document.createElement('li'),t=document.createElement('span'),m=document.createElement('span');
+  t.className='t';t.textContent=t0?((performance.now()-t0)/1000).toFixed(0)+'s':'';m.innerHTML=text;
+  if(cls)m.className=cls;li.appendChild(t);li.appendChild(m);log.appendChild(li);return m;
+ }
+ function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+ function pill(t){return t?'<span class="pill pill-sm pill-'+t+'"><i></i>'+t.charAt(0).toUpperCase()+t.slice(1)+'</span>':'<span class="pill pill-failed">Failed</span>'}
+ function busy(on){runBtn.disabled=on;stopBtn.hidden=!on;runBtn.querySelector('span').textContent=on?'Running...':'Run pipeline'}
+ function items(){
+  if(val('source')==='custom'){
+   var f={client_name:'c-name',client_type:'c-type',estimated_aum:'c-aum',requested_services:'c-services',description:'c-desc'},input={};
+   for(var k in f){input[k]=document.getElementById(f[k]).value.trim()}
+   return [{label:'CUSTOM-001 '+esc(input.client_name||'(no name)'),input:input}];
+  }
+  return [].map.call(form.querySelectorAll('input[name="sample"]:checked'),function(c){
+   return {label:c.value+' '+esc(c.parentNode.querySelector('span').childNodes[1].textContent.trim()),input:{sample_id:c.value}}});
+ }
+ function onMsg(e){
+  var m=e.data;
+  if(m.type==='status'){if(lastLine)lastLine.className='';lastLine=line(esc(m.text),'run')}
+  else if(m.type==='fatal'){if(lastLine)lastLine.className='';line('<span class="warn">'+esc(m.text)+'</span>');busy(false);worker.terminate();worker=null}
+  else if(m.type==='start'){if(lastLine){lastLine.className='';lastLine.textContent='Python runtime ready'}line('Run <code>'+esc(m.runId)+'</code>: '+m.n+' application(s), '+esc(current.cfg.provider)+':'+esc(current.cfg.model||'mock')+', prompts v4')}
+  else if(m.type==='progress'){bar.style.width=(100*m.i/current.items.length)+'%';lastLine=line(m.label+': risk pre-screen, then onboarding brief...','run')}
+  else if(m.type==='result'){
+   var o=m.out;bar.style.width=(100*(m.i+1)/current.items.length)+'%';
+   if(lastLine)lastLine.className='';
+   if(o.error&&!o.html){lastLine.innerHTML=m.label+': <span class="warn">'+esc(o.error)+'</span>'}
+   else{
+    var raised=o.result&&o.result.final_risk_tier&&o.result.final_risk_tier!==o.result.model_risk_tier;
+    lastLine.innerHTML=m.label+': '+pill(o.tier)+(raised?' <span class="raised">raised from '+esc(o.result.model_risk_tier)+'</span>':'')+(o.error?' <span class="warn">'+esc(o.error)+'</span>':'');
+    cards.insertAdjacentHTML('beforeend',o.html);results.push(o.result);
+    if(results.length===1){var c=cards.lastElementChild;if(c)c.open=true}
+   }
+  }
+  else if(m.type==='done'){
+   bar.style.width='100%';audit=m.audit;busy(false);
+   var n=results.length,ok=results.filter(function(r){return r.status==='processed'}).length;
+   sum.hidden=false;
+   sum.innerHTML='<b>'+ok+'/'+current.items.length+' processed</b><span>'+m.seconds.toFixed(0)+' s</span><span>'+m.tokens_in.toLocaleString()+' tokens in, '+m.tokens_out.toLocaleString()+' out</span>'+
+    (n?'<button type="button" class="btn btn-ghost" id="dl">Download results.json + audit log</button>':'');
+   var dl=document.getElementById('dl');
+   if(dl)dl.addEventListener('click',function(){
+    [['results.json',JSON.stringify(results,null,2),'application/json'],['audit_log.jsonl',audit,'application/x-ndjson']].forEach(function(f){
+     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f[1]],{type:f[2]}));a.download=f[0];document.body.appendChild(a);a.click();a.remove()});
+   });
+  }
+ }
+ form.addEventListener('submit',function(ev){
+  ev.preventDefault();err.textContent='';
+  var p=val('provider'),cfg={provider:p,model:p==='mock'?'':modelIn.value.trim(),key:p==='mock'?'':keyIn.value.trim()};
+  if(p!=='mock'&&!cfg.key){err.textContent='Enter an API key, or choose "No key (rules only)".';keyIn.focus();return}
+  var list=items();
+  if(!list.length){err.textContent='Pick at least one application.';return}
+  if(val('source')==='custom'&&document.getElementById('c-desc').value.trim().length<20){err.textContent='The application text needs at least 20 characters.';document.getElementById('c-desc').focus();return}
+  current={cfg:cfg,items:list};results=[];audit='';log.innerHTML='';cards.innerHTML='';sum.hidden=true;bar.style.width='0';
+  out.hidden=false;t0=performance.now();lastLine=null;busy(true);
+  if(!worker){worker=new Worker('runner/worker.js');worker.onmessage=onMsg;worker.onerror=function(e){onMsg({data:{type:'fatal',text:e.message||'worker error'}})}}
+  worker.postMessage({type:'run',cfg:cfg,items:list});
+  out.scrollIntoView({block:'nearest'});
+ });
+ stopBtn.addEventListener('click',function(){
+  if(worker){worker.terminate();worker=null}
+  if(lastLine)lastLine.className='';line('<span class="warn">Stopped. Results so far are kept; the next run reloads the runtime.</span>');busy(false);
+ });
+ syncProvider();
 })();
 """
 
@@ -632,7 +701,7 @@ PAGE = """<!doctype html>
 <header class="top"><div class="wrap">
  <a class="brand" href="#overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.4 8.4-8 9-4.6-.6-8-4.5-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg><span>Crestview AI Intake</span></a>
  <nav class="nav" aria-label="Sections">
-  <a href="#how">How it works</a><a href="#demo">Demo</a><a href="#results">Results</a>
+  <a href="#how">How it works</a><a href="#demo">Demo</a><a href="#live">Try it live</a><a href="#results">Results</a>
   <a href="#evaluation">Evaluation</a><a href="#monday">monday.com</a>
  </nav>
  <button class="iconbtn" id="theme" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
@@ -728,6 +797,62 @@ PAGE = """<!doctype html>
  </div>
 </div></section>
 
+<section id="live"><div class="wrap">
+ <div class="sec-head"><p class="eyebrow">Try it live</p><h2>Run the real pipeline in your browser</h2>
+ <p>This runs the same <code>pipeline.py</code>, rules, guardrails and v4 prompts as the command line, as Python inside your browser (Pyodide). Only the model call differs: your browser sends each prompt straight to the provider with your key. There is no server in between.</p></div>
+ <form class="live" id="live-form" novalidate>
+  <fieldset class="live-block"><legend>1. Model</legend>
+   <div class="seg" role="radiogroup" aria-label="Model provider">
+    <label><input type="radio" name="provider" value="openai" checked><span>OpenAI</span></label>
+    <label><input type="radio" name="provider" value="anthropic"><span>Anthropic</span></label>
+    <label><input type="radio" name="provider" value="mock"><span>No key (rules only)</span></label>
+   </div>
+   <div class="row2" id="key-row">
+    <div class="field"><label for="api-key">API key</label>
+     <input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." aria-describedby="key-help">
+    </div>
+    <div class="field"><label for="model">Model</label>
+     <input id="model" type="text" autocomplete="off" spellcheck="false" value="gpt-4.1-mini">
+    </div>
+   </div>
+   <p class="help" id="key-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+   <span>Your key stays in this tab. It is sent only to the provider you pick, never stored or logged, and is gone when you close the page. Use a key with a spending limit. With gpt-4.1-mini a run costs a few cents at most, even for all 15 applications.</span></p>
+   <p class="help" id="mock-help" hidden><span>No model is called. Tiers come from the deterministic rules only, so you can see the plumbing work. This is not AI output.</span></p>
+  </fieldset>
+  <fieldset class="live-block"><legend>2. Applications</legend>
+   <div class="seg" role="radiogroup" aria-label="Input">
+    <label><input type="radio" name="source" value="samples" checked><span>Sample applications</span></label>
+    <label><input type="radio" name="source" value="custom"><span>Write your own</span></label>
+   </div>
+   <div id="src-samples">
+    <div class="pick-actions"><button type="button" class="chip" data-pick="demo">3 demo cases</button><button type="button" class="chip" data-pick="all">All 15</button><button type="button" class="chip" data-pick="none">None</button></div>
+    <div class="picks">{live_samples}</div>
+   </div>
+   <div id="src-custom" hidden>
+    <div class="row2">
+     <div class="field"><label for="c-name">Client name</label><input id="c-name" value="Northgate Holdings Ltd"></div>
+     <div class="field"><label for="c-type">Client type</label><input id="c-type" value="Corporate"></div>
+     <div class="field"><label for="c-aum">Estimated AUM</label><input id="c-aum" value="$60M" aria-describedby="aum-help"><small id="aum-help">Accepts 60000000, $60,000,000 or 60M</small></div>
+     <div class="field"><label for="c-services">Requested services</label><input id="c-services" value="Discretionary portfolio management"></div>
+    </div>
+    <div class="field"><label for="c-desc">Application text</label>
+     <textarea id="c-desc" rows="6">Holding company incorporated in the British Virgin Islands in 2025. Ownership is held through two nominee directors; the client says the ultimate beneficial owner prefers to remain private. Funds of $60M will come from the sale of a trading business, documents to follow. The client wants the account open by Friday.</textarea></div>
+   </div>
+  </fieldset>
+  <div class="live-run">
+   <button type="submit" class="btn" id="run-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg><span>Run pipeline</span></button>
+   <button type="button" class="btn btn-ghost" id="stop-btn" hidden>Stop</button>
+   <p class="form-error" id="form-error" role="alert"></p>
+  </div>
+ </form>
+ <div class="live-out" id="live-out" hidden>
+  <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+  <ol class="log" id="log" aria-live="polite"></ol>
+  <div class="live-summary" id="live-summary" hidden></div>
+  <div class="cases" id="live-cards"></div>
+ </div>
+</div></section>
+
 <section id="results"><div class="wrap">
  <div class="sec-head"><p class="eyebrow">Results</p><h2>The reviewer report</h2>
  <p>Output from the last run. Every card is an AI pre-screen awaiting human review, not a compliance decision.</p></div>
@@ -782,7 +907,78 @@ PAGE = """<!doctype html>
 """
 
 
+WORKER_JS = r"""// Runs the real Python pipeline in the browser with Pyodide. Built by build_site.py.
+importScripts('https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js');
+let py = null, runner = null, ready = null;
+
+async function init() {
+  postMessage({type: 'status', text: 'Loading the Python runtime (about 10 s the first time)...'});
+  py = await loadPyodide();
+  await py.loadPackage(['pydantic']);
+  postMessage({type: 'status', text: 'Loading pipeline code and prompts...'});
+  const manifest = await (await fetch('py/manifest.json', {cache: 'no-cache'})).json();
+  for (const dir of manifest.dirs) py.FS.mkdirTree('/app/' + dir);
+  for (const f of manifest.files) {
+    const res = await fetch('py/' + f, {cache: 'no-cache'});
+    if (!res.ok) throw new Error('could not load ' + f);
+    py.FS.writeFile('/app/' + f, await res.text());
+  }
+  py.runPython("import sys, os; sys.path.insert(0, '/app'); os.chdir('/app')");
+  runner = py.pyimport('browser_runner');
+}
+
+onmessage = async (e) => {
+  const m = e.data;
+  try {
+    if (!ready) ready = init();
+    await ready;
+  } catch (err) {
+    ready = null;
+    postMessage({type: 'fatal', text: 'Could not start the Python runtime: ' + err});
+    return;
+  }
+  if (m.type !== 'run') return;
+  const runId = runner.new_run();
+  const cfg = JSON.stringify(m.cfg);
+  const started = performance.now();
+  postMessage({type: 'start', runId: runId, n: m.items.length});
+  for (let i = 0; i < m.items.length; i++) {
+    postMessage({type: 'progress', i: i, label: m.items[i].label});
+    let out;
+    try { out = JSON.parse(runner.process_one(cfg, JSON.stringify(m.items[i].input))); }
+    catch (err) { out = {error: String(err)}; }
+    postMessage({type: 'result', i: i, label: m.items[i].label, out: out});
+    if (out.error && /HTTP (401|403|404)/.test(out.error)) {
+      postMessage({type: 'status', text: 'Stopped: the provider rejected the key or model. Check them and run again.'});
+      break;
+    }
+  }
+  const t = JSON.parse(runner.totals());
+  postMessage({type: 'done', seconds: (performance.now() - started) / 1000, tokens_in: t.tokens_in,
+               tokens_out: t.tokens_out, runId: t.run_id, audit: runner.audit_log()});
+};
+"""
+
+RUNTIME_FILES = ["pipeline.py", "schemas.py", "rules.py", "mock_llm.py", "llm.py", "site_render.py",
+                 "browser_runner.py", "data/crestview_client_applications.csv"]
+
+
+def write_runner(docs: Path):
+    """Copy the pipeline code the in-browser runner loads, plus its worker."""
+    py_dir = docs / "runner" / "py"
+    files = RUNTIME_FILES + [f"prompts/{p.name}" for p in sorted((ROOT / "prompts").glob("*_v4.md"))]
+    for f in files:
+        dest = py_dir / f
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes((ROOT / f).read_bytes())
+    manifest = {"dirs": sorted({str(Path(f).parent).replace("\\", "/") for f in files} - {"."}),
+                "files": files}
+    (py_dir / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
+    (docs / "runner" / "worker.js").write_text(WORKER_JS, encoding="utf-8")
+
+
 if __name__ == "__main__":
+    write_runner(ROOT / "docs")
     out = ROOT / "docs" / "index.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(build(), encoding="utf-8")

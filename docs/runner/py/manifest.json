@@ -1,0 +1,18 @@
+{
+ "dirs": [
+  "data",
+  "prompts"
+ ],
+ "files": [
+  "pipeline.py",
+  "schemas.py",
+  "rules.py",
+  "mock_llm.py",
+  "llm.py",
+  "site_render.py",
+  "browser_runner.py",
+  "data/crestview_client_applications.csv",
+  "prompts/onboarding_summary_v4.md",
+  "prompts/risk_assessment_v4.md"
+ ]
+}

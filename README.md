@@ -4,7 +4,7 @@ Raw client applications in → explained risk pre-screen → operations brief �
 
 **Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** **0 missed high-risk cases in every run**. 14–15/15 within the hand-labelled acceptable tiers: the latest run over-escalated one case (James Okafor, APP-2026-0305), the safe direction of error (see [Evaluation](#evaluation)). ~20 s for the batch with 4 workers, ~3k tokens per application.
 
-**Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`).
+**Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`). Its **Try it live** section runs this same `pipeline.process()` in the browser with Pyodide (`browser_runner.py`): paste an OpenAI or Anthropic key, pick sample applications or write your own, and the browser calls the provider directly. No server, and the key is never stored.
 
 ## Run it
 
