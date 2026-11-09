@@ -9,7 +9,10 @@ pipeline.process() the command line runs, loaded from the same files.
 
 The key is passed in per call and never written anywhere.
 """
+import contextlib
+import io
 import json
+import tempfile
 import time
 import uuid
 from datetime import datetime, timezone
@@ -17,9 +20,10 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+import monday_client
 import pipeline
 from llm import DEFAULT_MODELS, LLMError, LLMResponse
-from schemas import Application
+from schemas import Application, ProcessedApplication
 from site_render import card
 
 ENDPOINTS = {"openai": "https://api.openai.com/v1/chat/completions",
@@ -128,6 +132,54 @@ def _application(item: dict) -> Application:
     fields.setdefault("status", "New")
     fields.setdefault("submission_date", datetime.now().strftime("%Y-%m-%d"))
     return Application(**fields)
+
+
+def _monday_transport(token: str):
+    """POST to monday.com from inside the Web Worker (synchronous XHR)."""
+    def send(payload: str):
+        from js import XMLHttpRequest
+
+        xhr = XMLHttpRequest.new()
+        xhr.open("POST", monday_client.API_URL, False)
+        xhr.setRequestHeader("content-type", "application/json")
+        xhr.setRequestHeader("authorization", token)
+        xhr.setRequestHeader("api-version", monday_client.API_VERSION)
+        try:
+            xhr.send(payload)
+        except Exception:  # NetworkError; a 401 without CORS headers also lands here
+            return 0, "", None
+        return int(xhr.status), str(xhr.responseText or ""), xhr.getResponseHeader("retry-after")
+    return send
+
+
+def push_to_board(token: str, board_id: str, results_json: str, transport=None) -> str:
+    """Write a finished run to an existing monday.com board with the same client the CLI uses.
+
+    Maps the board's columns by title (nothing is added), updates items found by the
+    application id in their name, creates the rest, and never touches a reviewer's status.
+    """
+    results = [ProcessedApplication(**r) for r in json.loads(results_json)
+               if r.get("status") == "processed"]
+    if not results:
+        return json.dumps({"error": "Nothing to write: no processed results"})
+    log = io.StringIO()
+    monday_client.TRANSPORT = transport or _monday_transport(token)
+    monday_client.SLEEP = _wait
+    monday_client.CONFIG = Path(tempfile.gettempdir()) / "monday_board.json"
+    try:
+        with contextlib.redirect_stdout(log):
+            monday_client.link(str(board_id).strip())
+            url = monday_client.push_results(results)
+        return json.dumps({"url": url, "count": len(results), "log": log.getvalue()})
+    except BaseException as exc:  # SystemExit from link() included
+        message = str(exc) or type(exc).__name__
+        if "unreachable" in message:
+            # monday.com answers a bad token with a 401 that has no CORS headers,
+            # so the browser sees only a network error.
+            message += ". The browser could not read monday.com's answer; the token is most likely wrong or expired."
+        return json.dumps({"error": message, "log": log.getvalue()})
+    finally:
+        monday_client.TRANSPORT = None  # the token is not kept after the call
 
 
 def process_one(cfg_json: str, item_json: str) -> str:

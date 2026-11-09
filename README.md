@@ -4,7 +4,7 @@ Raw client applications in → explained risk pre-screen → operations brief �
 
 **Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** **0 missed high-risk cases in every run**. 14–15/15 within the hand-labelled acceptable tiers: the latest run (20261109T080107Z) scored 15/15, and one earlier run over-escalated James Okafor (APP-2026-0305), the safe direction of error (see [Evaluation](#evaluation)). 20–30 s for the batch with 4 workers, ~3k tokens per application.
 
-**Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`). Its **Try it live** section runs this same `pipeline.process()` in the browser with Pyodide (`browser_runner.py`): paste an OpenAI or Anthropic key, pick sample applications or write your own, and the browser calls the provider directly. No server, and the key is never stored.
+**Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`). Its **Try it live** section runs this same `pipeline.process()` in the browser with Pyodide (`browser_runner.py`): paste an OpenAI or Anthropic key, pick sample applications or write your own, and the browser calls the provider directly. Optionally add a monday.com token and board ID: when the run finishes, the browser writes the results to that board with the same `monday_client.py` the command line uses. No server, and no key or token is stored.
 
 ## Run it
 

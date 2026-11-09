@@ -345,3 +345,40 @@ def test_monday_push_file_sends_a_saved_run(tmp_path, monkeypatch):
     created = [v for q, v in calls if "create_item" in q]
     assert len(created) == 1 and created[0]["n"].startswith("CUSTOM-1109153000 · ")
     assert monday_client.APP_ID.search(created[0]["n"]).group(0) == "CUSTOM-1109153000"
+
+
+def test_monday_gql_uses_a_swapped_transport(monkeypatch):
+    """The browser runner swaps the HTTP layer; errors stay readable."""
+    sent = []
+    monkeypatch.setattr(monday_client, "SLEEP", lambda s: None)
+    monkeypatch.setattr(monday_client, "TRANSPORT",
+                        lambda payload: (sent.append(payload) or (200, '{"data": {"me": {"id": 1}}}', None)))
+    assert monday_client.gql("{ me { id } }") == {"me": {"id": 1}}
+    assert json.loads(sent[0])["query"] == "{ me { id } }"
+    monkeypatch.setattr(monday_client, "TRANSPORT", lambda payload: (401, "", None))
+    with pytest.raises(RuntimeError, match="rejected the token"):
+        monday_client.gql("{ me { id } }")
+
+
+def test_browser_runner_pushes_a_run_to_the_board(tmp_path, monkeypatch):
+    """What the demo site does after a live run: link the board, then write, same client as the CLI."""
+    import browser_runner
+    monkeypatch.setenv("LLM_PROVIDER", "mock")
+    results = pipeline.main(["--out", str(tmp_path), "--ids", "APP-2026-0303"])
+    calls = []
+    fake = fake_monday(calls, [{"id": "555", "name": "APP-2026-0303 · Apex Global Holdings Ltd"}])
+
+    def transport(payload):
+        body = json.loads(payload)
+        return 200, json.dumps({"data": fake(body["query"], body["variables"])}), None
+
+    # push_to_board points these at the browser's own wait and temp folder; restore them after
+    monkeypatch.setattr(monday_client, "SLEEP", monday_client.SLEEP)
+    monkeypatch.setattr(monday_client, "CONFIG", monday_client.CONFIG)
+    out = json.loads(browser_runner.push_to_board("tok", "77", json.dumps(
+        [r.model_dump(mode="json") for r in results]), transport=transport))
+    assert out.get("error") is None, out
+    assert out["url"] == "https://x.monday.com/boards/77" and out["count"] == 1
+    update = next(v for q, v in calls if "change_multiple_column_values" in q)
+    assert update["i"] == "555" and json.loads(update["v"])["src"] == {"label": "AI pipeline"}
+    assert monday_client.TRANSPORT is None  # the token's transport is dropped after the call

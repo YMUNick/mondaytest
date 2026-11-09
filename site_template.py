@@ -219,6 +219,10 @@ section.alt{background:var(--surface)}
 .live-summary{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);align-items:center;margin-top:var(--s-4);padding-top:var(--s-4);
  border-top:1px solid var(--line);font-size:14px}
 .live-summary .btn{margin-left:auto;height:40px;font-size:15px;padding:0 16px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px;cursor:pointer;min-height:44px;padding:8px 0}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--action);flex:none}
+.check input:disabled+span{color:var(--muted)}
+#board-fields{margin-top:var(--s-3)}
 .to-board{flex-basis:100%;display:flex;flex-direction:column;gap:var(--s-2);font-size:15px;color:var(--ink-2)}
 .to-board .hint{margin:0}
 
@@ -458,7 +462,7 @@ JS = r"""
      err=document.getElementById('form-error'),empty=document.getElementById('console-empty'),state=document.getElementById('console-state'),
      out=document.getElementById('live-out'),log=document.getElementById('log'),bar=document.getElementById('bar'),
      sum=document.getElementById('live-summary'),cards=document.getElementById('live-cards');
- var worker=null,results=[],audit='',t0=0,current=null,lastLine=null;
+ var worker=null,results=[],audit='',t0=0,current=null,lastLine=null,boardLine=null;
  function val(n){var c=form.querySelector('input[name="'+n+'"]:checked');return c?c.value:''}
  function syncProvider(){
   var p=val('provider'),mock=p==='mock';
@@ -466,7 +470,14 @@ JS = r"""
   document.getElementById('mock-help').hidden=!mock;
   if(!mock&&(modelIn.value===''||Object.values(MODELS).indexOf(modelIn.value)>=0))modelIn.value=MODELS[p];
   keyIn.placeholder=p==='anthropic'?'sk-ant-...':'sk-...';
+  syncBoard();
  }
+ var boardOn=document.getElementById('to-board-on'),mToken=document.getElementById('m-token'),mBoard=document.getElementById('m-board');
+ function syncBoard(){
+  var mock=val('provider')==='mock';boardOn.disabled=mock;if(mock)boardOn.checked=false;
+  document.getElementById('board-mock').hidden=!mock;document.getElementById('board-fields').hidden=!boardOn.checked;
+ }
+ boardOn.addEventListener('change',syncBoard);
  form.querySelectorAll('input[name="provider"]').forEach(function(r){r.addEventListener('change',syncProvider)});
  form.querySelectorAll('input[name="source"]').forEach(function(r){r.addEventListener('change',function(){
   var c=val('source')==='custom';document.getElementById('src-samples').hidden=c;document.getElementById('src-custom').hidden=!c})});
@@ -509,8 +520,16 @@ JS = r"""
     if(results.length===1){var c=cards.lastElementChild;if(c)c.open=true}
    }
   }
+  else if(m.type==='board-start'){boardLine=line('Writing '+m.n+' result'+(m.n>1?'s':'')+' to monday.com board '+esc(current.board.boardId),'run')}
+  else if(m.type==='board-done'){
+   var b=m.out,target=boardLine||line('');boardLine=null;target.className='';busy(false);
+   if(b.error){target.innerHTML='<span class="warn">monday.com: '+esc(b.error)+'</span>';state.textContent='Board not updated'}
+   else{var safe=/^https:\/\/[a-z0-9-]+\.monday\.com\//.test(b.url||'');
+    target.innerHTML='monday.com board updated: '+b.count+' item'+(b.count>1?'s':'')+(safe?' &middot; <a href="'+esc(b.url)+'" target="_blank" rel="noopener">Open the board</a>':'');
+    state.textContent='Board updated'}
+  }
   else if(m.type==='done'){
-   bar.style.width='100%';audit=m.audit;busy(false);
+   bar.style.width='100%';audit=m.audit;busy(!!m.board);
    var ok=results.filter(function(r){return r.status==='processed'}).length;
    sum.hidden=false;
    sum.innerHTML='<b>'+ok+' of '+current.items.length+' processed</b><span>'+m.seconds.toFixed(0)+' s</span><span>'+m.tokens_in.toLocaleString()+' tokens in, '+m.tokens_out.toLocaleString()+' out</span>'+
@@ -538,10 +557,17 @@ JS = r"""
   var list=items();
   if(!list.length){err.textContent='Pick at least one application.';return}
   if(val('source')==='custom'&&document.getElementById('c-desc').value.trim().length<20){err.textContent='Write at least 20 characters of application text.';document.getElementById('c-desc').focus();return}
-  current={cfg:cfg,items:list};results=[];audit='';log.innerHTML='';cards.innerHTML='';sum.hidden=true;bar.style.width='0';
+  var board=null;
+  if(boardOn.checked){
+   board={token:mToken.value.trim(),boardId:mBoard.value.trim()};
+   if(!board.token){err.textContent='Paste a monday.com API token, or untick the board option.';mToken.setAttribute('aria-invalid','true');mToken.focus();return}
+   if(!/^\d+$/.test(board.boardId)){err.textContent='Write the board ID as digits, for example 5032370472.';mBoard.setAttribute('aria-invalid','true');mBoard.focus();return}
+   mToken.removeAttribute('aria-invalid');mBoard.removeAttribute('aria-invalid');
+  }
+  current={cfg:cfg,items:list,board:board};results=[];audit='';log.innerHTML='';cards.innerHTML='';sum.hidden=true;bar.style.width='0';
   empty.hidden=true;out.hidden=false;t0=performance.now();lastLine=null;busy(true);
   if(!worker){worker=new Worker('runner/worker.js');worker.onmessage=onMsg;worker.onerror=function(e){onMsg({data:{type:'fatal',text:e.message||'worker error'}})}}
-  worker.postMessage({type:'run',cfg:cfg,items:list});
+  worker.postMessage({type:'run',cfg:cfg,items:list,board:board});
   if(matchMedia('(max-width: 1023px)').matches)document.getElementById('console').scrollIntoView({block:'start'});
  });
  stopBtn.addEventListener('click',function(){
@@ -678,6 +704,20 @@ PAGE = """<!doctype html>
       <div class="field"><label for="c-desc">Application text</label>
        <textarea id="c-desc" name="c-desc" rows="6">Holding company incorporated in the British Virgin Islands in 2025. Ownership is held through two nominee directors; the client says the ultimate beneficial owner prefers to remain private. Funds of $60M will come from the sale of a trading business, documents to follow. The client wants the account open by Friday.</textarea></div>
      </div>
+    </fieldset>
+    <fieldset class="panel-box" style="margin-top:12px"><legend>monday.com board, optional</legend>
+     <label class="check"><input type="checkbox" id="to-board-on"><span>Write the results to a monday.com board when the run finishes</span></label>
+     <div id="board-fields" hidden>
+      <div class="row2">
+       <div class="field"><label for="m-token">monday.com API token</label>
+        <input id="m-token" name="m-token" type="password" autocomplete="off" spellcheck="false" aria-describedby="board-help"></div>
+       <div class="field"><label for="m-board">Board ID</label>
+        <input id="m-board" name="m-board" type="text" inputmode="numeric" autocomplete="off" value="5032370472" aria-describedby="board-id-help"><small id="board-id-help">The number in the board’s address</small></div>
+      </div>
+      <p class="help" id="board-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <span>The token goes only to api.monday.com and is dropped after the write. It can change the board, so use your own. The board keeps its own columns: items are matched by the application id in their name, the tier source is set to AI, and a reviewer’s status is never overwritten.</span></p>
+     </div>
+     <p class="help" id="board-mock" hidden><span>Pick OpenAI or Anthropic to write to a board: rules-only results are not AI output.</span></p>
     </fieldset>
     <div class="run-row">
      <button type="submit" class="btn btn--primary" id="run-btn"><span>Run the pipeline</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>

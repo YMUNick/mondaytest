@@ -33,11 +33,13 @@ onmessage = async (e) => {
   const cfg = JSON.stringify(m.cfg);
   const started = performance.now();
   postMessage({type: 'start', runId: runId, n: m.items.length});
+  const done = [];
   for (let i = 0; i < m.items.length; i++) {
     postMessage({type: 'progress', i: i, label: m.items[i].label});
     let out;
     try { out = JSON.parse(runner.process_one(cfg, JSON.stringify(m.items[i].input))); }
     catch (err) { out = {error: String(err)}; }
+    if (out.result && out.result.status === 'processed') done.push(out.result);
     postMessage({type: 'result', i: i, label: m.items[i].label, out: out});
     if (out.error && /HTTP (401|403|404)/.test(out.error)) {
       postMessage({type: 'status', text: 'Stopped: the provider rejected the key or model. Check them and run again.'});
@@ -46,5 +48,13 @@ onmessage = async (e) => {
   }
   const t = JSON.parse(runner.totals());
   postMessage({type: 'done', seconds: (performance.now() - started) / 1000, tokens_in: t.tokens_in,
-               tokens_out: t.tokens_out, runId: t.run_id, audit: runner.audit_log()});
+               tokens_out: t.tokens_out, runId: t.run_id, audit: runner.audit_log(), board: !!m.board});
+  if (m.board) {
+    if (!done.length) { postMessage({type: 'board-done', out: {error: 'Nothing to write: no application was processed.'}}); return; }
+    postMessage({type: 'board-start', n: done.length});
+    let out;
+    try { out = JSON.parse(runner.push_to_board(m.board.token, m.board.boardId, JSON.stringify(done))); }
+    catch (err) { out = {error: String(err)}; }
+    postMessage({type: 'board-done', out: out});
+  }
 };

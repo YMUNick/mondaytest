@@ -10,6 +10,7 @@
   "mock_llm.py",
   "llm.py",
   "site_render.py",
+  "monday_client.py",
   "browser_runner.py",
   "data/crestview_client_applications.csv",
   "prompts/onboarding_summary_v4.md",

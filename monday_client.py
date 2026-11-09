@@ -24,8 +24,6 @@ import sys
 import time
 from pathlib import Path
 
-import requests
-
 API_URL = "https://api.monday.com/v2"
 API_VERSION = "2025-04"
 CONFIG = Path(__file__).parent / "monday_board.json"
@@ -77,6 +75,25 @@ GROUP_WORDS = {"high": ("high", "escalat"), "enhanced": ("enhanced", "edd", "due
 _DRY_RUN = False
 _fake_id = 1000
 
+# How a request reaches monday.com. None = `requests` with MONDAY_API_TOKEN (command line).
+# The demo site's browser runner sets its own: fn(payload_json) -> (status, body_text, retry_after).
+TRANSPORT = None
+SLEEP = time.sleep  # the browser runner swaps in a wait that works inside a Web Worker
+
+
+def _send(payload: str) -> tuple[int, str, str | None]:
+    if TRANSPORT is not None:
+        return TRANSPORT(payload)
+    import requests  # only the command line needs it
+
+    token = os.environ.get("MONDAY_API_TOKEN")
+    if not token:
+        sys.exit("Set MONDAY_API_TOKEN first (or use --dry-run)")
+    resp = requests.post(API_URL, data=payload.encode("utf-8"), timeout=30,
+                         headers={"Authorization": token, "API-Version": API_VERSION,
+                                  "Content-Type": "application/json"})
+    return resp.status_code, resp.text, resp.headers.get("Retry-After")
+
 
 def gql(query: str, variables: dict | None = None, retries: int = 4) -> dict:
     global _fake_id
@@ -85,27 +102,28 @@ def gql(query: str, variables: dict | None = None, retries: int = 4) -> dict:
         print("            variables: " + json.dumps(variables or {}, ensure_ascii=False)[:300])
         _fake_id += 1
         return _DryRunData(str(_fake_id))
-    token = os.environ.get("MONDAY_API_TOKEN")
-    if not token:
-        sys.exit("Set MONDAY_API_TOKEN first (or use --dry-run)")
+    payload = json.dumps({"query": query, "variables": variables or {}}, ensure_ascii=False)
     for attempt in range(1, retries + 1):
         try:
-            resp = requests.post(API_URL, json={"query": query, "variables": variables or {}},
-                                 headers={"Authorization": token, "API-Version": API_VERSION},
-                                 timeout=30)
-        except requests.RequestException as exc:
+            status, text, retry_after = _send(payload)
+        except Exception as exc:  # network error, refused, offline
             if attempt == retries:
                 raise RuntimeError(f"monday.com unreachable: {exc}") from exc
-            time.sleep(2 ** attempt)
+            SLEEP(2 ** attempt)
             continue
-        if resp.status_code in (429, 500, 502, 503, 504) and attempt < retries:
-            time.sleep(int(resp.headers.get("Retry-After", 2 ** attempt)))
+        if status in (0, 429, 500, 502, 503, 504) and attempt < retries:
+            SLEEP(int(retry_after or 2 ** attempt))
             continue
-        body = resp.json()
+        if status in (401, 403):
+            raise RuntimeError(f"monday.com rejected the token (HTTP {status})")
+        try:
+            body = json.loads(text)
+        except ValueError:
+            raise RuntimeError(f"monday.com HTTP {status}: {text[:300]}") from None
         if body.get("errors") or body.get("error_code"):
             text = json.dumps(body)
             if ("Complexity" in text or "RATE_LIMIT" in text.upper()) and attempt < retries:
-                time.sleep(20)  # complexity budget resets per minute
+                SLEEP(20)  # complexity budget resets per minute
                 continue
             raise RuntimeError(f"monday.com API error: {text[:500]}")
         return body["data"]
