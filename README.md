@@ -34,6 +34,7 @@ export MONDAY_API_TOKEN=...
 python monday_client.py link 5032370472             # once: use an existing board (maps its columns by title)
 python monday_client.py setup                        # or once: a new board, 3 tier groups, 13 columns
 python pipeline.py --monday                          # idempotent upsert by Application ID, then opens the board
+python monday_client.py push ~/Downloads/results.json  # send a demo-site live run to the board, no new AI calls
 ```
 
 `LLM_PROVIDER=mock` runs everything offline to test the plumbing. Mock output comes from the rules only; it is not AI output.

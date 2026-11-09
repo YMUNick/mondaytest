@@ -228,6 +228,8 @@ section.alt{background:var(--surface)}
 .live-summary{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);align-items:center;margin-top:var(--s-4);padding-top:var(--s-4);
  border-top:1px solid var(--line);font-size:14px}
 .live-summary .btn{margin-left:auto;height:40px;font-size:15px;padding:0 16px}
+.to-board{flex-basis:100%;display:flex;flex-direction:column;gap:var(--s-2);font-size:15px;color:var(--ink-2)}
+.to-board .hint{margin:0}
 
 /* chips, tabs, filters */
 .chip{min-height:36px;padding:0 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:transparent;color:var(--ink-2);
@@ -1424,9 +1426,9 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
     <p class="say">&ldquo;Eastbridge Trading Group Ltd: the model alone said enhanced. The final tier is high &mdash; raised from enhanced to high: deterministic rules set a floor. The card shows exactly why.&rdquo;</p>
    </li>
    <li class="step"><h3>Run the tests</h3>
-    <p>23 offline tests with a mock model: messy rows, rules, policy, guardrails, brief checks, retries and the dry run.</p>
+    <p>24 offline tests with a mock model: messy rows, rules, policy, guardrails, brief checks, retries and the dry run.</p>
     <div class="cmd"><code>python -m pytest -q -p no:anyio</code><button class="copy" data-copy="python -m pytest -q -p no:anyio" aria-label="Copy command"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy</span></button></div>
-    <details class="out"><summary>Show the tests (29 passed in 0.73s)</summary><ul class="testlist"><li><span class='ok'>&#10003;</span> loads all sample rows</li><li><span class='ok'>&#10003;</span> messy rows are normalised or reported</li><li><span class='ok'>&#10003;</span> application text cannot close the prompt tag</li><li><span class='ok'>&#10003;</span> rule floor never exceeds golden labels</li><li><span class='ok'>&#10003;</span> prompt injection is flagged by rules</li><li><span class='ok'>&#10003;</span> policy combination of unevidenced funds and pressure is high</li><li><span class='ok'>&#10003;</span> policy three categories is high but other does not count</li><li><span class='ok'>&#10003;</span> policy severe flag is high and clean is standard</li><li><span class='ok'>&#10003;</span> guardrails apply policy only when checks present</li><li><span class='ok'>&#10003;</span> rules floor overrides lower model tier</li><li><span class='ok'>&#10003;</span> model can raise above floor</li><li><span class='ok'>&#10003;</span> low confidence raises one tier</li><li><span class='ok'>&#10003;</span> evidence is verified against source</li><li><span class='ok'>&#10003;</span> summary without routing step is fixed</li><li><span class='ok'>&#10003;</span> summary missing tier and approval language flagged</li><li><span class='ok'>&#10003;</span> board approval is not approval language</li><li><span class='ok'>&#10003;</span> parse json handles fences and chatter</li><li><span class='ok'>&#10003;</span> invalid output is retried with the error</li><li><span class='ok'>&#10003;</span> one failing application does not stop the batch</li><li><span class='ok'>&#10003;</span> full mock run writes all outputs</li><li><span class='ok'>&#10003;</span> monday column values and dry run</li><li><span class='ok'>&#10003;</span> monday link uses existing board as is</li><li><span class='ok'>&#10003;</span> monday push updates by item name and keeps review</li></ul></details>
+    <details class="out"><summary>Show the tests (30 passed in 0.85s)</summary><ul class="testlist"><li><span class='ok'>&#10003;</span> loads all sample rows</li><li><span class='ok'>&#10003;</span> messy rows are normalised or reported</li><li><span class='ok'>&#10003;</span> application text cannot close the prompt tag</li><li><span class='ok'>&#10003;</span> rule floor never exceeds golden labels</li><li><span class='ok'>&#10003;</span> prompt injection is flagged by rules</li><li><span class='ok'>&#10003;</span> policy combination of unevidenced funds and pressure is high</li><li><span class='ok'>&#10003;</span> policy three categories is high but other does not count</li><li><span class='ok'>&#10003;</span> policy severe flag is high and clean is standard</li><li><span class='ok'>&#10003;</span> guardrails apply policy only when checks present</li><li><span class='ok'>&#10003;</span> rules floor overrides lower model tier</li><li><span class='ok'>&#10003;</span> model can raise above floor</li><li><span class='ok'>&#10003;</span> low confidence raises one tier</li><li><span class='ok'>&#10003;</span> evidence is verified against source</li><li><span class='ok'>&#10003;</span> summary without routing step is fixed</li><li><span class='ok'>&#10003;</span> summary missing tier and approval language flagged</li><li><span class='ok'>&#10003;</span> board approval is not approval language</li><li><span class='ok'>&#10003;</span> parse json handles fences and chatter</li><li><span class='ok'>&#10003;</span> invalid output is retried with the error</li><li><span class='ok'>&#10003;</span> one failing application does not stop the batch</li><li><span class='ok'>&#10003;</span> full mock run writes all outputs</li><li><span class='ok'>&#10003;</span> monday column values and dry run</li><li><span class='ok'>&#10003;</span> monday link uses existing board as is</li><li><span class='ok'>&#10003;</span> monday push updates by item name and keeps review</li><li><span class='ok'>&#10003;</span> monday push file sends a saved run</li></ul></details>
    </li>
   </ol>
  </div>
@@ -1540,7 +1542,7 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
   if(val('source')==='custom'){
    var f={client_name:'c-name',client_type:'c-type',estimated_aum:'c-aum',requested_services:'c-services',description:'c-desc'},input={};
    for(var k in f)input[k]=document.getElementById(f[k]).value.trim();
-   return [{label:'CUSTOM-001 '+esc(input.client_name||'(no name)'),input:input}];
+   return [{label:'Your application: '+esc(input.client_name||'(no name)'),input:input}];
   }
   return [].map.call(form.querySelectorAll('input[name="sample"]:checked'),function(c){
    return {label:c.value+' '+esc(c.parentNode.querySelector('span').childNodes[1].textContent.trim()),input:{sample_id:c.value}}});
@@ -1567,12 +1569,20 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
    var ok=results.filter(function(r){return r.status==='processed'}).length;
    sum.hidden=false;
    sum.innerHTML='<b>'+ok+' of '+current.items.length+' processed</b><span>'+m.seconds.toFixed(0)+' s</span><span>'+m.tokens_in.toLocaleString()+' tokens in, '+m.tokens_out.toLocaleString()+' out</span>'+
-    (results.length?'<button type="button" class="btn btn--secondary" id="dl">Download the results</button>':'');
+    (results.length?'<button type="button" class="btn btn--secondary" id="dl">Download the results</button>'+
+     '<div class="to-board" id="to-board" hidden><p>Send this run to the monday.com board, no new AI calls, from the project folder:</p>'+
+     '<div class="cmd"><code>python monday_client.py push results.json</code><button type="button" class="copy" id="push-copy" aria-label="Copy the push command"><span>Copy</span></button></div>'+
+     '<p class="hint">Use the path your browser saved it to, for example ~/Downloads/results.json.</p></div>':'');
    var dl=document.getElementById('dl');
    if(dl)dl.addEventListener('click',function(){
     [['results.json',JSON.stringify(results,null,2),'application/json'],['audit_log.jsonl',audit,'application/x-ndjson']].forEach(function(f){
      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f[1]],{type:f[2]}));a.download=f[0];document.body.appendChild(a);a.click();a.remove()});
+    document.getElementById('to-board').hidden=false;
    });
+   var pc=document.getElementById('push-copy');
+   if(pc)pc.addEventListener('click',function(){var l=pc.querySelector('span');
+    function done(ok){l.textContent=ok?'Copied':'Select it';setTimeout(function(){l.textContent='Copy'},1600)}
+    if(navigator.clipboard)navigator.clipboard.writeText('python monday_client.py push results.json').then(function(){done(true)},function(){done(false)});else done(false)});
   }
  }
  form.addEventListener('submit',function(ev){

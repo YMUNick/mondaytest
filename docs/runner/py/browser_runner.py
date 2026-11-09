@@ -123,7 +123,8 @@ def _application(item: dict) -> Application:
     if item.get("sample_id"):
         return SAMPLES[item["sample_id"]]
     fields = dict(item)
-    fields.setdefault("application_id", "CUSTOM-001")
+    # one id per written application, so each becomes its own item on the board
+    fields.setdefault("application_id", "CUSTOM-" + datetime.now().strftime("%m%d%H%M%S"))
     fields.setdefault("status", "New")
     fields.setdefault("submission_date", datetime.now().strftime("%Y-%m-%d"))
     return Application(**fields)

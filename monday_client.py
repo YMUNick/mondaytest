@@ -4,6 +4,7 @@
   python monday_client.py link <board id> # use a board you already have (maps its columns)
   python monday_client.py setup           # or create a new board, groups and columns once
   python pipeline.py --monday             # pushes results, then opens the board
+  python monday_client.py push results.json  # push a saved run (e.g. the demo site's download), no AI calls
   python pipeline.py --monday --dry-run   # prints the GraphQL calls, sends nothing
 
 Board design:
@@ -69,7 +70,7 @@ ALIASES = {
 }
 # When a status column has its own labels, pick the one that means this value.
 LABEL_HINTS = {"review": r"^await", "tier_source": r"\bai\b"}
-APP_ID = re.compile(r"\b(?:APP-\d{4}-\d{4}|EDGE-\d{3}|CUSTOM-\d{3})\b")
+APP_ID = re.compile(r"\b(?:APP-\d{4}-\d{4}|EDGE-\d{3}|CUSTOM-\d{3,})\b")
 GROUP_WORDS = {"high": ("high", "escalat"), "enhanced": ("enhanced", "edd", "due diligence"),
                "standard": ("standard",)}
 
@@ -361,8 +362,39 @@ def push_results(results, dry_run: bool = False):
     return cfg.get("url")
 
 
+def push_file(path: str, dry_run: bool = False, open_board: bool = True):
+    """Send a results.json (from `pipeline.py` or the demo site's live run) to the board.
+
+    No model is called: the file already holds the pre-screens.
+    """
+    from schemas import ProcessedApplication
+
+    data = json.loads(Path(path).read_text(encoding="utf-8-sig"))
+    if isinstance(data, dict):
+        data = [data]
+    results = [ProcessedApplication(**r) for r in data]
+    ready = [r for r in results if r.status == "processed"]
+    for r in results:
+        if r.status != "processed":
+            print(f"  skipped {r.application_id}: {r.error or 'not processed'}")
+    if not ready:
+        sys.exit("Nothing to push: no processed results in the file")
+    print(f"Pushing {len(ready)} result(s) from {path}")
+    url = push_results(ready, dry_run=dry_run)
+    if url and not dry_run:
+        print(f"\nBoard updated: {url}")
+        if open_board:
+            import webbrowser
+            webbrowser.open(url)
+    return url
+
+
 if __name__ == "__main__":
-    if len(sys.argv) >= 2 and sys.argv[1] == "setup":
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if len(args) == 2 and args[0] == "push":
+        push_file(args[1], dry_run="--dry-run" in flags, open_board="--no-open" not in flags)
+    elif len(sys.argv) >= 2 and sys.argv[1] == "setup":
         setup(*sys.argv[2:3])
     elif len(sys.argv) >= 3 and sys.argv[1] == "link":
         link(sys.argv[2], create="--create" in sys.argv)

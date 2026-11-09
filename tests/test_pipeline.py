@@ -318,6 +318,30 @@ def test_monday_push_updates_by_item_name_and_keeps_review(tmp_path, monkeypatch
     assert update["i"] == "555"
     assert values["src"] == {"label": "AI pipeline"} and values["st9"] == {"label": "High"}
     assert "st3" not in values  # a reviewer's decision is never overwritten
+    assert sum("create_update" in q for q, _ in calls) == 2
     create = next(v for q, v in calls if "create_item" in q)
     assert create["n"] == "APP-2026-0301 · Greenfield State Pension Fund"
     assert json.loads(create["v"])["st3"] == {"label": "Awaiting review"}
+
+
+def test_monday_push_file_sends_a_saved_run(tmp_path, monkeypatch):
+    """`monday_client.py push results.json` writes a saved run without calling a model."""
+    monkeypatch.setenv("LLM_PROVIDER", "mock")
+    pipeline.main(["--out", str(tmp_path), "--ids", "APP-2026-0311"])
+    saved = json.loads((tmp_path / "results.json").read_text(encoding="utf-8"))
+    saved[0]["application_id"] = "CUSTOM-1109153000"  # a "Your own" run from the demo site
+    saved.append({**saved[0], "application_id": "APP-2026-0399", "status": "failed",
+                  "error": "LLMError: test"})
+    path = tmp_path / "web_results.json"
+    path.write_text(json.dumps(saved), encoding="utf-8")
+    calls = []
+    monkeypatch.setattr(monday_client, "CONFIG", tmp_path / "board.json")
+    monkeypatch.setattr(monday_client, "gql", fake_monday(calls))
+    monday_client.link("77")
+    calls.clear()
+    monkeypatch.setattr(monday_client, "gql", fake_monday(calls))
+    url = monday_client.push_file(str(path), open_board=False)
+    assert url == "https://x.monday.com/boards/77"
+    created = [v for q, v in calls if "create_item" in q]
+    assert len(created) == 1 and created[0]["n"].startswith("CUSTOM-1109153000 · ")
+    assert monday_client.APP_ID.search(created[0]["n"]).group(0) == "CUSTOM-1109153000"

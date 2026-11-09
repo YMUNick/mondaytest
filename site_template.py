@@ -219,6 +219,8 @@ section.alt{background:var(--surface)}
 .live-summary{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);align-items:center;margin-top:var(--s-4);padding-top:var(--s-4);
  border-top:1px solid var(--line);font-size:14px}
 .live-summary .btn{margin-left:auto;height:40px;font-size:15px;padding:0 16px}
+.to-board{flex-basis:100%;display:flex;flex-direction:column;gap:var(--s-2);font-size:15px;color:var(--ink-2)}
+.to-board .hint{margin:0}
 
 /* chips, tabs, filters */
 .chip{min-height:36px;padding:0 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:transparent;color:var(--ink-2);
@@ -485,7 +487,7 @@ JS = r"""
   if(val('source')==='custom'){
    var f={client_name:'c-name',client_type:'c-type',estimated_aum:'c-aum',requested_services:'c-services',description:'c-desc'},input={};
    for(var k in f)input[k]=document.getElementById(f[k]).value.trim();
-   return [{label:'CUSTOM-001 '+esc(input.client_name||'(no name)'),input:input}];
+   return [{label:'Your application: '+esc(input.client_name||'(no name)'),input:input}];
   }
   return [].map.call(form.querySelectorAll('input[name="sample"]:checked'),function(c){
    return {label:c.value+' '+esc(c.parentNode.querySelector('span').childNodes[1].textContent.trim()),input:{sample_id:c.value}}});
@@ -512,12 +514,20 @@ JS = r"""
    var ok=results.filter(function(r){return r.status==='processed'}).length;
    sum.hidden=false;
    sum.innerHTML='<b>'+ok+' of '+current.items.length+' processed</b><span>'+m.seconds.toFixed(0)+' s</span><span>'+m.tokens_in.toLocaleString()+' tokens in, '+m.tokens_out.toLocaleString()+' out</span>'+
-    (results.length?'<button type="button" class="btn btn--secondary" id="dl">Download the results</button>':'');
+    (results.length?'<button type="button" class="btn btn--secondary" id="dl">Download the results</button>'+
+     '<div class="to-board" id="to-board" hidden><p>Send this run to the monday.com board, no new AI calls, from the project folder:</p>'+
+     '<div class="cmd"><code>python monday_client.py push results.json</code><button type="button" class="copy" id="push-copy" aria-label="Copy the push command"><span>Copy</span></button></div>'+
+     '<p class="hint">Use the path your browser saved it to, for example ~/Downloads/results.json.</p></div>':'');
    var dl=document.getElementById('dl');
    if(dl)dl.addEventListener('click',function(){
     [['results.json',JSON.stringify(results,null,2),'application/json'],['audit_log.jsonl',audit,'application/x-ndjson']].forEach(function(f){
      var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f[1]],{type:f[2]}));a.download=f[0];document.body.appendChild(a);a.click();a.remove()});
+    document.getElementById('to-board').hidden=false;
    });
+   var pc=document.getElementById('push-copy');
+   if(pc)pc.addEventListener('click',function(){var l=pc.querySelector('span');
+    function done(ok){l.textContent=ok?'Copied':'Select it';setTimeout(function(){l.textContent='Copy'},1600)}
+    if(navigator.clipboard)navigator.clipboard.writeText('python monday_client.py push results.json').then(function(){done(true)},function(){done(false)});else done(false)});
   }
  }
  form.addEventListener('submit',function(ev){
