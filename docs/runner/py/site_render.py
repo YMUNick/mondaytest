@@ -75,19 +75,19 @@ def card(r: ProcessedApplication, app_text: str, set_key: str) -> str:
  </div>
  <div class="cols">
   <div>
-   <h4>Why this tier</h4>
+   <h3 class="k">Why this tier</h3>
    <p>{escape(ra.reasoning)}</p>
-   <h4>Red flags, with evidence</h4>{flags}
-   <h4>Deterministic rule hits</h4>{rules}
-   <h4>Guardrail actions</h4>{ul(r.tier_adjustments + r.policy_checks, "None needed")}
+   <h3 class="k">Red flags, with evidence</h3>{flags}
+   <h3 class="k">Deterministic rule hits</h3>{rules}
+   <h3 class="k">Guardrail actions</h3>{ul(r.tier_adjustments + r.policy_checks, "None needed")}
   </div>
   <div>
-   <h4>Onboarding brief</h4>
+   <h3 class="k">Onboarding brief</h3>
    <p><b>Risk:</b> {escape(s.risk_note)}</p>
    <p><b>Complexity:</b> {escape(s.complexity_note)}</p>
-   <h4>Next steps</h4><ol>{steps}</ol>
-   <h4>Missing information</h4>{ul(ra.missing_information)}
-   <h4>Other compliance considerations</h4>{ul(ra.other_compliance_considerations)}
+   <h3 class="k">Next steps</h3><ol>{steps}</ol>
+   <h3 class="k">Missing information</h3>{ul(ra.missing_information)}
+   <h3 class="k">Other compliance considerations</h3>{ul(ra.other_compliance_considerations)}
   </div>
  </div>
  <details class="source"><summary>Original application text{' (verified quotes highlighted)' if quotes else ''}</summary>
