@@ -12,6 +12,7 @@ How AI tools were used to build this POC, what the prompt iterations were, how o
 | Prompts | Claude Code + gpt-4.1-mini as the system under test | Iterated v1 → v4 driven by `evaluate.py` and by reading full outputs |
 | Evaluation | Hand-labelled golden set + scripts | `expected_tiers.csv` labelled before any model run; edge cases written to attack known weaknesses |
 | Slides | Claude | Proposal deck drafted from the stakeholder map and the real POC numbers |
+| Demo site and board | Claude Code | Public demo page, in-browser runner, live monday.com board (see the last section) |
 
 ## Prompt iterations
 
@@ -59,6 +60,29 @@ How AI tools were used to build this POC, what the prompt iterations were, how o
 
 Before (v2, model): *"The pressure to speed up onboarding adds a behavioural red flag but does not reach the threshold for high risk. There are fewer than three categories of red flags…"*, with ownership, source_of_funds and behaviour all listed. That is three categories.
 
-After (v4): the model's checklist says `source_of_funds_unevidenced: true, pressure_or_resistance: true`; `policy_tier` returns **high** with the reason *"unevidenced source of funds combined with pressure or resistance"*, recorded in `tier_adjustments` and shown on the monday.com item. Same result in every run.
+After (v4): the model alone still says **enhanced** in every run. Two independent code checks each say **high**:
+
+- the regex rules set a floor of high (source of funds not evidenced, resists due diligence, pressure on timeline, limited operating history);
+- `policy_tier`, run on the model's own fact checklist (`source_of_funds_unevidenced: true, pressure_or_resistance: true`), also returns high, for two reasons: *"red flags in 3 categories"* and *"unevidenced source of funds combined with pressure or resistance"*.
+
+The floor is applied first, so the reason recorded in `tier_adjustments` (and shown on the card and the monday.com item) is *"Raised from enhanced to high: deterministic rules set a floor"*; the policy agrees but has nothing left to raise. I first wrote this section as if the policy's reason were the recorded one; checking the archived runs (v1 to v4, every run) showed it never was, so this is corrected. The point for the demo: if the regex had missed the wording, the policy on the model's own facts would still have caught it.
 
 **Demo command:** `python pipeline.py --ids APP-2026-0311 --prompt-version v2` then `python pipeline.py --ids APP-2026-0311`.
+
+## After the core POC: demo site, in-browser runner, live board
+
+| Stage | Tool | What for |
+| --- | --- | --- |
+| Demo site | Claude Code; `ui-ux-pro-max` and `design-taste-frontend` skills | One page (`docs/`, GitHub Pages) built from the repo's own outputs by `build_site.py`: demo script, report, evaluation, board preview |
+| Live run | Claude Code; Pyodide 0.27 in a Web Worker | The same `pipeline.process()` and v4 prompts run in the visitor's browser; `browser_runner.py` swaps only the model call for a direct browser request with the visitor's own key |
+| monday.com | Claude Code; the GraphQL API | `link` maps an existing board by column title, `pipeline.py --monday` updates it and opens it, `push` sends a saved web run |
+| Checks | W3C Nu validator, headless Chrome screenshots, pytest | HTML5 with 0 messages, no sideways scroll at 320 to 1440 px, 30 offline tests |
+
+Where I intervened:
+
+- **Did not apply the design skill wholesale.** `design-taste-frontend` is built for marketing sites: stock photographs, shader effects, one section per screen, and a finish gate that enforces them on every stop. For a working demo tool that would have made the page worse, so I used its dealt palette and type, its system rules (one button pair, 44px controls, 400/500 weights, sentence-case labels) and its screenshot tool, and left the rest.
+- **Prompt hashes stopped matching the audit logs.** Git's line-ending normalisation changed the prompt bytes in the repo and on the site, so `risk_assessment_v4@d74fc82b` would have been a different hash anywhere else. Prompts are now stored byte for byte (`.gitattributes`).
+- **A re-run would have erased human decisions.** The first board client wrote "Awaiting review" on every push, which would reset a reviewer's Cleared or Declined. Review status is now written only when an item is created.
+- **The real board was not shaped like my design.** It had no Application ID column, one group, its own status labels ("AI pipeline", "Awaiting review") and an Owner column. Rather than add columns to someone else's board, the client matches items by the id in the item name, uses the board's labels, and puts what has no column in the item update.
+- **What a browser cannot do.** OpenAI and Anthropic accept direct browser calls; monday.com's API does not (no CORS), so the site cannot write to the board. The honest bridge is a download plus `monday_client.py push`, not a pasted token on a public page.
+- **Kept the numbers honest.** One v4 run scored 14/15 (James Okafor over-escalated). The README and the site report each run as it came out rather than re-running until it looked better.
