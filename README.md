@@ -2,7 +2,9 @@
 
 Raw client applications in → explained risk pre-screen → operations brief → structured output and a monday.com board.
 
-**Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** 15/15 within the hand-labelled acceptable tiers, **0 missed high-risk cases**, final tier identical across 3 repeated runs for 18/18 cases (incl. edge cases), ~20 s for the batch with 4 workers, ~2.9k tokens per application.
+**Result on the 15 sample applications (prompt v4, gpt-4.1-mini):** **0 missed high-risk cases in every run**. 14–15/15 within the hand-labelled acceptable tiers: the latest run over-escalated one case (James Okafor, APP-2026-0305), the safe direction of error (see [Evaluation](#evaluation)). ~20 s for the batch with 4 workers, ~3k tokens per application.
+
+**Demo site:** https://ymunick.github.io/mondaytest/ (built from this repo by `python build_site.py`).
 
 ## Run it
 
@@ -83,7 +85,9 @@ CSV row ─► Load & validate ─► Rules (regex) ─────────�
 | v1 | 15/15 | 14/15 | not run | Eastbridge saved only by rules floor; high-risk cases routed to the wrong queue; 10b5-1 issue not surfaced |
 | v2 | 15/15 | 14/15 | 2/3, **1 missed high** | Prompt-injection case stayed "enhanced" |
 | v3 | 14/15 (1 over) | 13/15 | 3/3 | Policy moved to code; checklist definition of "pressure" too broad (Brightpath) |
-| v4 | **15/15** | 14–15/15 | **3/3** | Final tier stable 18/18 across 3 runs |
+| v4 | **14–15/15** | 14–15/15 | **3/3** | 0 missed high in every run. Final tier matched in 18/18 cases across 3 consistency runs, but a later full run over-escalated APP-2026-0305 (below) |
+
+**Known variance (v4).** On the latest run the model tagged James Okafor's red flags in three categories (ownership, jurisdiction, source of funds) instead of two, so the code policy (≥3 categories → high) raised a case labelled `standard|enhanced` to high. The guardrails make the final tier far more stable than the model's own tier, but not perfectly stable, because the policy still depends on which facts the model extracts. Next tuning step, for compliance to decide: whether flags that describe complexity (international residency, layered but documented ownership) should count toward the 3-category rule. That needs a larger labelled set before changing it.
 
 Edge cases (`data/edge_cases.csv`): a prompt-injection attempt, a Spanish-language PEP case the regex rules cannot read, an unparseable AUM, an empty description, and a clean case with messy formatting.
 
