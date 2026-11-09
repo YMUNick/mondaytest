@@ -1,0 +1,591 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Crestview 作業導覽</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: an onboarding "case route" — one vertical spine runs down the page, each section is a stop on it.
+   The hero's 23 → 5 numerals are the one loud element; everything else stays quiet and left-aligned. */
+:root{
+  --paper:#F4F6F5;      /* cool ledger paper */
+  --sheet:#FFFFFF;      /* raised surfaces: diagrams, tables */
+  --ink:#1B2A33;        /* slate ink for text */
+  --quiet:#5A6A74;      /* secondary text */
+  --rule:#D3DBDE;       /* hairlines and the route */
+  --pen:#2B3F8C;        /* signing-pen indigo: the accent */
+  --pen-wash:#E3E7F5;
+  --std:#2E7A57; --std-wash:#E0F0E7;
+  --enh:#A86A12; --enh-wash:#F8ECD6;
+  --hi:#B5392D;  --hi-wash:#F7E0DC;
+  --code:#16222B; --code-ink:#D9E3EA;
+  --serif:"Noto Serif TC", "Songti TC", Georgia, serif;
+  --sans:"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11191E; --sheet:#18232A; --ink:#E3E9EC; --quiet:#97A6AF; --rule:#2B3942;
+  --pen:#A3B4F2; --pen-wash:#222C52;
+  --std:#6DC79E; --std-wash:#15342A; --enh:#E2AE5C; --enh-wash:#382A13; --hi:#EF8B7F; --hi-wash:#3C1F1C;
+  --code:#0B1217; --code-ink:#D9E3EA; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#11191E; --sheet:#18232A; --ink:#E3E9EC; --quiet:#97A6AF; --rule:#2B3942;
+  --pen:#A3B4F2; --pen-wash:#222C52;
+  --std:#6DC79E; --std-wash:#15342A; --enh:#E2AE5C; --enh-wash:#382A13; --hi:#EF8B7F; --hi-wash:#3C1F1C;
+  --code:#0B1217; --code-ink:#D9E3EA; color-scheme:dark }
+
+:root[data-lang="en"] .zh{display:none !important}
+:root:not([data-lang="en"]) .en{display:none !important}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:20px 88px}
+.page{max-width:1000px;margin:0 auto}
+p{margin:0}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(22px,2.8vw,29px);line-height:1.35}
+h3{font-size:16px;font-weight:700;line-height:1.5}
+a{color:var(--pen);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--pen);outline-offset:3px;border-radius:4px}
+.quiet{color:var(--quiet)}
+.lead{color:var(--quiet);max-width:60ch}
+.small{font-size:14px}
+
+/* ---------- top bar ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-size:14px;color:var(--quiet);font-weight:500}
+.lang{display:inline-flex;border:1px solid var(--rule);border-radius:999px;background:var(--sheet);padding:3px}
+.lang button{font:700 13px var(--sans);color:var(--quiet);background:transparent;border:0;border-radius:999px;padding:5px 14px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--pen);color:var(--sheet)}
+.lang button:hover:not([aria-pressed="true"]){color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{display:flex;flex-direction:column;gap:28px;padding-block:36px 8px}
+.hero-grid{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:end}
+.hero-grid > *{min-width:0}
+.numerals{font-family:var(--serif);font-weight:900;line-height:.86;display:flex;align-items:baseline;gap:.12em;font-size:clamp(88px,15vw,178px);font-variant-numeric:lining-nums;letter-spacing:-.02em}
+.numerals .old{color:var(--quiet);position:relative}
+.numerals .old::after{content:"";position:absolute;left:-4%;top:52%;height:.07em;width:108%;background:var(--hi);transform-origin:left center;animation:strike .7s .35s cubic-bezier(.6,0,.2,1) both}
+.numerals .arrow{font-family:var(--sans);font-weight:400;font-size:.36em;color:var(--quiet);transform:translateY(-.5em)}
+.numerals .new{color:var(--pen)}
+.numerals .unit{font-family:var(--sans);font-weight:500;font-size:.15em;letter-spacing:0;color:var(--quiet);margin-left:.15em}
+@keyframes strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(24px,3.2vw,34px);line-height:1.35}
+.hero-copy{display:flex;flex-direction:column;gap:14px;padding-bottom:10px}
+
+.bench{display:grid;grid-template-columns:72px 1fr;gap:10px 14px;align-items:center;max-width:720px}
+.bench .lab{font-size:13px;color:var(--quiet)}
+.bench .bar{height:26px;border-radius:3px;display:flex;align-items:center;padding-left:10px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar.now{background:var(--hi-wash);box-shadow:inset 3px 0 0 var(--hi)}
+.bar.mid{background:var(--sheet);box-shadow:inset 3px 0 0 var(--rule)}
+.bar.goal{background:var(--std-wash);box-shadow:inset 3px 0 0 var(--std)}
+.bench-note{grid-column:2;font-size:14px;color:var(--quiet)}
+
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px;border-top:1px solid var(--rule);padding-top:14px}
+nav.toc a{color:var(--ink);text-decoration:none}
+nav.toc a:hover{color:var(--pen);text-decoration:underline}
+
+/* ---------- the route ---------- */
+.route{position:relative;display:flex;flex-direction:column;gap:72px;margin-top:56px;padding-left:44px}
+.route::before{content:"";position:absolute;left:11px;top:14px;bottom:0;width:2px;background:var(--rule)}
+.stop{position:relative;display:flex;flex-direction:column;gap:20px;scroll-margin-top:20px}
+.stop::before{content:"";position:absolute;left:-41px;top:9px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:3px solid var(--pen)}
+.stop.end::before{background:var(--pen)}
+.stop-head{display:flex;flex-direction:column;gap:8px}
+
+/* ---------- diagrams ---------- */
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.dia{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.dia svg{display:block;width:100%;min-width:760px;height:auto;color:var(--quiet)}
+figcaption{font-size:14px;color:var(--quiet);max-width:72ch}
+.bx{fill:var(--sheet);stroke:var(--rule);stroke-width:1.25}
+.bx.acc{fill:var(--pen-wash);stroke:var(--pen);stroke-width:1.75}
+.bx.std{fill:var(--std-wash);stroke:var(--std);stroke-width:1.5}
+.bx.enh{fill:var(--enh-wash);stroke:var(--enh);stroke-width:1.5}
+.bx.hi{fill:var(--hi-wash);stroke:var(--hi);stroke-width:1.5}
+.bx.dash{stroke-dasharray:5 4}
+.t{fill:var(--ink);font-size:14px;font-weight:700;font-family:var(--sans)}
+.s{fill:var(--quiet);font-size:12px;font-family:var(--sans)}
+.m{fill:var(--quiet);font-size:11.5px;font-family:var(--mono)}
+.ln{stroke:currentColor;stroke-width:1.4;fill:none}
+.ln.hot{stroke:var(--hi)}
+.lbl{fill:var(--quiet);font-size:11px;font-family:var(--sans)}
+.lbl.hot{fill:var(--hi);font-weight:700}
+
+/* ---------- numbers ---------- */
+.ledger{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--rule)}
+th{font-size:13px;color:var(--quiet);font-weight:500;border-bottom:1.5px solid var(--ink)}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.bad{color:var(--hi);font-weight:700}
+td.good{color:var(--std);font-weight:700}
+
+/* ---------- leaders (compared side by side) ---------- */
+.leaders-wrap{overflow-x:auto}
+.leaders{display:grid;grid-template-columns:110px repeat(4,minmax(150px,1fr));min-width:760px;border-top:1.5px solid var(--ink)}
+.leaders > div{padding:12px 14px;border-bottom:1px solid var(--rule);font-size:14px;line-height:1.6}
+.leaders .rl{font-size:13px;color:var(--quiet);padding-left:0}
+.leaders .who{display:flex;flex-direction:column;gap:2px}
+.leaders .who b{font-family:var(--serif);font-size:20px;font-weight:700}
+.leaders .who span{font-size:13px;color:var(--quiet)}
+.leaders .veto{background:var(--hi-wash)}
+.leaders .win{color:var(--pen);font-weight:500}
+.leaders .last{border-bottom:none}
+.stamp{display:inline-block;align-self:flex-start;margin-top:6px;font-size:12px;font-weight:700;color:var(--hi);border:2px double var(--hi);border-radius:4px;padding:1px 8px;transform:rotate(-4deg)}
+
+/* ---------- deliverables ---------- */
+.clock{display:flex;border-radius:4px;overflow:hidden;border:1px solid var(--rule);background:var(--sheet)}
+.clock > div{padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.clock b{font-size:15px}
+.clock .sub{font-size:13px;color:var(--quiet)}
+.clock .c1{flex:20;background:var(--pen-wash)}
+.clock .c2{flex:15;border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+.clock .c3{flex:20;background:var(--enh-wash)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.cols > *{min-width:0;display:flex;flex-direction:column;gap:8px}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:15px}
+ul.plain li::marker{color:var(--quiet)}
+
+/* ---------- samples ---------- */
+.grid-wrap{overflow-x:auto}
+.mx{display:grid;grid-template-columns:96px repeat(3,1fr);min-width:680px;border-top:1.5px solid var(--ink)}
+.mx > div{border-bottom:1px solid var(--rule);padding:10px}
+.mx .hd{font-size:13px;color:var(--quiet);text-align:left}
+.mx .rh{font-size:14px;font-weight:700;display:flex;align-items:center;padding-left:0}
+.rh.hi{color:var(--hi)} .rh.enh{color:var(--enh)} .rh.std{color:var(--std)}
+.mx .cell{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;border-left:1px solid var(--rule);min-height:56px}
+.chip{font-size:13px;line-height:1.35;border-radius:3px;padding:4px 8px;border:1px solid}
+.chip i{font-style:normal;font-family:var(--mono);font-size:12px;margin-right:6px;opacity:.8}
+.chip.hi{background:var(--hi-wash);border-color:var(--hi)}
+.chip.enh{background:var(--enh-wash);border-color:var(--enh)}
+.chip.std{background:var(--std-wash);border-color:var(--std)}
+.chip.edge{border-style:dashed}
+.traps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.traps > div{border-top:2px solid var(--enh);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.traps p{font-size:14px;color:var(--quiet);line-height:1.65}
+
+/* ---------- next steps ---------- */
+.done{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 36px}
+.done li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:15px;align-items:start}
+.done svg{margin-top:5px}
+.done .sub{display:block;font-size:13px;color:var(--quiet)}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ol.steps > li{display:grid;grid-template-columns:40px 1fr;gap:18px;position:relative;padding-bottom:30px}
+ol.steps > li:not(:last-child)::before{content:"";position:absolute;left:19px;top:40px;bottom:0;width:1px;background:var(--rule)}
+.no{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:17px;background:var(--sheet);border:1.5px solid var(--pen);color:var(--pen)}
+.step{display:flex;flex-direction:column;gap:8px;min-width:0;padding-top:6px}
+.when{font-size:13px;color:var(--quiet)}
+.step .why{color:var(--quiet);font-size:14px;max-width:64ch}
+.codebox{position:relative;background:var(--code);color:var(--code-ink);border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.7;overflow-x:auto;white-space:pre}
+.codebox.wrapit{white-space:pre-wrap;padding-right:96px;font-family:var(--sans);font-size:14px}
+.copy{position:absolute;top:8px;right:8px;font:500 12px var(--sans);background:var(--code);color:var(--code-ink);border:1px solid #3A4B57;border-radius:4px;padding:3px 10px;cursor:pointer}
+.copy:hover{border-color:var(--code-ink)}
+ul.check{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
+code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1px solid var(--rule);border-radius:3px;padding:0 5px}
+
+@media (max-width:820px){
+  .hero-grid{grid-template-columns:1fr;gap:16px}
+  .cols,.done{grid-template-columns:1fr}
+  .traps{grid-template-columns:1fr;gap:20px}
+}
+@media (max-width:520px){
+  .route{padding-left:30px}
+  .route::before{left:6px}
+  .stop::before{left:-31px;width:14px;height:14px}
+  .bench{grid-template-columns:56px 1fr}
+  .clock{flex-direction:column}
+  .clock .c2{border:none;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:reduce){.numerals .old::after{animation:none}}
+</style>
+
+<div class="page">
+
+<div class="top">
+  <span class="brand">Crestview Capital Group × monday.com</span>
+  <div class="lang" role="group" aria-label="語言 / Language">
+    <button type="button" id="lang-zh" data-lang="zh" aria-pressed="true">中文</button>
+    <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-grid">
+    <div class="numerals" role="img" data-label-zh="開戶時間從 23 天縮到 5 天" data-label-en="Onboarding from 23 days to 5" aria-label="開戶時間從 23 天縮到 5 天">
+      <span class="old">23</span><span class="arrow">→</span><span class="new">5</span><span class="unit"><span class="zh">天</span><span class="en">days</span></span>
+    </div>
+    <div class="hero-copy">
+      <h1><span class="zh">Crestview 要在六個月內，把客戶開戶從 23 個工作天縮到 5 天</span><span class="en">Crestview wants client onboarding cut from 23 business days to 5 within six months</span></h1>
+    </div>
+  </div>
+  <div class="bench" role="img" data-label-zh="平均開戶天數：現況 23 天，業界 8 天，目標 5 天" data-label-en="Average onboarding time: 23 days today, 8 industry, 5 target" aria-label="平均開戶天數：現況 23 天，業界 8 天，目標 5 天">
+    <span class="lab"><span class="zh">現況</span><span class="en">Today</span></span><div class="bar now" style="width:100%"><span class="zh">23 個工作天</span><span class="en">23 business days</span></div>
+    <span class="lab"><span class="zh">業界</span><span class="en">Industry</span></span><div class="bar mid" style="width:34.8%">8</div>
+    <span class="lab"><span class="zh">目標</span><span class="en">Target</span></span><div class="bar goal" style="width:21.7%">5</div>
+    <p class="bench-note"><span class="zh">上一季因為「四週對五天」，輸掉一筆 2 億美元的機構資金。</span><span class="en">Last quarter, a $200M institutional allocation was lost over four weeks against five days.</span></p>
+  </div>
+  <nav class="toc" aria-label="頁內導覽 / On this page">
+    <a href="#today"><span class="zh">現況流程</span><span class="en">Today’s process</span></a>
+    <a href="#numbers"><span class="zh">關鍵數字</span><span class="en">Key numbers</span></a>
+    <a href="#people"><span class="zh">四位主管</span><span class="en">Four leaders</span></a>
+    <a href="#deliver"><span class="zh">你要交什麼</span><span class="en">Deliverables</span></a>
+    <a href="#target"><span class="zh">目標流程</span><span class="en">Target flow</span></a>
+    <a href="#poc"><span class="zh">POC 怎麼跑</span><span class="en">How the POC runs</span></a>
+    <a href="#samples"><span class="zh">15 筆樣本</span><span class="en">15 samples</span></a>
+  </nav>
+</header>
+
+<main class="route">
+
+<!-- today -->
+<section class="stop" id="today">
+  <div class="stop-head">
+    <h2><span class="zh">現在：五個系統，全靠人工搬資料</span><span class="en">Today: five systems, held together by manual work</span></h2>
+    <p class="lead"><span class="zh">每一次交接都是複製貼上或寄 email。營運團隊 60–70% 的時間在做這些事，案件卡在法遵時整條線停擺。</span><span class="en">Every handoff is copy-paste or an email. Operations spends 60–70% of its time on this, and when a case waits for compliance, everything stops.</span></p>
+  </div>
+  <figure>
+    <div class="dia">
+      <svg viewBox="0 0 920 290" role="img" data-label-zh="現行開戶流程：八個步驟，七次人工交接，法遵篩查積壓 85 件" data-label-en="Current onboarding: eight steps, seven manual handoffs, 85 cases waiting for compliance screening" aria-label="現行開戶流程：八個步驟，七次人工交接，法遵篩查積壓 85 件">
+        <defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+          <marker id="a1h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--hi)"/></marker>
+        </defs>
+        <rect class="bx" x="20" y="40" width="190" height="70" rx="6"/>
+        <text class="t zh" x="36" y="70">客戶寄來文件</text><text class="s zh" x="36" y="92">email、PDF、掃描、紙本</text>
+        <text class="t en" x="36" y="70">Client sends files</text><text class="s en" x="36" y="92">email, PDF, scans, paper</text>
+        <rect class="bx" x="250" y="40" width="190" height="70" rx="6"/>
+        <text class="t zh" x="266" y="70">RM 轉寄給營運</text><text class="t en" x="266" y="70">RM forwards to ops</text><text class="s" x="266" y="92">Outlook</text>
+        <rect class="bx" x="480" y="40" width="190" height="70" rx="6"/>
+        <text class="t zh" x="496" y="70">營運上傳文件</text><text class="t en" x="496" y="70">Ops uploads files</text><text class="s" x="496" y="92">SharePoint</text>
+        <rect class="bx" x="710" y="40" width="190" height="70" rx="6"/>
+        <text class="t zh" x="726" y="70">營運手打資料</text><text class="s zh" x="726" y="92">ClientHub（12 年老系統）</text>
+        <text class="t en" x="726" y="70">Ops retypes the data</text><text class="s en" x="726" y="92">ClientHub (legacy)</text>
+        <rect class="bx" x="710" y="190" width="190" height="70" rx="6"/>
+        <text class="t zh" x="726" y="220">營運建立審查申請</text><text class="s zh" x="726" y="242">手動</text>
+        <text class="t en" x="726" y="220">Ops raises a review</text><text class="s en" x="726" y="242">by hand</text>
+        <rect class="bx hi" x="480" y="190" width="190" height="70" rx="6"/>
+        <text class="t zh" x="496" y="220">法遵 KYC／AML 篩查</text><text class="s zh" x="496" y="242">ComplianceOne，積壓 85 件</text>
+        <text class="t en" x="496" y="220">KYC / AML screening</text><text class="s en" x="496" y="242">ComplianceOne, 85 queued</text>
+        <rect class="bx" x="250" y="190" width="190" height="70" rx="6"/>
+        <text class="t zh" x="266" y="220">法遵寫報告寄回</text><text class="t en" x="266" y="220">Compliance replies</text><text class="s" x="266" y="242">Word, email</text>
+        <rect class="bx" x="20" y="190" width="190" height="70" rx="6"/>
+        <text class="t zh" x="36" y="220">營運再更新一次</text><text class="t en" x="36" y="220">Ops updates again</text><text class="s" x="36" y="242">ClientHub</text>
+        <path class="ln" d="M210 75H248" marker-end="url(#a1)"/>
+        <path class="ln" d="M440 75H478" marker-end="url(#a1)"/>
+        <path class="ln" d="M670 75H708" marker-end="url(#a1)"/>
+        <path class="ln" d="M805 110V188" marker-end="url(#a1)"/>
+        <path class="ln hot" d="M710 225H672" marker-end="url(#a1h)"/>
+        <path class="ln" d="M480 225H442" marker-end="url(#a1)"/>
+        <path class="ln" d="M250 225H212" marker-end="url(#a1)"/>
+        <g class="zh">
+          <text class="lbl" x="230" y="66" text-anchor="middle">人工</text><text class="lbl" x="460" y="66" text-anchor="middle">人工</text><text class="lbl" x="690" y="66" text-anchor="middle">人工</text>
+          <text class="lbl" x="814" y="154">人工</text>
+          <text class="lbl hot" x="690" y="216" text-anchor="middle">排隊</text><text class="lbl" x="460" y="216" text-anchor="middle">人工</text><text class="lbl" x="230" y="216" text-anchor="middle">人工</text>
+        </g>
+        <g class="en">
+          <text class="lbl" x="230" y="66" text-anchor="middle">manual</text><text class="lbl" x="460" y="66" text-anchor="middle">manual</text><text class="lbl" x="690" y="66" text-anchor="middle">manual</text>
+          <text class="lbl" x="814" y="154">manual</text>
+          <text class="lbl hot" x="690" y="216" text-anchor="middle">queue</text><text class="lbl" x="460" y="216" text-anchor="middle">manual</text><text class="lbl" x="230" y="216" text-anchor="middle">manual</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><span class="zh">簡單案件法遵約 1 小時，複雜案件要一整天，但兩者排在同一條隊伍裡。簡單客戶是被複雜客戶卡住的。</span><span class="en">Simple cases take compliance about an hour and complex ones a full day, yet they wait in the same queue. Simple clients are stuck behind complex ones.</span></figcaption>
+  </figure>
+</section>
+
+<!-- numbers -->
+<section class="stop" id="numbers">
+  <div class="stop-head">
+    <h2><span class="zh">關鍵數字：每一項都落後業界</span><span class="en">Key numbers: behind the industry on every one</span></h2>
+    <p class="lead small"><span class="zh">來源：Crestview 營運儀表板，2025 年第 4 季</span><span class="en">Source: Crestview Operations Dashboard, Q4 2025</span></p>
+  </div>
+  <div class="ledger"><table>
+    <thead><tr>
+      <th><span class="zh">指標</span><span class="en">Metric</span></th><th><span class="zh">現況</span><span class="en">Today</span></th><th><span class="zh">業界</span><span class="en">Industry</span></th><th><span class="zh">目標</span><span class="en">Target</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="zh">平均開戶時間</span><span class="en">Average onboarding time</span></td><td class="n bad"><span class="zh">23 天</span><span class="en">23 days</span></td><td class="n"><span class="zh">8 天</span><span class="en">8 days</span></td><td class="n good"><span class="zh">5 天</span><span class="en">5 days</span></td></tr>
+      <tr><td><span class="zh">法遵審查積壓</span><span class="en">Compliance review backlog</span></td><td class="n bad"><span class="zh">85 件</span><span class="en">85</span></td><td class="n quiet">—</td><td class="n good"><span class="zh">少於 10 件</span><span class="en">under 10</span></td></tr>
+      <tr><td><span class="zh">開戶 NPS</span><span class="en">Onboarding NPS</span></td><td class="n bad">24</td><td class="n">52</td><td class="n good"><span class="zh">55 以上</span><span class="en">55+</span></td></tr>
+      <tr><td><span class="zh">開戶放棄率</span><span class="en">Onboarding abandonment</span></td><td class="n bad">18%</td><td class="n">5%</td><td class="n good"><span class="zh">低於 5%</span><span class="en">under 5%</span></td></tr>
+      <tr><td><span class="zh">每年風險營收</span><span class="en">Annual revenue at risk</span></td><td class="n bad"><span class="zh">約 1,200 萬美元</span><span class="en">~$12M</span></td><td class="n quiet">—</td><td class="n good"><span class="zh">低於 200 萬美元</span><span class="en">under $2M</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="lead small"><span class="zh">對 monday.com 的意義：Crestview 現在只有 IT 和 PMO 在用（1,500 席，ARR 65 萬美元）。這次試點成功，就能擴展到營運、法遵、RM 三個部門，再加 600 席以上。</span><span class="en">What it means for monday.com: today only IT and PMO use it (1,500 seats, $650K ARR). If the pilot works, it expands to operations, compliance and relationship management, adding 600+ seats.</span></p>
+</section>
+
+<!-- people -->
+<section class="stop" id="people">
+  <div class="stop-head">
+    <h2><span class="zh">四位主管，四種成功定義</span><span class="en">Four leaders, four definitions of success</span></h2>
+    <p class="lead"><span class="zh">方案要同時過四關。最難也最關鍵的是 Priya，她有否決權。</span><span class="en">The solution has to clear all four. Priya is the hardest and the most important: she holds a veto.</span></p>
+  </div>
+  <div class="leaders-wrap"><div class="leaders">
+    <div class="rl"></div>
+    <div class="who"><b>Claire</b><span><span class="zh">COO，專案發起人</span><span class="en">COO, sponsor</span></span></div>
+    <div class="who"><b>David</b><span><span class="zh">客戶營運處長</span><span class="en">MD, Client Operations</span></span></div>
+    <div class="who veto"><b>Priya</b><span><span class="zh">法遵長</span><span class="en">Chief Compliance Officer</span></span><span class="stamp"><span class="zh">有否決權</span><span class="en">Holds a veto</span></span></div>
+    <div class="who"><b>Marcus</b><span><span class="zh">科技副總</span><span class="en">VP, Technology</span></span></div>
+
+    <div class="rl"><span class="zh">要什麼</span><span class="en">Wants</span></div>
+    <div><span class="zh">23 天縮到一週內；上正式環境；給董事會的擴展故事</span><span class="en">Under a week instead of 23 days; in production; a scaling story for the board</span></div>
+    <div><span class="zh">團隊 70% 行政時間翻成 70% 服務客戶；能處理例外</span><span class="en">Flip 70% admin into 70% client work; handle exceptions</span></div>
+    <div class="veto"><span class="zh">法遵準確度上升、稽核缺失減少</span><span class="en">Higher compliance accuracy, fewer audit findings</span></div>
+    <div><span class="zh">資料安全；用現有 M365 和 Copilot；4 人團隊顧得了</span><span class="en">Secure data; use existing M365 and Copilot; supportable by a team of four</span></div>
+
+    <div class="rl"><span class="zh">怕什麼</span><span class="en">Fears</span></div>
+    <div><span class="zh">顧問丟下手冊就走</span><span class="en">Consultants who hand over a playbook and leave</span></div>
+    <div><span class="zh">重演 RPA：展示很順，上線一直壞</span><span class="en">A repeat of RPA: great demo, broken in production</span></div>
+    <div class="veto"><span class="zh">說不出理由的 AI 黑盒子</span><span class="en">An AI black box that can’t explain itself</span></div>
+    <div><span class="zh">FDE 走後沒人能維護</span><span class="en">Nobody can maintain it after the FDE leaves</span></div>
+
+    <div class="rl last"><span class="zh">怎麼贏得</span><span class="en">How we win</span></div>
+    <div class="win last"><span class="zh">第 6 週就有真實案件在新流程上跑</span><span class="en">Real cases on the new flow by week 6</span></div>
+    <div class="win last"><span class="zh">用他團隊最難搞的真實文件測試</span><span class="en">Test on his team’s hardest real documents</span></div>
+    <div class="win veto last"><span class="zh">每個判斷附證據、留紀錄、由人簽核</span><span class="en">Evidence on every call, an audit trail, human sign-off</span></div>
+    <div class="win last"><span class="zh">標準工具，他的團隊從第 1 週一起做</span><span class="en">Standard tools, with his team building from week 1</span></div>
+  </div></div>
+</section>
+
+<!-- deliverables -->
+<section class="stop" id="deliver">
+  <div class="stop-head">
+    <h2><span class="zh">你要交什麼：60 分鐘，三段</span><span class="en">What you deliver: 60 minutes, three parts</span></h2>
+    <p class="lead"><span class="zh">把面試官當成 Claire 和 Crestview 的主管來簡報。時間是 PDF 寫的大約值。</span><span class="en">Present as if the panel were Claire and Crestview’s leadership. Timings are the brief’s approximate figures.</span></p>
+  </div>
+  <div class="clock" role="img" data-label-zh="面試時間分配：策略簡報 15 到 20 分鐘，POC 展示 10 到 15 分鐘，提問約 20 分鐘" data-label-en="Interview time: strategy 15 to 20 minutes, POC demo 10 to 15 minutes, Q&amp;A about 20 minutes" aria-label="面試時間分配：策略簡報 15 到 20 分鐘，POC 展示 10 到 15 分鐘，提問約 20 分鐘">
+    <div class="c1"><b><span class="zh">Part 1 策略簡報</span><span class="en">Part 1 Strategy</span></b><span class="sub"><span class="zh">15–20 分鐘，投影片</span><span class="en">15–20 min, slides</span></span></div>
+    <div class="c2"><b><span class="zh">Part 2 POC 展示</span><span class="en">Part 2 POC demo</span></b><span class="sub"><span class="zh">10–15 分鐘，現場跑程式</span><span class="en">10–15 min, live code</span></span></div>
+    <div class="c3"><b><span class="zh">面試官提問</span><span class="en">Panel questions</span></b><span class="sub"><span class="zh">約 20 分鐘</span><span class="en">about 20 min</span></span></div>
+  </div>
+  <div class="cols">
+    <div><h3><span class="zh">Part 1 要涵蓋</span><span class="en">Part 1 must cover</span></h3>
+      <ul class="plain zh">
+        <li>問題分析與商業價值</li>
+        <li>以 monday.com 為骨幹的架構、系統整合，以及 AI 用什麼、怎麼運作、為什麼</li>
+        <li>如何用 M365 和 Copilot</li>
+        <li>6 個月 roadmap：每位主管的指標、風險與對策</li>
+        <li>擴展到其他部門，以及帶回給 monday 產品團隊的回饋</li>
+      </ul>
+      <ul class="plain en">
+        <li>Problem analysis and business case</li>
+        <li>A monday.com-centred architecture, integrations, and which AI, how it works and why</li>
+        <li>How to use M365 and Copilot</li>
+        <li>A 6-month roadmap: each leader’s metrics, risks and mitigations</li>
+        <li>Scaling to other teams, and feedback for monday’s product team</li>
+      </ul>
+    </div>
+    <div><h3><span class="zh">Part 2 要展示</span><span class="en">Part 2 must show</span></h3>
+      <ul class="plain zh">
+        <li>AI 風險評估，附明確理由</li>
+        <li>以風險結果為基礎的開戶摘要</li>
+        <li>結構化輸出（JSON、CSV 或 monday board）</li>
+        <li>完整 pipeline 與錯誤處理</li>
+        <li>另外要記錄你怎麼用 AI 完成作業，會被深入追問</li>
+      </ul>
+      <ul class="plain en">
+        <li>AI risk assessment with explicit reasoning</li>
+        <li>An onboarding summary built on the risk result</li>
+        <li>Structured output (JSON, CSV or a monday board)</li>
+        <li>The full pipeline, with error handling</li>
+        <li>A record of how you used AI, which the panel will probe in depth</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- target -->
+<section class="stop" id="target">
+  <div class="stop-head">
+    <h2><span class="zh">目標流程：monday 串起流程，AI 先分流，人做決定</span><span class="en">Target flow: monday runs it, AI triages, people decide</span></h2>
+    <p class="lead"><span class="zh">原本所有案件排同一條隊伍。改成 AI 預篩後分三條，簡單案件不再被複雜案件卡住。</span><span class="en">Today every case waits in one queue. With an AI pre-screen it splits three ways, so simple cases stop waiting behind complex ones.</span></p>
+  </div>
+  <figure>
+    <div class="dia">
+      <svg viewBox="0 0 920 300" role="img" data-label-zh="目標流程：Salesforce 成交後自動在 monday 建立項目，AI 擷取並預篩，分成標準、加強、高風險三條隊伍，最後一律由人工簽核" data-label-en="Target flow: a won Salesforce deal creates a monday item, AI extracts and pre-screens, cases split into standard, enhanced and high-risk queues, and a person signs off every one" aria-label="目標流程：Salesforce 成交後自動在 monday 建立項目，AI 擷取並預篩，分成標準、加強、高風險三條隊伍，最後一律由人工簽核">
+        <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+        <rect class="bx" x="16" y="118" width="150" height="64" rx="6"/>
+        <text class="t zh" x="30" y="145">Salesforce 成交</text><text class="s zh" x="30" y="166">觸發開戶</text>
+        <text class="t en" x="30" y="145">Salesforce: won</text><text class="s en" x="30" y="166">starts onboarding</text>
+        <rect class="bx" x="200" y="118" width="160" height="64" rx="6"/>
+        <text class="t zh" x="214" y="145">monday 開戶項目</text><text class="s zh" x="214" y="166">自動建立，全程追蹤</text>
+        <text class="t en" x="214" y="145">monday item</text><text class="s en" x="214" y="166">auto-created, tracked</text>
+        <rect class="bx acc" x="394" y="118" width="170" height="64" rx="6"/>
+        <text class="t zh" x="408" y="145">AI 擷取＋預篩</text><text class="s zh" x="408" y="166">每個警訊附原文證據</text>
+        <text class="t en" x="408" y="145">AI extract + screen</text><text class="s en" x="408" y="166">evidence on each flag</text>
+        <rect class="bx std" x="620" y="24" width="150" height="56" rx="6"/>
+        <text class="t zh" x="634" y="48">標準審查</text><text class="s zh" x="634" y="68">約 1 小時</text>
+        <text class="t en" x="634" y="48">Standard review</text><text class="s en" x="634" y="68">about 1 hour</text>
+        <rect class="bx enh" x="620" y="122" width="150" height="56" rx="6"/>
+        <text class="t zh" x="634" y="146">加強審查</text><text class="t en" x="634" y="146">Enhanced review</text><text class="s" x="634" y="166">EDD</text>
+        <rect class="bx hi" x="620" y="220" width="150" height="56" rx="6"/>
+        <text class="t zh" x="634" y="244">高風險升級</text><text class="s zh" x="634" y="264">法遵主管</text>
+        <text class="t en" x="634" y="244">High risk</text><text class="s en" x="634" y="264">to compliance lead</text>
+        <rect class="bx" x="804" y="118" width="100" height="64" rx="6"/>
+        <text class="t zh" x="818" y="145">人工簽核</text><text class="s zh" x="818" y="166">留稽核紀錄</text>
+        <text class="t en" x="818" y="145">Sign-off</text><text class="s en" x="818" y="166">audit trail</text>
+        <path class="ln" d="M166 150H198" marker-end="url(#a2)"/>
+        <path class="ln" d="M360 150H392" marker-end="url(#a2)"/>
+        <path class="ln" d="M564 150H592V52H618" marker-end="url(#a2)"/>
+        <path class="ln" d="M564 150H618" marker-end="url(#a2)"/>
+        <path class="ln" d="M592 150V248H618" marker-end="url(#a2)"/>
+        <text class="lbl zh" x="570" y="141">分流</text><text class="lbl en" x="568" y="141">triage</text>
+        <path class="ln" d="M770 52H787V140"/>
+        <path class="ln" d="M770 150H802" marker-end="url(#a2)"/>
+        <path class="ln" d="M770 248H787V160"/>
+      </svg>
+    </div>
+    <figcaption><span class="zh">關鍵原則：AI 只能把案件往上送，不能自己放行。最終一律由法遵人員簽核，系統記下是誰、何時、依據什麼。文件留在 SharePoint、客戶資料留在 ClientHub，monday 管的是「案件在哪、卡在誰、下一步是什麼」。</span><span class="en">Key rule: AI can only escalate a case; it never clears one. Compliance staff sign off every case, and the system records who, when and on what basis. Documents stay in SharePoint and client data in ClientHub; monday tracks where each case is, who has it and what happens next.</span></figcaption>
+  </figure>
+</section>
+
+<!-- poc -->
+<section class="stop" id="poc">
+  <div class="stop-head">
+    <h2><span class="zh">POC 怎麼跑：兩條路線先判斷，再合流</span><span class="en">How the POC runs: two checks, then one decision</span></h2>
+    <p class="lead"><span class="zh">程式已經寫好並離線測過（crestview-poc.zip）。規則和 AI 各自判斷風險，防護機制取較高的那個，摘要再根據最終等級撰寫。</span><span class="en">The code is written and tested offline (crestview-poc.zip). Rules and AI each judge risk, the guardrails keep the higher tier, and the summary is written from that final tier.</span></p>
+  </div>
+  <figure>
+    <div class="dia">
+      <svg viewBox="0 0 920 330" role="img" data-label-zh="POC 流程：申請 CSV 同時進入規則檢查和 AI 風險評估，兩者進入防護機制得出最終等級，再由 AI 寫開戶摘要，輸出 JSON、CSV 和 monday board，並用 evaluate.py 比對預期等級" data-label-en="POC flow: the applications CSV goes to both rule checks and an AI risk review, the guardrails combine them into a final tier, AI writes the onboarding summary, output goes to JSON, CSV and a monday board, and evaluate.py compares it with expected tiers" aria-label="POC 流程：申請 CSV 同時進入規則檢查和 AI 風險評估，兩者進入防護機制得出最終等級，再由 AI 寫開戶摘要，輸出 JSON、CSV 和 monday board，並用 evaluate.py 比對預期等級">
+        <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+        <rect class="bx" x="16" y="120" width="140" height="80" rx="6"/>
+        <text class="t zh" x="30" y="148">申請 CSV</text><text class="s zh" x="30" y="168">15 筆</text>
+        <text class="t en" x="30" y="148">Applications</text><text class="s en" x="30" y="168">15 rows, CSV</text>
+        <text class="m" x="30" y="188">data/</text>
+        <rect class="bx" x="206" y="30" width="140" height="80" rx="6"/>
+        <text class="t zh" x="220" y="58">規則檢查</text><text class="t en" x="220" y="58">Rule checks</text>
+        <text class="m" x="220" y="78">rules.py</text>
+        <text class="s zh" x="220" y="98">設定風險下限</text><text class="s en" x="220" y="98">sets a risk floor</text>
+        <rect class="bx acc" x="206" y="210" width="140" height="80" rx="6"/>
+        <text class="t zh" x="220" y="238">AI 風險評估</text><text class="t en" x="220" y="238">AI risk review</text>
+        <text class="m" x="220" y="258">risk prompt</text>
+        <text class="s zh" x="220" y="278">等級、證據、信心</text><text class="s en" x="220" y="278">tier + evidence</text>
+        <rect class="bx" x="396" y="120" width="140" height="80" rx="6"/>
+        <text class="t zh" x="410" y="148">防護機制</text><text class="t en" x="410" y="148">Guardrails</text>
+        <text class="m" x="410" y="168">pipeline.py</text>
+        <text class="s zh" x="410" y="188">只升不降</text><text class="s en" x="410" y="188">raise, never lower</text>
+        <rect class="bx acc" x="586" y="120" width="140" height="80" rx="6"/>
+        <text class="t zh" x="600" y="148">AI 開戶摘要</text><text class="t en" x="600" y="148">AI summary</text>
+        <text class="m" x="600" y="168">summary prompt</text>
+        <text class="s zh" x="600" y="188">依最終等級撰寫</text><text class="s en" x="600" y="188">from the final tier</text>
+        <rect class="bx" x="776" y="120" width="128" height="80" rx="6"/>
+        <text class="t zh" x="790" y="148">輸出</text><text class="t en" x="790" y="148">Output</text>
+        <text class="s" x="790" y="168">JSON, CSV</text><text class="s" x="790" y="188">monday board</text>
+        <rect class="bx dash" x="776" y="250" width="128" height="64" rx="6"/>
+        <text class="t" x="790" y="276">evaluate.py</text>
+        <text class="s zh" x="790" y="298">比對預期等級</text><text class="s en" x="790" y="298">vs expected tiers</text>
+        <path class="ln" d="M156 160H180V70H204" marker-end="url(#a3)"/>
+        <path class="ln" d="M180 160V250H204" marker-end="url(#a3)"/>
+        <path class="ln" d="M346 70H370V150H394" marker-end="url(#a3)"/>
+        <path class="ln" d="M346 250H370V170H394" marker-end="url(#a3)"/>
+        <path class="ln" d="M536 160H584" marker-end="url(#a3)"/>
+        <path class="ln" d="M726 160H774" marker-end="url(#a3)"/>
+        <path class="ln" d="M840 200V248" marker-end="url(#a3)"/>
+        <g class="zh"><text class="lbl" x="352" y="62">下限</text><text class="lbl" x="352" y="242">評估</text><text class="lbl" x="560" y="151" text-anchor="middle">最終等級</text><text class="lbl" x="750" y="151" text-anchor="middle">JSON</text><text class="lbl" x="848" y="230">比對</text></g>
+        <g class="en"><text class="lbl" x="350" y="62">floor</text><text class="lbl" x="350" y="242">tier</text><text class="lbl" x="560" y="151" text-anchor="middle">final</text><text class="lbl" x="750" y="151" text-anchor="middle">JSON</text><text class="lbl" x="848" y="230">compare</text></g>
+      </svg>
+    </div>
+    <figcaption><span class="zh">防護機制做三件事：最終等級取規則與 AI 的較高者；AI 信心低於 0.7 自動升一級；檢查每條證據是否真的出現在原文。每次模型呼叫都記進 audit_log.jsonl。</span><span class="en">The guardrails do three things: keep the higher of the rule tier and the AI tier; raise the tier one step when AI confidence is below 0.7; and check that every quoted piece of evidence really appears in the application. Every model call is written to audit_log.jsonl.</span></figcaption>
+  </figure>
+</section>
+
+<!-- samples -->
+<section class="stop end" id="samples">
+  <div class="stop-head">
+    <h2><span class="zh">15 筆申請：風險和複雜度是兩回事</span><span class="en">15 applications: risk and complexity are different things</span></h2>
+    <p class="lead"><span class="zh">這是我的初判，不是標準答案，你要自己再確認一次。虛線框代表在兩個等級之間都說得通。</span><span class="en">This is my first pass, not an answer key; check it yourself. A dashed outline means the neighbouring tier is also defensible.</span></p>
+  </div>
+  <div class="grid-wrap">
+    <div class="mx" role="table" data-label-zh="15 筆申請依風險等級與作業複雜度分布" data-label-en="15 applications by risk tier and onboarding complexity" aria-label="15 筆申請依風險等級與作業複雜度分布">
+      <div class="hd"></div>
+      <div class="hd"><span class="zh">作業複雜度低</span><span class="en">Low complexity</span></div>
+      <div class="hd"><span class="zh">中</span><span class="en">Medium</span></div>
+      <div class="hd"><span class="zh">高</span><span class="en">High</span></div>
+
+      <div class="rh hi"><span class="zh">高風險</span><span class="en">High risk</span></div>
+      <div class="cell">
+        <span class="chip hi"><i>0311</i><span class="zh">Eastbridge 新公司</span><span class="en">Eastbridge, new company</span></span>
+        <span class="chip hi"><i>0315</i><span class="zh">R. Ashford 離岸信託</span><span class="en">R. Ashford, offshore trust</span></span>
+      </div>
+      <div class="cell"><span class="chip hi"><i>0303</i><span class="zh">Apex 名義董事</span><span class="en">Apex, nominee directors</span></span></div>
+      <div class="cell"></div>
+
+      <div class="rh enh"><span class="zh">加強審查</span><span class="en">Enhanced</span></div>
+      <div class="cell"></div>
+      <div class="cell"><span class="chip enh"><i>0307</i><span class="zh">Velocity 政治人物</span><span class="en">Velocity, PEP</span></span></div>
+      <div class="cell"><span class="chip enh edge"><i>0313</i><span class="zh">Mercer-Hastings 上市公司 CEO</span><span class="en">Mercer-Hastings, CEO</span></span></div>
+
+      <div class="rh std"><span class="zh">標準</span><span class="en">Standard</span></div>
+      <div class="cell">
+        <span class="chip std"><i>0301</i><span class="zh">Greenfield 退休基金</span><span class="en">Greenfield pension</span></span>
+        <span class="chip std"><i>0302</i><span class="zh">Ashworth 夫婦</span><span class="en">Ashworth couple</span></span>
+        <span class="chip std"><i>0308</i>Vasquez</span>
+        <span class="chip std"><i>0312</i><span class="zh">Midwest 工會</span><span class="en">Midwest union</span></span>
+      </div>
+      <div class="cell">
+        <span class="chip std"><i>0304</i><span class="zh">PNW 教師退休</span><span class="en">PNW teachers</span></span>
+        <span class="chip std edge"><i>0305</i><span class="zh">Okafor 海外信託</span><span class="en">Okafor, overseas trusts</span></span>
+        <span class="chip std"><i>0306</i><span class="zh">Brightpath 校務基金</span><span class="en">Brightpath endowment</span></span>
+        <span class="chip std"><i>0314</i>Global Impact</span>
+      </div>
+      <div class="cell">
+        <span class="chip std edge"><i>0309</i><span class="zh">主權基金</span><span class="en">Sovereign fund</span></span>
+        <span class="chip std"><i>0310</i><span class="zh">Heritage 家族辦公室</span><span class="en">Heritage family office</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="traps">
+    <div><h3><span class="zh">陷阱 1：正常財富來源</span><span class="en">Trap 1: normal sources of wealth</span></h3>
+      <p><span class="zh">0302 有遺產繼承、0308 是離婚和解。這些都是正常來源，模型不該因此判高風險。</span><span class="en">0302 includes an inheritance and 0308 a divorce settlement. Both are ordinary sources; the model should not flag them as high risk.</span></p></div>
+    <div><h3><span class="zh">陷阱 2：複雜不等於危險</span><span class="en">Trap 2: complex is not risky</span></h3>
+      <p><span class="zh">0309 主權基金、0310 家族辦公室作業很重，但沒有洗錢警訊。分數混在一起就會判錯。</span><span class="en">0309 (sovereign fund) and 0310 (family office) are heavy to onboard but show no laundering red flags. Mixing the two scores gets them wrong.</span></p></div>
+    <div><h3><span class="zh">陷阱 3：「單純案件」</span><span class="en">Trap 3: “straightforward”</span></h3>
+      <p><span class="zh">好幾筆的描述寫著 straightforward，那是客戶或 RM 的說法，不能直接當證據。</span><span class="en">Several descriptions call the case straightforward. That is the client’s or the RM’s word, not evidence.</span></p></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var buttons = document.querySelectorAll('.lang button');
+
+  function setLang(lang){
+    root.setAttribute('data-lang', lang);
+    root.lang = lang === 'en' ? 'en' : 'zh-Hant';
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+    document.querySelectorAll('[data-label-zh]').forEach(function(el){
+      el.setAttribute('aria-label', el.getAttribute(lang === 'en' ? 'data-label-en' : 'data-label-zh'));
+    });
+    try { localStorage.setItem('crestview-lang', lang); } catch (e) {}
+  }
+
+  var saved = 'zh';
+  try { saved = localStorage.getItem('crestview-lang') || 'zh'; } catch (e) {}
+  setLang(saved === 'en' ? 'en' : 'zh');
+  buttons.forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.lang); }); });
+
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var payload = btn.parentElement.querySelector('.payload');
+      var text = payload.textContent.trim();
+      var en = root.getAttribute('data-lang') === 'en';
+      var original = btn.innerHTML;
+      var flash = function(msg){ btn.textContent = msg; setTimeout(function(){ btn.innerHTML = original; }, 1600); };
+      var fallback = function(){
+        var r = document.createRange(); r.selectNodeContents(payload);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        flash(en ? 'Selected, press Ctrl+C' : '已選取，按 Ctrl+C');
+      };
+      try {
+        navigator.clipboard.writeText(text).then(function(){ flash(en ? 'Copied' : '已複製'); }, fallback);
+      } catch (e) { fallback(); }
+    });
+  });
+})();
+</script>
+
+</body></html>

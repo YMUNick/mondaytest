@@ -592,7 +592,7 @@ PAGE = """<!doctype html>
    <p class="lead">An AI model reads each application, quotes its evidence and drafts the onboarding brief. Code applies the escalation policy and picks the compliance queue. A person makes every decision.</p>
    <div class="btn-row">
     <a class="btn btn--primary" href="#live">Run the pipeline <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <a class="btn btn--secondary" href="#results">See the results</a>
+    <a class="btn btn--secondary" href="brief.html">Init Request</a>
    </div>
    <dl class="facts">
     <div class="good"><dt>missed high-risk cases</dt><dd>{missed}</dd></div>
@@ -780,7 +780,7 @@ PAGE = """<!doctype html>
  <div class="wrap foot">
   <div><p><b>Crestview AI intake</b>, a proof of concept for the monday.com Forward Deployed Engineer exercise.</p>
   <p>Crestview Capital Group is fictional and every application is synthetic sample data. Built from the repository's own outputs on {built}.</p></div>
-  <p><a href="{repo}">Read the source on GitHub</a></p>
+  <p><a href="brief.html">Init Request</a> &middot; <a href="{repo}">Read the source on GitHub</a></p>
  </div>
 </footer>
 <script>{js}</script>
