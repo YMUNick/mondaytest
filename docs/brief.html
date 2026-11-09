@@ -202,7 +202,7 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
 <div class="page">
 
 <div class="top">
-  <span class="brand">Crestview Capital Group × monday.com</span>
+  <a class="brand" href="index.html"><span class="zh">← 回到 POC demo</span><span class="en">← Back to the POC demo</span></a>
   <div class="lang" role="group" aria-label="語言 / Language">
     <button type="button" id="lang-zh" data-lang="zh" aria-pressed="true">中文</button>
     <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
@@ -228,7 +228,7 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
     <a href="#today"><span class="zh">現況流程</span><span class="en">Today’s process</span></a>
     <a href="#numbers"><span class="zh">關鍵數字</span><span class="en">Key numbers</span></a>
     <a href="#people"><span class="zh">四位主管</span><span class="en">Four leaders</span></a>
-    <a href="#deliver"><span class="zh">你要交什麼</span><span class="en">Deliverables</span></a>
+    <a href="#deliver"><span class="zh">作業範圍</span><span class="en">Assignment scope</span></a>
     <a href="#target"><span class="zh">目標流程</span><span class="en">Target flow</span></a>
     <a href="#poc"><span class="zh">POC 怎麼跑</span><span class="en">How the POC runs</span></a>
     <a href="#samples"><span class="zh">15 筆樣本</span><span class="en">15 samples</span></a>
@@ -350,13 +350,8 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
 <!-- deliverables -->
 <section class="stop" id="deliver">
   <div class="stop-head">
-    <h2><span class="zh">你要交什麼：60 分鐘，三段</span><span class="en">What you deliver: 60 minutes, three parts</span></h2>
-    <p class="lead"><span class="zh">把面試官當成 Claire 和 Crestview 的主管來簡報。時間是 PDF 寫的大約值。</span><span class="en">Present as if the panel were Claire and Crestview’s leadership. Timings are the brief’s approximate figures.</span></p>
-  </div>
-  <div class="clock" role="img" data-label-zh="面試時間分配：策略簡報 15 到 20 分鐘，POC 展示 10 到 15 分鐘，提問約 20 分鐘" data-label-en="Interview time: strategy 15 to 20 minutes, POC demo 10 to 15 minutes, Q&amp;A about 20 minutes" aria-label="面試時間分配：策略簡報 15 到 20 分鐘，POC 展示 10 到 15 分鐘，提問約 20 分鐘">
-    <div class="c1"><b><span class="zh">Part 1 策略簡報</span><span class="en">Part 1 Strategy</span></b><span class="sub"><span class="zh">15–20 分鐘，投影片</span><span class="en">15–20 min, slides</span></span></div>
-    <div class="c2"><b><span class="zh">Part 2 POC 展示</span><span class="en">Part 2 POC demo</span></b><span class="sub"><span class="zh">10–15 分鐘，現場跑程式</span><span class="en">10–15 min, live code</span></span></div>
-    <div class="c3"><b><span class="zh">面試官提問</span><span class="en">Panel questions</span></b><span class="sub"><span class="zh">約 20 分鐘</span><span class="en">about 20 min</span></span></div>
+    <h2><span class="zh">作業範圍：策略提案與可運作的 POC</span><span class="en">Assignment scope: a strategy proposal and a working POC</span></h2>
+    <p class="lead"><span class="zh">Part 1 是給 Crestview 主管的提案簡報，Part 2 是實際能跑的開戶預篩 pipeline。</span><span class="en">Part 1 is a proposal for Crestview’s leadership; Part 2 is an onboarding pre-screen pipeline that actually runs.</span></p>
   </div>
   <div class="cols">
     <div><h3><span class="zh">Part 1 要涵蓋</span><span class="en">Part 1 must cover</span></h3>
@@ -381,14 +376,14 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
         <li>以風險結果為基礎的開戶摘要</li>
         <li>結構化輸出（JSON、CSV 或 monday board）</li>
         <li>完整 pipeline 與錯誤處理</li>
-        <li>另外要記錄你怎麼用 AI 完成作業，會被深入追問</li>
+        <li>開發過程的 AI 使用紀錄（<a href="https://github.com/YMUNick/mondaytest/blob/main/AI_DEVELOPMENT_LOG.md">AI_DEVELOPMENT_LOG.md</a>）</li>
       </ul>
       <ul class="plain en">
         <li>AI risk assessment with explicit reasoning</li>
         <li>An onboarding summary built on the risk result</li>
         <li>Structured output (JSON, CSV or a monday board)</li>
         <li>The full pipeline, with error handling</li>
-        <li>A record of how you used AI, which the panel will probe in depth</li>
+        <li>A log of how AI was used to build it (<a href="https://github.com/YMUNick/mondaytest/blob/main/AI_DEVELOPMENT_LOG.md">AI_DEVELOPMENT_LOG.md</a>)</li>
       </ul>
     </div>
   </div>
@@ -443,7 +438,7 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
 <section class="stop" id="poc">
   <div class="stop-head">
     <h2><span class="zh">POC 怎麼跑：兩條路線先判斷，再合流</span><span class="en">How the POC runs: two checks, then one decision</span></h2>
-    <p class="lead"><span class="zh">程式已經寫好並離線測過（crestview-poc.zip）。規則和 AI 各自判斷風險，防護機制取較高的那個，摘要再根據最終等級撰寫。</span><span class="en">The code is written and tested offline (crestview-poc.zip). Rules and AI each judge risk, the guardrails keep the higher tier, and the summary is written from that final tier.</span></p>
+    <p class="lead"><span class="zh">規則和 AI 各自判斷風險，防護機制取較高的那個，摘要再根據最終等級撰寫。程式碼在 <a href="https://github.com/YMUNick/mondaytest">GitHub</a>，也可以在 <a href="index.html#live">demo 頁的 Live run</a> 直接用瀏覽器跑。</span><span class="en">Rules and AI each judge risk, the guardrails keep the higher tier, and the summary is written from that final tier. The code is on <a href="https://github.com/YMUNick/mondaytest">GitHub</a>, and the <a href="index.html#live">demo page’s Live run</a> runs it in the browser.</span></p>
   </div>
   <figure>
     <div class="dia">
@@ -486,7 +481,7 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
         <g class="en"><text class="lbl" x="350" y="62">floor</text><text class="lbl" x="350" y="242">tier</text><text class="lbl" x="560" y="151" text-anchor="middle">final</text><text class="lbl" x="750" y="151" text-anchor="middle">JSON</text><text class="lbl" x="848" y="230">compare</text></g>
       </svg>
     </div>
-    <figcaption><span class="zh">防護機制做三件事：最終等級取規則與 AI 的較高者；AI 信心低於 0.7 自動升一級；檢查每條證據是否真的出現在原文。每次模型呼叫都記進 audit_log.jsonl。</span><span class="en">The guardrails do three things: keep the higher of the rule tier and the AI tier; raise the tier one step when AI confidence is below 0.7; and check that every quoted piece of evidence really appears in the application. Every model call is written to audit_log.jsonl.</span></figcaption>
+    <figcaption><span class="zh">防護機制做四件事：最終等級取規則與 AI 的較高者；用程式碼套用升級政策，判斷依據是 AI 抽出的事實；AI 信心低於 0.7 自動升一級；檢查每條證據是否真的出現在原文。每次模型呼叫都記進 audit_log.jsonl。</span><span class="en">The guardrails do four things: keep the higher of the rule tier and the AI tier; apply the escalation policy in code to the facts the AI extracted; raise the tier one step when AI confidence is below 0.7; and check that every quoted piece of evidence really appears in the application. Every model call is written to audit_log.jsonl.</span></figcaption>
   </figure>
 </section>
 
@@ -494,7 +489,7 @@ code.inl{font-family:var(--mono);font-size:13px;background:var(--sheet);border:1
 <section class="stop end" id="samples">
   <div class="stop-head">
     <h2><span class="zh">15 筆申請：風險和複雜度是兩回事</span><span class="en">15 applications: risk and complexity are different things</span></h2>
-    <p class="lead"><span class="zh">這是我的初判，不是標準答案，你要自己再確認一次。虛線框代表在兩個等級之間都說得通。</span><span class="en">This is my first pass, not an answer key; check it yourself. A dashed outline means the neighbouring tier is also defensible.</span></p>
+    <p class="lead"><span class="zh">這是開工前、還沒跑任何模型時的人工初判。評分用的可接受範圍在 <a href="https://github.com/YMUNick/mondaytest/blob/main/data/expected_tiers.csv">data/expected_tiers.csv</a>。虛線框代表在兩個等級之間都說得通。</span><span class="en">A first pass by hand, made before any model ran. The acceptable ranges used for scoring are in <a href="https://github.com/YMUNick/mondaytest/blob/main/data/expected_tiers.csv">data/expected_tiers.csv</a>. A dashed outline means the neighbouring tier is also defensible.</span></p>
   </div>
   <div class="grid-wrap">
     <div class="mx" role="table" data-label-zh="15 筆申請依風險等級與作業複雜度分布" data-label-en="15 applications by risk tier and onboarding complexity" aria-label="15 筆申請依風險等級與作業複雜度分布">
