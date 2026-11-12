@@ -824,6 +824,15 @@ PAGE = """<!doctype html>
   </ol>
  </div>
 </section>
+
+<section id="live-board" class="alt" aria-labelledby="live-board-title">
+ <div class="wrap">
+  <div class="sec-head"><h2 id="live-board-title">The live monday.com board</h2>
+  <p>A read-only shared view of the real board the pipeline writes to. Every item is synthetic sample data and starts as &ldquo;Awaiting review&rdquo;.</p></div>
+  <iframe src="https://view.monday.com/embed/5032370472-c3d9b741a3cb3edeb26ae9ca85b18dc5?r=apse2" title="Crestview client onboarding board on monday.com (read-only)" loading="lazy" width="770" height="560" style="display:block;width:100%;max-width:100%;border:0;border-radius:8px;box-shadow:5px 5px 56px 0 rgba(0,0,0,.25)"></iframe>
+  <p class="callout">If the board does not load here, <a href="https://view.monday.com/5032370472-c3d9b741a3cb3edeb26ae9ca85b18dc5?r=apse2&amp;is_sharable_link=true" target="_blank" rel="noopener">open the shared view in a new tab</a>.</p>
+ </div>
+</section>
 </main>
 
 <footer>
