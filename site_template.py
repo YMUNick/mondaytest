@@ -829,7 +829,10 @@ PAGE = """<!doctype html>
  <div class="wrap">
   <div class="sec-head"><h2 id="live-board-title">The live monday.com board</h2>
   <p>A read-only shared view of the real board the pipeline writes to. Every item is synthetic sample data and starts as &ldquo;Awaiting review&rdquo;.</p></div>
-  <iframe src="https://view.monday.com/embed/5032370472-c3d9b741a3cb3edeb26ae9ca85b18dc5?r=apse2" title="Crestview client onboarding board on monday.com (read-only)" loading="lazy" width="770" height="560" style="display:block;width:100%;max-width:100%;border:0;border-radius:8px;box-shadow:5px 5px 56px 0 rgba(0,0,0,.25)"></iframe>
+  <div role="region" aria-label="Live monday.com board, scroll sideways to see every column" tabindex="0" style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:5px 5px 56px 0 rgba(0,0,0,.25)">
+   <iframe src="https://view.monday.com/embed/5032370472-c3d9b741a3cb3edeb26ae9ca85b18dc5?r=apse2" title="Crestview client onboarding board on monday.com (read-only)" loading="lazy" width="1100" height="560" style="display:block;width:100%;min-width:1100px;border:0"></iframe>
+  </div>
+  <p class="sub" style="margin-top:12px">On a phone, swipe the board sideways to see every column. monday.com's own shared page shows only the item names on small screens.</p>
   <p class="callout">If the board does not load here, <a href="https://view.monday.com/5032370472-c3d9b741a3cb3edeb26ae9ca85b18dc5?r=apse2&amp;is_sharable_link=true" target="_blank" rel="noopener">open the shared view in a new tab</a>.</p>
  </div>
 </section>
