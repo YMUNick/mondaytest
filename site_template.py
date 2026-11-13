@@ -689,8 +689,9 @@ PAGE = """<!doctype html>
       <label><input type="radio" name="provider" value="mock"><span>No key</span></label>
      </div>
      <div class="field" id="azure-row" hidden><label for="az-endpoint">Azure OpenAI endpoint</label>
-      <input id="az-endpoint" name="az-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-resource.openai.azure.com" aria-describedby="az-help">
-      <small id="az-help">From Keys and Endpoint in the Azure portal. Put your deployment name in the Deployment box.</small></div>
+      <input id="az-endpoint" name="az-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-resource.openai.azure.com" aria-describedby="az-help az-untested">
+      <small id="az-help">From Keys and Endpoint in the Azure portal. Put your deployment name in the Deployment box.</small>
+      <small id="az-untested">Not yet tested against a live Azure resource. If your browser blocks the call, use the command line: <code>LLM_PROVIDER=azure python pipeline.py</code>.</small></div>
      <div class="row2" id="key-row">
       <div class="field"><label for="api-key">API key</label>
        <input id="api-key" name="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." aria-describedby="key-help form-error"></div>
