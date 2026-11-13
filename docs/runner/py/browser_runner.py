@@ -2,8 +2,8 @@
 
 Used by the "Try it live" section of the demo site (docs/index.html). Only one
 thing differs from `python pipeline.py`: how the model is called. Here the
-browser sends each prompt straight to the provider with the visitor's own API
-key (a synchronous XMLHttpRequest, which is allowed inside a Web Worker). The
+browser sends each prompt straight to the provider (OpenAI, Anthropic or the
+visitor's own Azure OpenAI resource) with the visitor's own API key (a synchronous XMLHttpRequest, which is allowed inside a Web Worker). The
 rules, guardrails, escalation policy, routing and brief checks are the same
 pipeline.process() the command line runs, loaded from the same files.
 
@@ -12,6 +12,7 @@ The key is passed in per call and never written anywhere.
 import contextlib
 import io
 import json
+import re
 import tempfile
 import time
 import uuid
@@ -28,6 +29,21 @@ from site_render import card
 
 ENDPOINTS = {"openai": "https://api.openai.com/v1/chat/completions",
              "anthropic": "https://api.anthropic.com/v1/messages"}
+AZURE_API_VERSION = "2024-10-21"
+# The key is only ever sent to an Azure OpenAI resource, never to an arbitrary URL.
+AZURE_HOST = re.compile(r"^https://[a-z0-9][a-z0-9-]{0,62}\.(openai\.azure\.com|cognitiveservices\.azure\.com"
+                        r"|services\.ai\.azure\.com)/?$")
+
+
+def azure_url(endpoint: str, deployment: str) -> str:
+    """Chat-completions URL for an Azure OpenAI deployment; rejects anything that is not an Azure host."""
+    endpoint = (endpoint or "").strip().lower()
+    if not AZURE_HOST.match(endpoint):
+        raise LLMError("Azure endpoint must look like https://<resource>.openai.azure.com")
+    if not re.fullmatch(r"[A-Za-z0-9._-]{1,64}", deployment or ""):
+        raise LLMError("Write the Azure deployment name in the Model box")
+    return (f"{endpoint.rstrip('/')}/openai/deployments/{deployment}/chat/completions"
+            f"?api-version={AZURE_API_VERSION}")
 RETRY_STATUS = {0, 408, 409, 429, 500, 502, 503, 504, 529}  # 0 = network error
 
 SAMPLES = {a.application_id: a for a in
@@ -52,10 +68,11 @@ def _error_text(body: str) -> str:
 class BrowserLLM:
     """Same interface as llm.LLMClient: .provider, .model, .complete(prompt)."""
 
-    def __init__(self, provider: str, model: str, key: str):
+    def __init__(self, provider: str, model: str, key: str, endpoint: str = ""):
         self.provider = provider
         self.model = "mock" if provider == "mock" else (model or DEFAULT_MODELS[provider])
         self._key = key
+        self._url = azure_url(endpoint, self.model) if provider == "azure" else ENDPOINTS.get(provider)
 
     def complete(self, prompt: str, max_retries: int = 3) -> LLMResponse:
         for attempt in range(1, max_retries + 1):
@@ -74,10 +91,13 @@ class BrowserLLM:
         from js import XMLHttpRequest  # only exists inside the browser
 
         xhr = XMLHttpRequest.new()
-        xhr.open("POST", ENDPOINTS[self.provider], False)
+        xhr.open("POST", self._url, False)
         xhr.setRequestHeader("content-type", "application/json")
-        if self.provider == "openai":
-            xhr.setRequestHeader("authorization", f"Bearer {self._key}")
+        if self.provider in ("openai", "azure"):
+            if self.provider == "azure":
+                xhr.setRequestHeader("api-key", self._key)  # the deployment in the URL picks the model
+            else:
+                xhr.setRequestHeader("authorization", f"Bearer {self._key}")
             payload = {"model": self.model, "temperature": 0,
                        "response_format": {"type": "json_object"},
                        "messages": [{"role": "user", "content": prompt}]}
@@ -95,7 +115,7 @@ class BrowserLLM:
 
     def _parse(self, body: str) -> LLMResponse:
         data = json.loads(body)
-        if self.provider == "openai":
+        if self.provider in ("openai", "azure"):
             usage = data.get("usage") or {}
             return LLMResponse(data["choices"][0]["message"].get("content") or "",
                                usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
@@ -190,7 +210,10 @@ def process_one(cfg_json: str, item_json: str) -> str:
     except ValidationError as exc:
         problems = "; ".join(f"{'.'.join(map(str, e['loc']))}: {e['msg']}" for e in exc.errors())
         return json.dumps({"error": f"Application rejected at load: {problems}"})
-    llm = BrowserLLM(cfg["provider"], cfg.get("model", ""), cfg.get("key", ""))
+    try:
+        llm = BrowserLLM(cfg["provider"], cfg.get("model", ""), cfg.get("key", ""), cfg.get("endpoint", ""))
+    except LLMError as exc:
+        return json.dumps({"error": str(exc)})
     result = pipeline.process(app, llm, _auditor, pipeline.DEFAULT_PROMPT_VERSION)
     return json.dumps({"id": app.application_id, "status": result.status,
                        "tier": result.final_risk_tier, "error": result.error,

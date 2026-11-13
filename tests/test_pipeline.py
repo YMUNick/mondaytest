@@ -382,3 +382,51 @@ def test_browser_runner_pushes_a_run_to_the_board(tmp_path, monkeypatch):
     update = next(v for q, v in calls if "change_multiple_column_values" in q)
     assert update["i"] == "555" and json.loads(update["v"])["src"] == {"label": "AI pipeline"}
     assert monday_client.TRANSPORT is None  # the token's transport is dropped after the call
+
+
+def test_browser_azure_url_only_accepts_azure_hosts():
+    import browser_runner
+    from llm import LLMError
+    url = browser_runner.azure_url("https://crest-ai.openai.azure.com/", "gpt-4.1-mini")
+    assert url == ("https://crest-ai.openai.azure.com/openai/deployments/gpt-4.1-mini/chat/completions"
+                   "?api-version=" + browser_runner.AZURE_API_VERSION)
+    for bad in ("https://evil.example.com", "http://crest-ai.openai.azure.com",
+                "https://crest-ai.openai.azure.com.evil.io", "https://crest-ai.openai.azure.com/x"):
+        with pytest.raises(LLMError):
+            browser_runner.azure_url(bad, "gpt-4.1-mini")
+    with pytest.raises(LLMError):
+        browser_runner.azure_url("https://crest-ai.openai.azure.com", "../../x")
+
+
+def test_browser_azure_call_uses_api_key_header(monkeypatch):
+    import sys
+    import types
+    import browser_runner
+
+    sent = {}
+
+    class FakeXHR:
+        status, responseText = 200, json.dumps({
+            "choices": [{"message": {"content": '{"ok": true}'}}],
+            "usage": {"prompt_tokens": 11, "completion_tokens": 3}})
+
+        @classmethod
+        def new(cls):
+            return cls()
+
+        def open(self, method, url, sync):
+            sent["url"] = url
+
+        def setRequestHeader(self, k, v):
+            sent.setdefault("headers", {})[k] = v
+
+        def send(self, body):
+            sent["body"] = json.loads(body)
+
+    monkeypatch.setitem(sys.modules, "js", types.SimpleNamespace(XMLHttpRequest=FakeXHR))
+    llm = browser_runner.BrowserLLM("azure", "my-deploy", "secret", "https://crest-ai.openai.azure.com")
+    resp = llm.complete("hi")
+    assert sent["url"].startswith("https://crest-ai.openai.azure.com/openai/deployments/my-deploy/")
+    assert sent["headers"]["api-key"] == "secret" and "authorization" not in sent["headers"]
+    assert sent["body"]["response_format"] == {"type": "json_object"}
+    assert (resp.text, resp.input_tokens, resp.output_tokens) == ('{"ok": true}', 11, 3)

@@ -488,12 +488,16 @@ footer{border-top:1px solid var(--line);padding:var(--s-7) 0;font-size:14px;colo
      <div class="seg" role="radiogroup" aria-label="Model provider">
       <label><input type="radio" name="provider" value="openai" checked><span>OpenAI</span></label>
       <label><input type="radio" name="provider" value="anthropic"><span>Anthropic</span></label>
+      <label><input type="radio" name="provider" value="azure"><span>Azure OpenAI</span></label>
       <label><input type="radio" name="provider" value="mock"><span>No key</span></label>
      </div>
+     <div class="field" id="azure-row" hidden><label for="az-endpoint">Azure OpenAI endpoint</label>
+      <input id="az-endpoint" name="az-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-resource.openai.azure.com" aria-describedby="az-help">
+      <small id="az-help">From Keys and Endpoint in the Azure portal. Put your deployment name in the Deployment box.</small></div>
      <div class="row2" id="key-row">
       <div class="field"><label for="api-key">API key</label>
        <input id="api-key" name="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." aria-describedby="key-help form-error"></div>
-      <div class="field"><label for="model">Model</label>
+      <div class="field"><label for="model" id="model-label">Model</label>
        <input id="model" name="model" type="text" autocomplete="off" spellcheck="false" value="gpt-4.1-mini"></div>
      </div>
      <p class="help" id="key-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -532,7 +536,7 @@ footer{border-top:1px solid var(--line);padding:var(--s-7) 0;font-size:14px;colo
       <p class="help" id="board-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <span>The token goes only to api.monday.com and is dropped after the write. It can change the board, so use your own. The board keeps its own columns: items are matched by the application id in their name, the tier source is set to AI, and a reviewer’s status is never overwritten.</span></p>
      </div>
-     <p class="help" id="board-mock" hidden><span>Pick OpenAI or Anthropic to write to a board: rules-only results are not AI output.</span></p>
+     <p class="help" id="board-mock" hidden><span>Pick a model provider to write to a board: rules-only results are not AI output.</span></p>
     </fieldset>
     <div class="run-row">
      <button type="submit" class="btn btn--primary" id="run-btn"><span>Run the pipeline</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -1444,9 +1448,9 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
     <p class="say">&ldquo;Eastbridge Trading Group Ltd: the model alone said enhanced. The final tier is high &mdash; raised from enhanced to high: deterministic rules set a floor. The card shows exactly why.&rdquo;</p>
    </li>
    <li class="step"><h3>Run the tests</h3>
-    <p>26 offline tests with a mock model: messy rows, rules, policy, guardrails, brief checks, retries and the dry run.</p>
+    <p>28 offline tests with a mock model: messy rows, rules, policy, guardrails, brief checks, retries and the dry run.</p>
     <div class="cmd"><code>python -m pytest -q -p no:anyio</code><button class="copy" data-copy="python -m pytest -q -p no:anyio" aria-label="Copy command"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span>Copy</span></button></div>
-    <details class="out"><summary>Show the tests (32 passed in 0.80s)</summary><ul class="testlist"><li><span class='ok'>&#10003;</span> loads all sample rows</li><li><span class='ok'>&#10003;</span> messy rows are normalised or reported</li><li><span class='ok'>&#10003;</span> application text cannot close the prompt tag</li><li><span class='ok'>&#10003;</span> rule floor never exceeds golden labels</li><li><span class='ok'>&#10003;</span> prompt injection is flagged by rules</li><li><span class='ok'>&#10003;</span> policy combination of unevidenced funds and pressure is high</li><li><span class='ok'>&#10003;</span> policy three categories is high but other does not count</li><li><span class='ok'>&#10003;</span> policy severe flag is high and clean is standard</li><li><span class='ok'>&#10003;</span> guardrails apply policy only when checks present</li><li><span class='ok'>&#10003;</span> rules floor overrides lower model tier</li><li><span class='ok'>&#10003;</span> model can raise above floor</li><li><span class='ok'>&#10003;</span> low confidence raises one tier</li><li><span class='ok'>&#10003;</span> evidence is verified against source</li><li><span class='ok'>&#10003;</span> summary without routing step is fixed</li><li><span class='ok'>&#10003;</span> summary missing tier and approval language flagged</li><li><span class='ok'>&#10003;</span> board approval is not approval language</li><li><span class='ok'>&#10003;</span> parse json handles fences and chatter</li><li><span class='ok'>&#10003;</span> invalid output is retried with the error</li><li><span class='ok'>&#10003;</span> one failing application does not stop the batch</li><li><span class='ok'>&#10003;</span> full mock run writes all outputs</li><li><span class='ok'>&#10003;</span> monday column values and dry run</li><li><span class='ok'>&#10003;</span> monday link uses existing board as is</li><li><span class='ok'>&#10003;</span> monday push updates by item name and keeps review</li><li><span class='ok'>&#10003;</span> monday push file sends a saved run</li><li><span class='ok'>&#10003;</span> monday gql uses a swapped transport</li><li><span class='ok'>&#10003;</span> browser runner pushes a run to the board</li></ul></details>
+    <details class="out"><summary>Show the tests (34 passed in 0.64s)</summary><ul class="testlist"><li><span class='ok'>&#10003;</span> loads all sample rows</li><li><span class='ok'>&#10003;</span> messy rows are normalised or reported</li><li><span class='ok'>&#10003;</span> application text cannot close the prompt tag</li><li><span class='ok'>&#10003;</span> rule floor never exceeds golden labels</li><li><span class='ok'>&#10003;</span> prompt injection is flagged by rules</li><li><span class='ok'>&#10003;</span> policy combination of unevidenced funds and pressure is high</li><li><span class='ok'>&#10003;</span> policy three categories is high but other does not count</li><li><span class='ok'>&#10003;</span> policy severe flag is high and clean is standard</li><li><span class='ok'>&#10003;</span> guardrails apply policy only when checks present</li><li><span class='ok'>&#10003;</span> rules floor overrides lower model tier</li><li><span class='ok'>&#10003;</span> model can raise above floor</li><li><span class='ok'>&#10003;</span> low confidence raises one tier</li><li><span class='ok'>&#10003;</span> evidence is verified against source</li><li><span class='ok'>&#10003;</span> summary without routing step is fixed</li><li><span class='ok'>&#10003;</span> summary missing tier and approval language flagged</li><li><span class='ok'>&#10003;</span> board approval is not approval language</li><li><span class='ok'>&#10003;</span> parse json handles fences and chatter</li><li><span class='ok'>&#10003;</span> invalid output is retried with the error</li><li><span class='ok'>&#10003;</span> one failing application does not stop the batch</li><li><span class='ok'>&#10003;</span> full mock run writes all outputs</li><li><span class='ok'>&#10003;</span> monday column values and dry run</li><li><span class='ok'>&#10003;</span> monday link uses existing board as is</li><li><span class='ok'>&#10003;</span> monday push updates by item name and keeps review</li><li><span class='ok'>&#10003;</span> monday push file sends a saved run</li><li><span class='ok'>&#10003;</span> monday gql uses a swapped transport</li><li><span class='ok'>&#10003;</span> browser runner pushes a run to the board</li><li><span class='ok'>&#10003;</span> browser azure url only accepts azure hosts</li><li><span class='ok'>&#10003;</span> browser azure call uses api key header</li></ul></details>
    </li>
   </ol>
  </div>
@@ -1468,7 +1472,7 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
 <footer>
  <div class="wrap foot">
   <div><p><b>Crestview AI intake</b>, a proof of concept for the monday.com Forward Deployed Engineer exercise.</p>
-  <p>Crestview Capital Group is fictional and every application is synthetic sample data. Built from the repository's own outputs on 12 Nov 2026.</p></div>
+  <p>Crestview Capital Group is fictional and every application is synthetic sample data. Built from the repository's own outputs on 13 Nov 2026.</p></div>
   <p><a href="brief.html">Init Request</a> &middot; <a href="https://github.com/YMUNick/mondaytest">Read the source on GitHub</a></p>
  </div>
 </footer>
@@ -1537,7 +1541,9 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
  /* live run: the real pipeline in a Pyodide worker */
  var form=document.getElementById('live-form');
  if(!form)return;
- var MODELS={openai:'gpt-4.1-mini',anthropic:'claude-sonnet-5-5',mock:'mock'};
+ var MODELS={openai:'gpt-4.1-mini',anthropic:'claude-sonnet-5-5',azure:'',mock:'mock'};
+ var AZURE=/^https:\/\/[a-z0-9][a-z0-9-]{0,62}\.(openai\.azure\.com|cognitiveservices\.azure\.com|services\.ai\.azure\.com)\/?$/i;
+ var azIn=document.getElementById('az-endpoint');
  var keyIn=document.getElementById('api-key'),modelIn=document.getElementById('model'),
      runBtn=document.getElementById('run-btn'),stopBtn=document.getElementById('stop-btn'),
      err=document.getElementById('form-error'),empty=document.getElementById('console-empty'),state=document.getElementById('console-state'),
@@ -1549,8 +1555,11 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
   var p=val('provider'),mock=p==='mock';
   document.getElementById('key-row').hidden=mock;document.getElementById('key-help').hidden=mock;
   document.getElementById('mock-help').hidden=!mock;
+  var az=p==='azure';document.getElementById('azure-row').hidden=!az;
+  document.getElementById('model-label').textContent=az?'Deployment':'Model';
   if(!mock&&(modelIn.value===''||Object.values(MODELS).indexOf(modelIn.value)>=0))modelIn.value=MODELS[p];
-  keyIn.placeholder=p==='anthropic'?'sk-ant-...':'sk-...';
+  modelIn.placeholder=az?'e.g. gpt-4.1-mini':'';
+  keyIn.placeholder=p==='anthropic'?'sk-ant-...':az?'Azure OpenAI key':'sk-...';
   syncBoard();
  }
  var boardOn=document.getElementById('to-board-on'),mToken=document.getElementById('m-token'),mBoard=document.getElementById('m-board');
@@ -1633,6 +1642,13 @@ MISSED HIGH-RISK: 0  (must be 0)</pre></details>
  form.addEventListener('submit',function(ev){
   ev.preventDefault();err.textContent='';
   var p=val('provider'),cfg={provider:p,model:p==='mock'?'':modelIn.value.trim(),key:p==='mock'?'':keyIn.value.trim()};
+  if(p==='azure'){
+   cfg.endpoint=azIn.value.trim();
+   if(!AZURE.test(cfg.endpoint)){err.textContent='Write the Azure endpoint as https://<resource>.openai.azure.com';azIn.setAttribute('aria-invalid','true');azIn.focus();return}
+   azIn.removeAttribute('aria-invalid');
+   if(!cfg.model){err.textContent='Write your Azure deployment name.';modelIn.setAttribute('aria-invalid','true');modelIn.focus();return}
+   modelIn.removeAttribute('aria-invalid');
+  }
   if(p!=='mock'&&!cfg.key){err.textContent='Paste an API key, or pick "No key".';keyIn.setAttribute('aria-invalid','true');keyIn.focus();return}
   keyIn.removeAttribute('aria-invalid');
   var list=items();

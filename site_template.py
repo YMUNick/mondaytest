@@ -456,7 +456,9 @@ JS = r"""
  /* live run: the real pipeline in a Pyodide worker */
  var form=document.getElementById('live-form');
  if(!form)return;
- var MODELS={openai:'gpt-4.1-mini',anthropic:'claude-sonnet-5-5',mock:'mock'};
+ var MODELS={openai:'gpt-4.1-mini',anthropic:'claude-sonnet-5-5',azure:'',mock:'mock'};
+ var AZURE=/^https:\/\/[a-z0-9][a-z0-9-]{0,62}\.(openai\.azure\.com|cognitiveservices\.azure\.com|services\.ai\.azure\.com)\/?$/i;
+ var azIn=document.getElementById('az-endpoint');
  var keyIn=document.getElementById('api-key'),modelIn=document.getElementById('model'),
      runBtn=document.getElementById('run-btn'),stopBtn=document.getElementById('stop-btn'),
      err=document.getElementById('form-error'),empty=document.getElementById('console-empty'),state=document.getElementById('console-state'),
@@ -468,8 +470,11 @@ JS = r"""
   var p=val('provider'),mock=p==='mock';
   document.getElementById('key-row').hidden=mock;document.getElementById('key-help').hidden=mock;
   document.getElementById('mock-help').hidden=!mock;
+  var az=p==='azure';document.getElementById('azure-row').hidden=!az;
+  document.getElementById('model-label').textContent=az?'Deployment':'Model';
   if(!mock&&(modelIn.value===''||Object.values(MODELS).indexOf(modelIn.value)>=0))modelIn.value=MODELS[p];
-  keyIn.placeholder=p==='anthropic'?'sk-ant-...':'sk-...';
+  modelIn.placeholder=az?'e.g. gpt-4.1-mini':'';
+  keyIn.placeholder=p==='anthropic'?'sk-ant-...':az?'Azure OpenAI key':'sk-...';
   syncBoard();
  }
  var boardOn=document.getElementById('to-board-on'),mToken=document.getElementById('m-token'),mBoard=document.getElementById('m-board');
@@ -552,6 +557,13 @@ JS = r"""
  form.addEventListener('submit',function(ev){
   ev.preventDefault();err.textContent='';
   var p=val('provider'),cfg={provider:p,model:p==='mock'?'':modelIn.value.trim(),key:p==='mock'?'':keyIn.value.trim()};
+  if(p==='azure'){
+   cfg.endpoint=azIn.value.trim();
+   if(!AZURE.test(cfg.endpoint)){err.textContent='Write the Azure endpoint as https://<resource>.openai.azure.com';azIn.setAttribute('aria-invalid','true');azIn.focus();return}
+   azIn.removeAttribute('aria-invalid');
+   if(!cfg.model){err.textContent='Write your Azure deployment name.';modelIn.setAttribute('aria-invalid','true');modelIn.focus();return}
+   modelIn.removeAttribute('aria-invalid');
+  }
   if(p!=='mock'&&!cfg.key){err.textContent='Paste an API key, or pick "No key".';keyIn.setAttribute('aria-invalid','true');keyIn.focus();return}
   keyIn.removeAttribute('aria-invalid');
   var list=items();
@@ -673,12 +685,16 @@ PAGE = """<!doctype html>
      <div class="seg" role="radiogroup" aria-label="Model provider">
       <label><input type="radio" name="provider" value="openai" checked><span>OpenAI</span></label>
       <label><input type="radio" name="provider" value="anthropic"><span>Anthropic</span></label>
+      <label><input type="radio" name="provider" value="azure"><span>Azure OpenAI</span></label>
       <label><input type="radio" name="provider" value="mock"><span>No key</span></label>
      </div>
+     <div class="field" id="azure-row" hidden><label for="az-endpoint">Azure OpenAI endpoint</label>
+      <input id="az-endpoint" name="az-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-resource.openai.azure.com" aria-describedby="az-help">
+      <small id="az-help">From Keys and Endpoint in the Azure portal. Put your deployment name in the Deployment box.</small></div>
      <div class="row2" id="key-row">
       <div class="field"><label for="api-key">API key</label>
        <input id="api-key" name="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." aria-describedby="key-help form-error"></div>
-      <div class="field"><label for="model">Model</label>
+      <div class="field"><label for="model" id="model-label">Model</label>
        <input id="model" name="model" type="text" autocomplete="off" spellcheck="false" value="gpt-4.1-mini"></div>
      </div>
      <p class="help" id="key-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
@@ -717,7 +733,7 @@ PAGE = """<!doctype html>
       <p class="help" id="board-help"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <span>The token goes only to api.monday.com and is dropped after the write. It can change the board, so use your own. The board keeps its own columns: items are matched by the application id in their name, the tier source is set to AI, and a reviewer’s status is never overwritten.</span></p>
      </div>
-     <p class="help" id="board-mock" hidden><span>Pick OpenAI or Anthropic to write to a board: rules-only results are not AI output.</span></p>
+     <p class="help" id="board-mock" hidden><span>Pick a model provider to write to a board: rules-only results are not AI output.</span></p>
     </fieldset>
     <div class="run-row">
      <button type="submit" class="btn btn--primary" id="run-btn"><span>Run the pipeline</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
